@@ -1,0 +1,22 @@
+{
+  "mcpServers": {
+    "codegraph": {
+      "type": "stdio",
+      "command": "codegraph",
+      "args": ["serve", "--mcp"]
+    },
+    "firecrawl": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "firecrawl-mcp"],
+      "env": {
+        "FIRECRAWL_API_URL": "http://127.0.0.1:3002"
+      }
+    },
+    "engram": {
+      "type": "stdio",
+      "command": "engram",
+      "args": ["mcp"]
+    }
+  }
+}

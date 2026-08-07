@@ -1,0 +1,51 @@
+{
+  "format_version": 1,
+  "canonical_root": ".agents",
+  "schemas": {
+    "contracts": ".agents/schema/v1/agents.schema.json",
+    "mappings": ".agents/schema/v1/mappings.schema.json"
+  },
+  "supports": [
+    "instructions",
+    "rules",
+    "agents",
+    "hooks",
+    "permissions",
+    "guardrails",
+    "memories",
+    "plugins",
+    "profiles",
+    "prompts",
+    "settings",
+    "tools",
+    "skills"
+  ],
+  "unsupported": {
+    "permissions": [
+      "Codex no direct file-backed mapping currently; represented in adapter projection."
+    ],
+    "plugins": [
+      "No first-class vendor support outside Copilot."
+    ],
+    "profiles": [
+      "Only Codex has native profile section support."
+    ],
+    "prompts": [
+      "Prompt templates are not currently projected outside Copilot and Claude."
+    ],
+    "settings": [
+      "Settings are adapter-specific in current projections."
+    ],
+    "memories": [
+      "Memories remain out-of-band in this repository version."
+    ],
+    "guardrails": [
+      "Primarily represented by sandbox/approval settings in target configs."
+    ]
+  },
+  "compatibility_notes": [
+    "Schema and mapping metadata are expected to be used by vendor tooling.",
+    "Adapters may reject unsupported categories unless `--allow-unsupported` is set.",
+    "MCP transport support is adapter-specific."
+  ]
+}
