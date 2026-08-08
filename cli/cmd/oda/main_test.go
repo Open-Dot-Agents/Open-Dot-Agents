@@ -13,6 +13,28 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+func TestResolveVersion(t *testing.T) {
+	tests := []struct {
+		name          string
+		linkerVersion string
+		buildVersion  string
+		want          string
+	}{
+		{name: "release linker flag wins", linkerVersion: "v0.0.1", buildVersion: "v9.9.9", want: "v0.0.1"},
+		{name: "go install module version", linkerVersion: "dev", buildVersion: "v0.0.1", want: "v0.0.1"},
+		{name: "local development build", linkerVersion: "dev", buildVersion: "(devel)", want: "dev"},
+		{name: "missing build information", linkerVersion: "", buildVersion: "", want: "dev"},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := resolveVersion(tt.linkerVersion, tt.buildVersion); got != tt.want {
+				t.Fatalf("resolveVersion(%q, %q) = %q, want %q", tt.linkerVersion, tt.buildVersion, got, tt.want)
+			}
+		})
+	}
+}
+
 func TestResolveTargetsAll(t *testing.T) {
 	targets, err := resolveTargets("all")
 	if err != nil {

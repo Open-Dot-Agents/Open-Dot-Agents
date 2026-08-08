@@ -1,0 +1,50 @@
+version: 2
+
+project_name: oda
+
+builds:
+  - id: oda
+    dir: cli
+    main: ./cmd/oda
+    binary: oda
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - darwin
+      - linux
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    ldflags:
+      - -s -w -X main.version={{ .Tag }}
+    mod_timestamp: "{{ .CommitTimestamp }}"
+
+archives:
+  - ids:
+      - oda
+    formats:
+      - tar.gz
+    format_overrides:
+      - goos: windows
+        formats:
+          - zip
+    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+
+checksum:
+  name_template: checksums.txt
+
+changelog:
+  use: git
+  sort: asc
+
+release:
+  draft: true
+  name_template: "Open-Dot-Agents {{ .Tag }}"
+  header: |
+    Open-Dot-Agents {{ .Tag }} is the first packaged release of the vendor-neutral
+    `.agents/` standard and the `oda` compatibility CLI.
+  footer: |
+    The Codex repository configuration and custom-agent registration round-trip
+    correctly, but live custom-agent child spawning remains a documented Codex
+    runtime limitation. See `COMPATIBILITY.md` for the exact acceptance boundary.

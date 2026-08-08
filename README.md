@@ -68,6 +68,19 @@ Use this section as the canonical onboarding reference.
 
 ### 1) Install and verify the CLI
 
+Install the released Go module:
+
+```bash
+go install github.com/Open-Dot-Agents/Open-Dot-Agents/cli/cmd/oda@v0.0.1
+oda --version
+```
+
+Prebuilt Linux, macOS, and Windows archives for amd64 and arm64 are available
+from [GitHub Releases](https://github.com/Open-Dot-Agents/Open-Dot-Agents/releases).
+Every release includes `checksums.txt` with SHA-256 hashes.
+
+To build from a local checkout instead:
+
 ```bash
 cd /path/to/Open-Dot-Agents
 cd cli
@@ -174,7 +187,7 @@ oda --root . check --target all --ci
 The v0.0.1 canonical contract and adapters for GitHub Copilot CLI, OpenAI Codex, and
 Anthropic Claude Code are implemented. Current work focuses on compatibility,
 release stability, and adoption of the `.agents` mapping model. The initial
-project release is planned as `v0.0.1`.
+project release is `v0.0.1`; see [CHANGELOG.md](./CHANGELOG.md) for release notes.
 
 Mapping statuses describe what the current `oda` adapters emit, not every native
 feature available in each harness. See [the v0.0.1 schema notes](.agents/schema/v0.0.1/README.md)

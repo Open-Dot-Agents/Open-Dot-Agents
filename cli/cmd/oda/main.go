@@ -7,6 +7,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"runtime/debug"
 	"strings"
 	"time"
 
@@ -15,6 +16,24 @@ import (
 )
 
 var version = "dev"
+
+func currentVersion() string {
+	buildVersion := ""
+	if info, ok := debug.ReadBuildInfo(); ok {
+		buildVersion = info.Main.Version
+	}
+	return resolveVersion(version, buildVersion)
+}
+
+func resolveVersion(linkerVersion, buildVersion string) string {
+	if linkerVersion != "" && linkerVersion != "dev" {
+		return linkerVersion
+	}
+	if buildVersion != "" && buildVersion != "(devel)" {
+		return buildVersion
+	}
+	return "dev"
+}
 
 type commandResult struct {
 	Command string                  `json:"command"`
@@ -138,7 +157,7 @@ func main() {
 		return
 	}
 	if parsed.version {
-		fmt.Fprintf(os.Stdout, "oda %s\n", version)
+		fmt.Fprintf(os.Stdout, "oda %s\n", currentVersion())
 		return
 	}
 	if parsed.command == "" {

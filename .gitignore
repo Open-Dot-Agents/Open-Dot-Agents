@@ -5,6 +5,9 @@
 !/.github/
 !/.github/workflows/
 !/.github/workflows/ci.yml
+!/.github/workflows/release.yml
+!/.goreleaser.yaml
 /.codex/
 /.claude/
 /CLAUDE.md
+/dist/

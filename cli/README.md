@@ -12,6 +12,18 @@ generated files so regeneration stays safe and repeatable.
 
 ## Quick start
 
+Install the published module:
+
+```bash
+go install github.com/Open-Dot-Agents/Open-Dot-Agents/cli/cmd/oda@v0.0.1
+oda --version
+```
+
+Alternatively, download a platform archive and its SHA-256 checksum from the
+[GitHub Releases page](https://github.com/Open-Dot-Agents/Open-Dot-Agents/releases).
+
+For local development:
+
 ```bash
 cd cli
 go install ./cmd/oda

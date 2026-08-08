@@ -47,6 +47,22 @@ tasks:
       - cd cli && go build -trimpath -ldflags="-s -w -X main.version={{.VERSION}}" -o bin/oda ./cmd/oda
       - cd cli && test "$(./bin/oda --version)" = "oda {{.VERSION}}"
 
+  release:check:
+    desc: Validate the GoReleaser configuration
+    preconditions:
+      - sh: command -v goreleaser >/dev/null 2>&1
+        msg: Install GoReleaser v2.17.1 to validate release packaging
+    cmds:
+      - goreleaser check
+
+  release:snapshot:
+    desc: Build an unpublished cross-platform release snapshot
+    deps:
+      - verify
+      - release:check
+    cmds:
+      - goreleaser release --snapshot --clean
+
   test:copilot:
     desc: Run the Copilot CLI compatibility fixture
     deps:
