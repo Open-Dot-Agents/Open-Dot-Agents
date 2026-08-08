@@ -1,12 +1,22 @@
 name: Release
 
 on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Release version (for example, v0.0.1)
+        required: true
+        type: string
   push:
     tags:
       - "v*"
 
 permissions:
   contents: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
 
 jobs:
   release:
@@ -20,9 +30,60 @@ jobs:
           go-version-file: cli/go.mod
           cache-dependency-path: cli/go.sum
       - uses: arduino/setup-task@b91d5d2c96a56797b48ac1e0e89220bf64044611 # v2.0.0
+      - name: Resolve release tag
+        id: release
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          INPUT_VERSION: ${{ inputs.version }}
+          REF_NAME: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+            if [ "$GITHUB_REF" != "refs/heads/main" ]; then
+              echo "Manual releases must be dispatched from main." >&2
+              exit 1
+            fi
+            release_tag="$INPUT_VERSION"
+          else
+            release_tag="$REF_NAME"
+          fi
+          if [[ ! "$release_tag" =~ ^v[0-9]+\.[0-9]+\.[0-9]+([.-][0-9A-Za-z][0-9A-Za-z.-]*)?$ ]]; then
+            echo "Release version must use the form vMAJOR.MINOR.PATCH." >&2
+            exit 1
+          fi
+          echo "tag=$release_tag" >> "$GITHUB_OUTPUT"
+      - name: Verify release source
+        run: task cli:verify
+      - name: Create repository and module tags
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          RELEASE_TAG: ${{ steps.release.outputs.tag }}
+        run: |
+          set -euo pipefail
+          release_commit="$(git rev-parse "${GITHUB_SHA}^{commit}")"
+          ensure_tag() {
+            tag="$1"
+            if git rev-parse --verify --quiet "refs/tags/$tag" >/dev/null; then
+              tag_commit="$(git rev-list -n 1 "$tag")"
+              if [ "$tag_commit" != "$release_commit" ]; then
+                echo "Tag $tag already points to $tag_commit, not $release_commit." >&2
+                exit 1
+              fi
+              return
+            fi
+            git \
+              -c user.name=github-actions[bot] \
+              -c user.email=41898282+github-actions[bot]@users.noreply.github.com \
+              tag -a "$tag" "$release_commit" -m "Release $tag"
+          }
+          ensure_tag "$RELEASE_TAG"
+          ensure_tag "cli/$RELEASE_TAG"
+          git push --atomic origin \
+            "refs/tags/$RELEASE_TAG" \
+            "refs/tags/cli/$RELEASE_TAG"
       - name: Verify repository and module tags
         env:
-          RELEASE_TAG: ${{ github.ref_name }}
+          RELEASE_TAG: ${{ steps.release.outputs.tag }}
         run: |
           set -euo pipefail
           repository_commit="$(git rev-list -n 1 "$RELEASE_TAG")"
@@ -30,8 +91,6 @@ jobs:
           event_commit="$(git rev-parse "${GITHUB_SHA}^{commit}")"
           test "$repository_commit" = "$module_commit"
           test "$repository_commit" = "$event_commit"
-      - name: Verify release source
-        run: task cli:verify
       - name: Create draft release
         uses: goreleaser/goreleaser-action@f06c13b6b1a9625abc9e6e439d9c05a8f2190e94 # v7.2.3
         with:
@@ -40,3 +99,4 @@ jobs:
           args: release --clean
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GORELEASER_CURRENT_TAG: ${{ steps.release.outputs.tag }}
