@@ -1,3 +1,7 @@
 /.*
 !/.agents/
 !/.agents/**
+/.github/
+/.codex/
+/.claude/
+/CLAUDE.md

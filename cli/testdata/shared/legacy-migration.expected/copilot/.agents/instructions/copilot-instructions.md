@@ -1,0 +1,1 @@
+Use Copilot legacy conventions.

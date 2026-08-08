@@ -1,11 +1,29 @@
-# Schema contracts
+# Schema contracts (v1)
 
-This folder hosts the v1 machine-readable contracts for Open-Dot-Agents.
+This folder contains the canonical machine-readable contracts used by the
+Open-Dot-Agents adapter and validation tooling.
 
-- `agents.schema.json` — canonical `.agents/` category contract
-  (filenames, front-matter requirements, behavior flags, and category shapes).
-- `mappings.schema.json` — schema for `.agents/mappings.yaml` metadata
-  (targets, per-category status values, and optional compatibility notes).
+## Files
 
-Tooling that validates `.agents` trees should use `format_version: 1` and
-`canonical_root: ".agents"` as the shared baseline across implementations.
+- `agents.schema.json`  
+  Canonical contracts for `.agents/` category structure, including filenames,
+  required fields, parser expectations, and supported metadata for each category.
+- `mappings.schema.json`  
+  Contract for `.agents/mappings.yaml` status/compatibility metadata across targets.
+
+## Validation baseline
+
+Tooling should use:
+
+- `format_version: 1`
+- `canonical_root: ".agents"`
+
+across compatible implementations.
+
+## Contract and compatibility
+
+These schemas are the source of truth for structural validation and are intended to
+be stable per major version while allowing controlled extension.
+
+See neighboring category READMEs and `.agents/mappings.yaml` for how each schema field
+is used in practice.

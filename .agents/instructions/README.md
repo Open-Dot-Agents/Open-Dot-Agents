@@ -1,21 +1,38 @@
 # Instructions
 
-Always-on, repo-wide (or user-wide) behavioral instructions that are loaded
-into every agent session automatically — coding conventions, build/test
-commands, architectural context, communication style.
+Instructions are unconditional, always-on context that applies to every agent
+session. They provide the baseline operating model for the workspace.
 
-**Scope note vs. `../rules/`:** across vendors this same concept goes by
-different names — Claude Code's always-loaded `CLAUDE.md`, GitHub Copilot's
-`copilot-instructions.md`, and generic `AGENTS.md` are all "instructions" in
-this standard's sense: unconditional, always-applied context. Use `../rules/`
-instead for *scoped/conditional* behavior (e.g. rules that only apply to
-certain paths, languages, or triggers). If a harness doesn't distinguish the
-two, treat its equivalent file as `instructions` by default.
+## Purpose
 
-Maps to: Claude Code `CLAUDE.md`, GitHub Copilot CLI custom instructions
-(`.github/copilot-instructions.md`, `AGENTS.md`), OpenAI Codex CLI `AGENTS.md`.
+- repository architecture and conventions
+- coding and review standards
+- common build/test expectations
+- persistent communication and behavior expectations
 
-See `../mappings.yaml` for links to each vendor's canonical documentation.
+## Scope note
 
-Machine contract metadata is in `../schema/v1/agents.schema.json`, including
-the `.md` file convention and parser expectations for this category.
+Differentiate clearly from `../rules/`:
+
+- `instructions`: always active, no trigger required
+- `rules`: conditionally active based on path, trigger, or context
+
+When a harness conflates the two, treat its equivalent file as
+`instructions` by default.
+
+## Vendor mappings
+
+- Claude Code: `CLAUDE.md`
+- GitHub Copilot CLI: `AGENTS.md`, `.github/copilot-instructions.md`
+- OpenAI Codex CLI: `AGENTS.md`
+
+## Expected content
+
+One or more Markdown files containing high-level global guidance.
+
+## Contract
+
+Machine metadata is in `../schema/v1/agents.schema.json`, including filename and
+parser expectations.
+
+See `../mappings.yaml` for canonical vendor documentation.

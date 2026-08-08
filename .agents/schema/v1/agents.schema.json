@@ -289,7 +289,10 @@
               "type": "array",
               "items": {
                 "type": "string",
-                "const": "skills/*/SKILL.md"
+                "enum": [
+                  "skills/*/SKILL.md",
+                  "skills/*/scripts/*"
+                ]
               }
             },
             "front_matter": {

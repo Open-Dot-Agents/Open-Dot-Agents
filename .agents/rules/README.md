@@ -1,24 +1,34 @@
 # Rules
 
-Scoped or conditional behavioral rules — apply only in certain contexts (a
-given path, language, file type, or trigger condition), as opposed to the
-unconditional, always-on guidance in `../instructions/`.
+Rules are scoped or conditional instructions that apply only when a trigger, path,
+or context is matched.
 
-**Scope note vs. `../instructions/`:** see `../instructions/README.md` for
-the full distinction. In short: `instructions` = always loaded; `rules` =
-conditionally applied. Cursor's `.cursor/rules/*.mdc` files confirm this is a
-first-class, widely-used concept beyond OpenAI: each rule file carries
-activation metadata (always-on, glob/path-matched, manually triggered, or
-"model decides"). When mapping from a harness that has only one mechanism,
-prefer `instructions` and use `rules` only for genuinely conditional/scoped
-guidance.
+## Purpose
 
-Maps to: OpenAI's agent-configuration rules concept, Cursor's
-`.cursor/rules/*.mdc` files, Windsurf Cascade's `.windsurf/rules/`;
-conditionally-scoped instruction mechanisms in other harnesses (e.g.
-path-scoped instruction files) fall here too.
+- encode path- or file-type specific behavior
+- document conditional constraints
+- apply policy only where it is relevant
 
-See `../mappings.yaml` for links to each vendor's canonical documentation.
+## Scope note
 
-Machine contract metadata is in `../schema/v1/agents.schema.json`, including
-the `rules/*.md` filename pattern and required `applyTo` front matter key.
+Rules are distinct from `../instructions/`:
+
+- `instructions`: unconditional, always active
+- `rules`: conditional by activation criteria (path, language, trigger, etc.)
+
+## Vendor mappings
+
+- OpenAI: agent rule concept
+- Any vendor with conditional instruction semantics
+
+## Expected content
+
+- Markdown files with activation metadata (e.g. scope/tags/globs/trigger)
+- optional model-invocation hinting where supported
+
+## Contract
+
+Machine metadata is in `../schema/v1/agents.schema.json`, including filename and
+required front matter.
+
+See `../mappings.yaml` for vendor documentation.

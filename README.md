@@ -1,55 +1,84 @@
 # Open-Dot-Agents
 
-Open configuration standard for AI coding agents.
+Open-Dot-Agents defines a practical, vendor-neutral standard for configuring AI
+coding agents. Instead of maintaining separate formats per tool, teams author one
+canonical `.agents/` tree and generate compatible target outputs.
 
-Every AI coding harness (GitHub Copilot CLI, OpenAI Codex CLI, Claude Code, ...)
-invents its own directory layout and file format for the same handful of
-customization concepts: persistent instructions, reusable prompts, custom
-sub-agents, reusable skills, external tool connections, lifecycle hooks,
-safety guardrails, and so on.
+## Why this project exists
 
-`Open-Dot-Agents` proposes a single, vendor-neutral `.agents/` folder that
-groups these concepts into well-defined categories, so that tooling can adopt
-one standard layout instead of a different one per vendor.
+Most harnesses (Copilot, Codex, Claude, and others) represent the same ideas with
+different schemas. Open-Dot-Agents normalizes those ideas into one contract:
 
-## Structure
+- always-on instructions and scoped rules
+- agent and skill definitions
+- hooks and lifecycle automation
+- safety controls and permissions
+- tooling integrations (MCP and beyond)
 
-```
+## Canonical `.agents/` layout
+
+```text
 .agents/
-├── agents/       # Custom sub-agent / persona definitions
-├── guardrails/   # Safety limits, sandboxing, read-only/restricted modes
-├── hooks/        # Lifecycle automation (pre/post tool call, session start/end, ...)
-├── instructions/ # Always-on, repo-wide behavioral instructions
-├── memories/     # Persistent cross-session knowledge/context
-├── permissions/  # Tool allow/deny/ask rules and approval policies
-├── plugins/      # Installable bundles combining any of the above categories
-├── profiles/     # Named, swappable presets of settings/permissions/tools
-├── prompts/      # Reusable, parameterized prompt templates / slash commands
-├── rules/        # Scoped behavioral rules (e.g. path- or language-specific)
-├── settings/     # Base runtime configuration (model, env vars, sandbox mode, ...)
-├── skills/       # Portable, on-demand task playbooks
-├── tools/        # External tool/service connections (e.g. MCP servers)
-├── mappings.yaml # Maps each category to the vendor docs it corresponds to
-└── schema/      # Versioned machine-readable contracts
+├── agents/        Persona and sub-agent definitions
+├── guardrails/    Sandbox and hard runtime boundaries
+├── hooks/         Lifecycle hook definitions
+├── instructions/  Unconditional behavioral guidance
+├── memories/      Persistent memory structures
+├── permissions/   Allow/deny/ask action policies
+├── plugins/       Installable configuration bundles
+├── profiles/      Named runtime presets
+├── prompts/       Reusable prompt templates
+├── rules/         Scoped and conditional behavior
+├── settings/      Base runtime defaults
+├── skills/        On-demand task playbooks
+├── tools/         External integrations
+├── mappings.yaml  Target mapping and status metadata
+└── schema/        Versioned machine-readable contracts
 ```
 
-Each category folder has its own `README.md` describing its purpose and expected
-content. `mappings.yaml` cross-references each category with the equivalent
-feature documentation from existing harnesses, to help adopters and tooling authors
-translate between the open standard and vendor-specific formats. The machine-readable
-contracts are in:
+Category documentation:
+
+- [`agents`](./.agents/agents/README.md)
+- [`guardrails`](./.agents/guardrails/README.md)
+- [`hooks`](./.agents/hooks/README.md)
+- [`instructions`](./.agents/instructions/README.md)
+- [`memories`](./.agents/memories/README.md)
+- [`permissions`](./.agents/permissions/README.md)
+- [`plugins`](./.agents/plugins/README.md)
+- [`profiles`](./.agents/profiles/README.md)
+- [`prompts`](./.agents/prompts/README.md)
+- [`rules`](./.agents/rules/README.md)
+- [`settings`](./.agents/settings/README.md)
+- [`skills`](./.agents/skills/README.md)
+- [`tools`](./.agents/tools/README.md)
+
+Machine-readable contracts:
 
 - `.agents/schema/v1/agents.schema.json`
 - `.agents/schema/v1/mappings.schema.json`
+- `.agents/manifest.json`
 
-`manifest.json` records explicit versioning, canonical root semantics, and
-compatibility notes for this repository version.
+## Quick start
 
-## Status
+```bash
+cd cli
+go install ./cmd/oda
+oda validate --root /path/to/repo
+oda generate --root /path/to/repo --target all
+oda check --root /path/to/repo --target all
+```
 
-This is an early-stage proposal. Category boundaries and file formats are
-still being refined — see individual category READMEs and `mappings.yaml`
-for current scope and open questions.
+Helpful flags:
+
+- `--target all` for registry-wide runs
+- `--dry-run` to preview writes
+- `--diff` for file-level change summaries
+- `--format=json` for machine-readable output
+- `--ci` for strict CI behavior
+
+## Roadmap and status
+
+See [ROADMAP.md](./ROADMAP.md) for the milestone plan and current status.
 
 ## License
 

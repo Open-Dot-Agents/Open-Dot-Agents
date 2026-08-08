@@ -26,7 +26,6 @@
     - https://docs.github.com/en/copilot/tutorials/customization-library/prompt-files/your-first-prompt-file
   rules:
     - https://learn.chatgpt.com/docs/agent-configuration/rules
-    - https://cursor.com/docs/rules
   settings:
     - https://learn.chatgpt.com/docs/config-file/config-reference
     - https://code.claude.com/docs/en/settings

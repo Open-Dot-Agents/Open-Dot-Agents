@@ -1,22 +1,31 @@
 # Permissions
 
-Rules governing *which specific tools/actions* an agent may invoke, and
-whether each requires human approval before running — tool allow/deny/ask
-lists, approval policies (e.g. "never", "on-request", "untrusted"), and
-per-action gating (shell, network, filesystem writes, MCP calls).
+Permissions define policy for what the agent is allowed to do at runtime and what
+requires explicit consent.
 
-**Scope note vs. `../guardrails/`:** `guardrails` covers the sandbox/
-environment an agent runs inside (what it's *physically capable of*, e.g.
-network access at the OS level); `permissions` covers the *policy layer* on
-top (what it's *allowed to attempt* and whether approval is required first).
-Some harnesses expose both as a single setting (e.g. Codex's
-`sandbox_mode` + `approval_policy` pair) — in that case document the sandbox
-half under `guardrails` and the approval/allow-list half here, cross-linking
-both READMEs.
+## Scope note
 
-Maps to: OpenAI Codex CLI `approval_policy` (config.toml), Claude Code
-`permissions` (allow/deny/ask) in `.claude/settings.json`.
+Permissions sit above guardrails:
 
-See `../mappings.yaml` for links to each vendor's canonical documentation.
+- `guardrails`: environment capability limits (what is technically possible)
+- `permissions`: governance limits (what is allowed, blocked, or requires approval)
 
-Machine contract metadata is in `../schema/v1/agents.schema.json`.
+If a harness combines these concepts, document the environment controls under
+`../guardrails/` and place approval policy here.
+
+## Vendor mappings
+
+- OpenAI Codex CLI: `approval_policy` and policy-style command controls
+- Claude Code: `permissions` section in `.claude/settings.json`
+
+## Expected content
+
+- allow/deny/ask action rules
+- global approval policy
+- per-tool gating (for example shell, network, and file write constraints)
+
+## Contract
+
+Machine metadata is in `../schema/v1/agents.schema.json`.
+
+See `../mappings.yaml` for canonical vendor documentation.

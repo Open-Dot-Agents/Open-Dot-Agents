@@ -1,20 +1,27 @@
 # Settings
 
-Base runtime configuration for an agent session — model selection, reasoning
-effort, environment variables, default sandbox mode, and other options that
-apply regardless of which agent/skill/tool is active. This is the
-vendor-neutral equivalent of a harness's top-level config file, as opposed to
-the more specific `../permissions/`, `../profiles/`, and `../tools/`
-categories.
+Settings define the base runtime configuration for the active agent session.
 
-Maps to: OpenAI Codex CLI `config.toml` (top-level, non-profile keys),
-Claude Code `.claude/settings.json` (non-permissions, non-hooks keys),
-GitHub Copilot CLI configuration.
+## Purpose
 
-**Scope note:** keep tool wiring in `../tools/`, tool allow/deny/approval
-rules in `../permissions/`, and named presets in `../profiles/` — `settings`
-is for the single "current" base configuration.
+- set default model and runtime knobs
+- define environment defaults
+- set default sandbox/policy behavior
+- establish defaults before overlays like `../permissions/`, `../profiles/`, and
+  `../tools/` are applied
 
-See `../mappings.yaml` for links to each vendor's canonical documentation.
+## Vendor mappings
 
-Machine contract metadata is in `../schema/v1/agents.schema.json`.
+- OpenAI Codex CLI: top-level `config.toml` settings
+- Claude Code: non-permission/non-hook settings in `.claude/settings.json`
+- GitHub Copilot CLI configuration primitives
+
+## Expected content
+
+Base configuration values that represent the "current" session defaults.
+
+## Contract
+
+Machine metadata is in `../schema/v1/agents.schema.json`.
+
+See `../mappings.yaml` for canonical vendor documentation.

@@ -1,0 +1,12 @@
+[mcp_servers."local-docs"]
+command = "node"
+args = ["tools/docs-server.js", "--project"]
+[mcp_servers."local-docs".env]
+"LOG_LEVEL" = "debug"
+"PROJECT_MODE" = "read-only"
+
+[mcp_servers."remote-issues"]
+url = "https://issues.example.test/mcp"
+[mcp_servers."remote-issues".http_headers]
+"Authorization" = "Bearer ${ISSUES_TOKEN}"
+"X-Project" = "open-dot-agents"

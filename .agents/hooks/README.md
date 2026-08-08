@@ -1,18 +1,38 @@
 # Hooks
 
-Automation triggered on lifecycle events of an agent session — e.g. before/
-after a tool call, on session start/end, before context compaction. Used for
-deterministic actions (linting, logging, notifications, policy enforcement)
-that shouldn't consume the agent's own context or reasoning.
+Hooks are deterministic automations bound to session lifecycle events. They run
+outside core reasoning and are useful for policy checks, logging, linting, and
+notification workflows.
 
-Maps to: GitHub Copilot CLI hooks (`.github/hooks/*.json`), Claude Code hooks
-(registered in `.claude/settings.json`), OpenAI Codex CLI lifecycle hooks
-(governed via `requirements.toml`).
+## Purpose
 
-Expected content: hook definitions specifying the triggering event and the
-command/script to run, typically JSON or YAML.
+Typical hook points include:
 
-See `../mappings.yaml` for links to each vendor's canonical documentation.
+- pre/post tool invocation
+- session start/end
+- before compaction or handoff
+- custom task-specific triggers (where supported)
 
-Machine contract metadata is in `../schema/v1/agents.schema.json`, including
-`hooks/*.json` payload shape and Claude merge semantics.
+## Vendor mappings
+
+- GitHub Copilot CLI hooks in `.github/hooks/*.json`
+- Claude Code hooks in `.claude/settings.json`
+- OpenAI Codex CLI lifecycle hooks via `requirements.toml`
+
+## Expected content
+
+Each hook entry should define:
+
+- trigger/event name
+- command or script to execute
+- optional arguments and environment
+- failure handling semantics where supported
+
+Format is usually JSON or YAML depending on the target harness.
+
+## Contract
+
+Machine metadata is in `../schema/v1/agents.schema.json`, including
+`hooks/*.json` payload expectations and merge behavior.
+
+See `../mappings.yaml` for links to vendor docs.

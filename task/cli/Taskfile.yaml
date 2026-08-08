@@ -1,0 +1,243 @@
+version: '3'
+
+tasks:
+  build:
+    desc: Build the oda CLI
+    cmds:
+      - cd cli && go build -o bin/oda ./cmd/oda
+    sources:
+      - cli/**/*.go
+      - cli/go.mod
+      - cli/go.sum
+    generates:
+      - cli/bin/oda
+
+  install:
+    desc: Install the oda CLI with Go
+    cmds:
+      - cd cli && go install ./cmd/oda
+
+  test:
+    desc: Run CLI unit tests
+    cmds:
+      - cd cli && go test ./...
+
+  verify:
+    desc: Run production verification gates
+    deps:
+      - test
+      - test:copilot
+      - test:codex
+      - test:claude
+    cmds:
+      - cd cli && go vet ./...
+
+  release:
+    desc: Build a versioned release binary after verification
+    requires:
+      vars: [VERSION]
+    deps:
+      - verify
+    cmds:
+      - cd cli && go build -trimpath -ldflags="-s -w -X main.version={{.VERSION}}" -o bin/oda ./cmd/oda
+      - cd cli && test "$(./bin/oda --version)" = "oda {{.VERSION}}"
+
+  test:copilot:
+    desc: Run the Copilot CLI compatibility fixture
+    deps:
+      - test
+    cmds:
+      - |
+        set -eu
+        seed_metadata() {
+          local fixture_root="$1"
+          mkdir -p "$fixture_root/.agents/schema/v1"
+          cp ../.agents/schema/v1/agents.schema.json "$fixture_root/.agents/schema/v1/agents.schema.json"
+          cp ../.agents/schema/v1/mappings.schema.json "$fixture_root/.agents/schema/v1/mappings.schema.json"
+          cp ../.agents/mappings.yaml "$fixture_root/.agents/mappings.yaml"
+          cp ../.agents/manifest.json "$fixture_root/.agents/manifest.json"
+        }
+        cleanup_metadata() {
+          local fixture_root="$1"
+          rm -f "$fixture_root/.agents/schema/v1/agents.schema.json"
+          rm -f "$fixture_root/.agents/schema/v1/mappings.schema.json"
+          rm -f "$fixture_root/.agents/mappings.yaml"
+          rm -f "$fixture_root/.agents/manifest.json"
+          rm -rf "$fixture_root/.agents/schema"
+        }
+        cleanup() {
+          cleanup_metadata testdata/shared/basic
+          cleanup_metadata testdata/shared/complex
+          go run ./cmd/oda --root testdata/shared/basic --target copilot clean >/dev/null 2>&1 || true
+          go run ./cmd/oda --root testdata/shared/complex --target copilot clean >/dev/null 2>&1 || true
+        }
+        trap cleanup EXIT
+        fixture="testdata/shared/basic"
+        seed_metadata "$fixture"
+        go run ./cmd/oda --root "$fixture" validate
+        go run ./cmd/oda --root "$fixture" generate
+        if command -v copilot >/dev/null 2>&1; then
+          (
+            cd "$fixture"
+            copilot skill list | grep -F "docs - Updates project documentation"
+          )
+        else
+          echo "Skipping native Copilot CLI discovery: copilot is not installed."
+        fi
+        go run ./cmd/oda --root "$fixture" check
+        fixture="testdata/shared/complex"
+        seed_metadata "$fixture"
+        go run ./cmd/oda --root "$fixture" validate
+        go run ./cmd/oda --root "$fixture" generate
+        go run ./cmd/oda --root "$fixture" check
+        if command -v copilot >/dev/null 2>&1; then
+          (
+            cd "$fixture"
+            copilot skill list | grep -F "release - Prepares a release and verifies all release gates."
+            copilot mcp list --json | grep -F '"local-docs"'
+            copilot mcp list --json | grep -F '"remote-issues"'
+          )
+        fi
+        go run ./cmd/oda --root "$fixture" clean
+    dir: cli
+
+  test:codex:
+    desc: Run Codex fixtures and native MCP discovery when available
+    cmds:
+      - go test ./internal/adapter -run '^(TestCodexGenerateCheckAndClean|TestCodexComplexFixture)$'
+      - |
+        set -eu
+        seed_metadata() {
+          local fixture_root="$1"
+          mkdir -p "$fixture_root/.agents/schema/v1"
+          cp ../.agents/schema/v1/agents.schema.json "$fixture_root/.agents/schema/v1/agents.schema.json"
+          cp ../.agents/schema/v1/mappings.schema.json "$fixture_root/.agents/schema/v1/mappings.schema.json"
+          cp ../.agents/mappings.yaml "$fixture_root/.agents/mappings.yaml"
+          cp ../.agents/manifest.json "$fixture_root/.agents/manifest.json"
+        }
+        cleanup_metadata() {
+          local fixture_root="$1"
+          rm -f "$fixture_root/.agents/schema/v1/agents.schema.json"
+          rm -f "$fixture_root/.agents/schema/v1/mappings.schema.json"
+          rm -f "$fixture_root/.agents/mappings.yaml"
+          rm -f "$fixture_root/.agents/manifest.json"
+          rm -rf "$fixture_root/.agents/schema"
+        }
+        cleanup() {
+          cleanup_metadata testdata/shared/basic
+          cleanup_metadata testdata/shared/complex
+          go run ./cmd/oda --root testdata/shared/basic --target codex clean >/dev/null 2>&1 || true
+          go run ./cmd/oda --root testdata/shared/complex --target codex clean >/dev/null 2>&1 || true
+        }
+        trap cleanup EXIT
+        fixture="testdata/shared/basic"
+        seed_metadata "$fixture"
+        go run ./cmd/oda --root "$fixture" --target codex validate
+        go run ./cmd/oda --root "$fixture" --target codex generate
+        go run ./cmd/oda --root "$fixture" --target codex check
+        go run ./cmd/oda --root "$fixture" --target codex clean
+        fixture="testdata/shared/complex"
+        seed_metadata "$fixture"
+        if go run ./cmd/oda --root "$fixture" --target codex validate; then
+          echo "Expected Codex validation to reject rules and hooks." >&2
+          exit 1
+        fi
+        go run ./cmd/oda --root "$fixture" --target codex --allow-unsupported generate
+        go run ./cmd/oda --root "$fixture" --target codex --allow-unsupported check
+        if command -v codex >/dev/null 2>&1; then
+          (
+            cd "$fixture"
+            codex mcp list | grep -F "local-docs"
+            codex mcp list | grep -F "remote-issues"
+          )
+        else
+          echo "Skipping native Codex discovery: codex is not installed."
+        fi
+    dir: cli
+
+  test:claude:
+    desc: Run Claude Code fixtures and native MCP discovery when available
+    cmds:
+      - go test ./internal/adapter -run '^(TestClaudeGenerateCheckAndClean|TestClaudeComplexFixture)$'
+      - |
+        set -eu
+        seed_metadata() {
+          local fixture_root="$1"
+          mkdir -p "$fixture_root/.agents/schema/v1"
+          cp ../.agents/schema/v1/agents.schema.json "$fixture_root/.agents/schema/v1/agents.schema.json"
+          cp ../.agents/schema/v1/mappings.schema.json "$fixture_root/.agents/schema/v1/mappings.schema.json"
+          cp ../.agents/mappings.yaml "$fixture_root/.agents/mappings.yaml"
+          cp ../.agents/manifest.json "$fixture_root/.agents/manifest.json"
+        }
+        cleanup_metadata() {
+          local fixture_root="$1"
+          rm -f "$fixture_root/.agents/schema/v1/agents.schema.json"
+          rm -f "$fixture_root/.agents/schema/v1/mappings.schema.json"
+          rm -f "$fixture_root/.agents/mappings.yaml"
+          rm -f "$fixture_root/.agents/manifest.json"
+          rm -rf "$fixture_root/.agents/schema"
+        }
+        cleanup() {
+          cleanup_metadata testdata/shared/basic
+          cleanup_metadata testdata/shared/complex
+          go run ./cmd/oda --root testdata/shared/basic --target claude clean >/dev/null 2>&1 || true
+          go run ./cmd/oda --root testdata/shared/complex --target claude clean >/dev/null 2>&1 || true
+        }
+        trap cleanup EXIT
+        fixture="testdata/shared/basic"
+        seed_metadata "$fixture"
+        go run ./cmd/oda --root "$fixture" --target claude validate
+        go run ./cmd/oda --root "$fixture" --target claude generate
+        go run ./cmd/oda --root "$fixture" --target claude check
+        go run ./cmd/oda --root "$fixture" --target claude clean
+        fixture="testdata/shared/complex"
+        seed_metadata "$fixture"
+        go run ./cmd/oda --root "$fixture" --target claude generate
+        go run ./cmd/oda --root "$fixture" --target claude check
+        if command -v claude >/dev/null 2>&1; then
+          (
+            cd "$fixture"
+            claude mcp list | grep -F "local-docs"
+            claude mcp list | grep -F "remote-issues"
+          )
+        else
+          echo "Skipping native Claude Code discovery: claude is not installed."
+        fi
+    dir: cli
+
+  test:surface:
+    desc: Run CLI help, validation, and completion command smoke checks (allows unsupported categories by default)
+    cmds:
+      - |
+        set -eu
+        oda_bin="$(command -v oda)"
+        if [ -z "$oda_bin" ]; then
+          echo "oda not found in PATH"
+          exit 1
+        fi
+        repo_root="$(cd .. && pwd)"
+        if [ "${ODA_ALLOW_UNSUPPORTED:-1}" = "1" ] || [ "${ODA_ALLOW_UNSUPPORTED:-1}" = "true" ]; then
+          allow_unsupported="--allow-unsupported"
+        else
+          allow_unsupported=""
+        fi
+        echo "==> oda --help"
+        "$oda_bin" --help
+        echo "==> oda --root . validate"
+        "$oda_bin" --root "$repo_root" validate
+        echo "==> oda --root . validate --target all"
+        "$oda_bin" --root "$repo_root" validate --target all $allow_unsupported
+        echo "==> oda --root . validate --target all --format json"
+        "$oda_bin" --root "$repo_root" validate --target all --format json $allow_unsupported
+        echo "==> oda --root . --target all validate"
+        "$oda_bin" --root "$repo_root" --target all validate $allow_unsupported
+        echo "==> oda --root . completion bash"
+        "$oda_bin" completion bash | head -n 5
+        echo "==> oda --root . completion zsh"
+        "$oda_bin" completion zsh | head -n 8
+    dir: cli
+
+  test:surface:strict:
+    desc: Run the same surface checks in strict mode (no --allow-unsupported)
+    cmds:
+      - ODA_ALLOW_UNSUPPORTED=0 task cli:test:surface

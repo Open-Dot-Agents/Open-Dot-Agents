@@ -1,26 +1,31 @@
 # Tools
 
-Connections to external tools/services the agent can call — most commonly
-Model Context Protocol (MCP) servers, but any external tool integration
-belongs here.
+Tools define external integrations the agent can call, most commonly Model
+Context Protocol (MCP) servers.
 
-Maps to: MCP server configuration across all major harnesses (GitHub Copilot
-CLI, Claude Code `.mcp.json`/`.claude/settings.json`, OpenAI Codex CLI
-`[mcp_servers.*]` in `config.toml`).
+## Purpose
 
-Expected content: tool/server definitions (command, args, env, transport).
+- register external services and commands
+- configure invocation details (`command`, `args`, `env`, transport)
+- establish safe, explicit tool wiring
 
-## `oda` adapter input
+## Vendor mappings
 
-The `oda` adapter reads `mcp.json` from this directory. Its content uses the
-portable MCP `mcpServers` object and is projected to GitHub Copilot CLI's
-`.github/mcp.json`, OpenAI Codex's `.codex/config.toml`, or Claude Code's
-`.mcp.json`.
+- GitHub Copilot CLI (`.github/mcp.json`)
+- Claude Code (`.mcp.json` / `.claude/settings.json`)
+- OpenAI Codex CLI (`[mcp_servers.*]` in `config.toml`)
 
-Do not put credentials in this file. Reference environment variables or use
-the harness's local secret configuration instead.
+## Expected content
 
-See `../mappings.yaml` for links to each vendor's canonical documentation.
+- MCP server definitions and related transport configuration
+- secure connection metadata (excluding secrets)
+- environment-variable placeholders
 
-Machine contract metadata is in `../schema/v1/agents.schema.json`, including
-the `tools/mcp.json` portable MCP schema and supported transports.
+`oda` adapter input expects a portable MCP definition in `mcp.json`.
+
+## Contract
+
+Machine metadata is in `../schema/v1/agents.schema.json`, including expected
+`tools/mcp.json` shape and supported transports.
+
+See `../mappings.yaml` for vendor references.

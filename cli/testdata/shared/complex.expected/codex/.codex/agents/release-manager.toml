@@ -1,0 +1,3 @@
+name = "release-manager"
+description = "Prepares release notes and validates release readiness."
+developer_instructions = "Summarize shipped changes and verify release prerequisites."

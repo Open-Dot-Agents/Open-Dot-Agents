@@ -1,20 +1,42 @@
 # Guardrails
 
-Safety limits on *what an agent is allowed to attempt at all* — sandboxing
-mode (e.g. filesystem/network isolation), read-only vs. write-enabled
-sessions, and other hard boundaries baked into an agent's operating
-environment.
+Guardrails define hard runtime boundaries: what the agent environment can or
+cannot do, regardless of its task intent.
 
-**Scope note:** this category is about the *environment/sandbox* an agent
-runs in. It is distinct from `../permissions/`, which covers *which specific
-tools/actions* an agent may invoke and whether each needs approval — the two
-are related but not the same concept. If a harness only exposes a single
-combined "sandbox + approval policy" setting (e.g. Codex `sandbox_mode` +
-`approval_policy` in one config block), document it under `guardrails` here
-and cross-link from `../permissions/README.md`.
+## Purpose
 
-Maps to: OpenAI Codex CLI sandbox modes, general agent sandboxing concepts.
+- Filesystem scope (`read-only` vs. `read-write`)
+- Network access policy
+- Process execution limits
+- Sandboxing mode and similar environmental restrictions
 
-See `../mappings.yaml` for links to each vendor's canonical documentation.
+## Scope note
 
-Machine contract metadata is in `../schema/v1/agents.schema.json`.
+Guardrails are different from `../permissions/`:
+
+- `guardrails`: what the environment allows at the platform level
+- `permissions`: which tools/actions are permitted by policy and approval flow
+
+If a harness exposes only a single combined control (for example, a broad
+`sandbox_mode` setting), model it as `guardrails` and document the approval policy
+separately in `../permissions/README.md`.
+
+## Vendor mappings
+
+- OpenAI Codex CLI sandbox modes
+- Generic agent runtime sandbox models used across vendors
+
+## Expected content
+
+This category typically maps to harness configuration blocks that define:
+
+- read/write filesystem policy
+- network restrictions
+- command/session execution limits
+- other non-negotiable execution boundaries
+
+## Contract
+
+Machine-readable fields are defined in `../schema/v1/agents.schema.json`.
+
+See `../mappings.yaml` for canonical links.

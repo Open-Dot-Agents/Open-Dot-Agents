@@ -1,18 +1,34 @@
 # Skills
 
-Portable, on-demand task playbooks — self-contained folders of instructions
-(and optionally scripts/resources) for a specific repeatable task, loaded
-just-in-time when relevant rather than kept in context at all times.
+Skills are on-demand task playbooks that load only when needed.
 
-Maps to: GitHub Copilot CLI agent skills (`.github/skills/<skill>/SKILL.md`),
-Claude Code skills (`.claude/skills/`), OpenAI Codex CLI skills, the
-vendor-neutral `agentskills.io` format.
+## Purpose
 
-Expected content: one subfolder per skill, containing at minimum a
-`SKILL.md` with name/description/trigger metadata plus instructions, and
-optionally supporting scripts.
+- package repeatable problem-solving procedures
+- minimize prompt/context overhead
+- keep specialist workflows discoverable and reusable
 
-See `../mappings.yaml` for links to each vendor's canonical documentation.
+## Vendor mappings
 
-Machine contract metadata is in `../schema/v1/agents.schema.json`, including
-the `skills/*/SKILL.md` file convention and required front matter.
+- GitHub Copilot CLI: `.github/skills/<skill>/SKILL.md`
+- Claude Code: skill-style reusable workflow folders
+- OpenAI Codex CLI: codex-specific skill/task folders
+- `agentskills.io` compatible skill formats
+
+## Expected content
+
+Each skill uses a dedicated subfolder (for example `.github/skills/<name>/`) and
+at minimum includes a `SKILL.md` with:
+
+- trigger/usage description
+- required context
+- execution steps or heuristics
+
+Optional scripts or resources can be added as needed.
+
+## Contract
+
+Machine metadata is in `../schema/v1/agents.schema.json`, including required file
+layout and front matter.
+
+See `../mappings.yaml` for vendor documentation.

@@ -1,0 +1,1 @@
+Use concise commit language.

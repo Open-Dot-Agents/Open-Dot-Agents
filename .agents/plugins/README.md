@@ -1,20 +1,33 @@
 # Plugins
 
-Installable, distributable bundles that combine any of the other
-categories — e.g. a single package that ships an agent, a couple of skills,
-a hook, and an MCP server together — so they can be shared and versioned as
-one unit instead of copy-pasted piecemeal.
+Plugins are distributable bundles that combine multiple agent categories into a
+single reusable package.
 
-Maps to: GitHub Copilot CLI plugins (installable via a plugin marketplace).
-Other harnesses do not currently have a first-class plugin/marketplace
-mechanism; sharing a bundle of configuration there typically means copying
-the relevant subfolders/files directly (e.g. cloning another repo's
-`.claude/` contents).
+## Purpose
 
-Expected content: a manifest describing the plugin (name, version,
-description, included categories/paths) plus the bundled category
-subfolders themselves.
+Use plugins when teams want to share:
 
-See `../mappings.yaml` for links to each vendor's canonical documentation.
+- persona definitions
+- tool integrations
+- hooks and rules
+- command/skill bundles
 
-Machine contract metadata is in `../schema/v1/agents.schema.json`.
+as one installable unit rather than individual file copies.
+
+## Vendor mappings
+
+- GitHub Copilot CLI: installable plugin packages through its marketplace model
+- Other harnesses: usually emulate via direct repository sharing of equivalent
+  category folders and files
+
+## Expected content
+
+- plugin manifest (name, version, description, compatibility metadata)
+- package contents for included categories
+- optional installation metadata
+
+## Contract
+
+Machine metadata is in `../schema/v1/agents.schema.json`.
+
+See `../mappings.yaml` for vendor-specific plugin documentation.

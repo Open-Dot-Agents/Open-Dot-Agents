@@ -1,16 +1,27 @@
 # Prompts
 
-Reusable, parameterized prompt templates invoked on demand (not automatically
-loaded like `../instructions/`) — e.g. "review this PR", "write tests for
-this file". Often exposed to users as slash commands.
+Prompts are reusable, parameterized templates invoked on demand. Unlike
+`../instructions/`, they are not loaded automatically and are selected
+explicitly by user intent.
 
-Maps to: GitHub Copilot CLI prompt files (`.github/prompts/*.prompt.md`),
-Claude Code custom slash commands, OpenAI Codex CLI custom slash
-commands/workflows.
+## Purpose
 
-Expected content: one file per prompt, typically Markdown with placeholders
-for variables/arguments.
+- provide repeatable command-and-response formats
+- standardize reviews, triage, refactoring, and other recurring tasks
+- keep context focused through bounded templates
 
-See `../mappings.yaml` for links to each vendor's canonical documentation.
+## Vendor mappings
 
-Machine contract metadata is in `../schema/v1/agents.schema.json`.
+- GitHub Copilot CLI: `.github/prompts/*.prompt.md`
+- Claude Code: slash-command based custom prompts
+- OpenAI Codex CLI: custom slash commands / workflows
+
+## Expected content
+
+One file per prompt template, typically Markdown with variable placeholders.
+
+## Contract
+
+Machine metadata is in `../schema/v1/agents.schema.json`.
+
+See `../mappings.yaml` for canonical links.

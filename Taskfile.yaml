@@ -1,0 +1,6 @@
+version: '3'
+
+includes:
+  cli:
+    taskfile: ./task/cli/Taskfile.yaml
+    dir: .

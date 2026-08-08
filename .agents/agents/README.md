@@ -1,17 +1,28 @@
 # Agents
 
-Definitions for custom sub-agents (a.k.a. "custom agents" or "subagents"):
-named, specialized personas with their own instructions, allowed tools, and
-optionally their own model — invoked to isolate a task in a separate context
-window (e.g. a "security reviewer" or "test writer" agent).
+Defines reusable, named personas or sub-agents with dedicated instructions.
 
-Maps to: GitHub Copilot CLI custom agents (`.github/agents/*.md`), Claude Code
-subagents (`.claude/agents/*.md`), OpenAI Codex CLI `AGENTS.md` agent roles.
+## Purpose
 
-Expected content: one file per agent, typically Markdown with front-matter
-for name/description/allowed-tools, followed by the agent's system prompt.
+Use this category for role-specific behavior that should be reusable across tasks, such as:
 
-See `../mappings.yaml` for links to each vendor's canonical documentation.
+- security review
+- test design
+- architecture and API design
 
-Machine contract metadata is in `../schema/v1/agents.schema.json`, including
-the `agents/*.md` filename convention and required `description` front matter.
+## Mappings
+
+- GitHub Copilot: `.github/agents/*.md`
+- OpenAI Codex CLI: `.codex/agents/*.toml`
+- Claude Code: `.claude/agents/*.md`
+
+## Expected content
+
+- One file per agent, typically Markdown.
+- Front matter includes:
+  - `description` (required)
+  - optional persona metadata (e.g. allowed tools, model preference).
+
+## Contract
+
+See `../schema/v1/agents.schema.json` for filename and front-matter requirements.
