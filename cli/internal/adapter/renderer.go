@@ -40,7 +40,7 @@ var statusesByTarget = map[string]map[string]string{
 		"hooks": categoryStatusUnsupported, "memories": categoryStatusUnsupported,
 		"permissions": categoryStatusUnsupported, "plugins": categoryStatusUnsupported,
 		"profiles": categoryStatusUnsupported, "prompts": categoryStatusUnsupported,
-		"settings": categoryStatusUnsupported, "skills": categoryStatusMapped,
+		"settings": categoryStatusUnsupported, "skills": categoryStatusSupported,
 		"tools": categoryStatusPartial,
 	},
 	"claude": {

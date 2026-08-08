@@ -1,0 +1,436 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://open-dot-agents.local/schema/v0.0.1/agents.schema.json",
+  "title": "Open-Dot-Agents v0.0.1 source contract",
+  "description": "Machine-readable contract for the `.agents/` repository layout.",
+  "type": "object",
+  "required": ["format_version", "canonical_root", "categories"],
+  "additionalProperties": false,
+  "properties": {
+    "format_version": {
+      "type": "string",
+      "const": "v0.0.1",
+      "description": "Schema contract version."
+    },
+    "canonical_root": {
+      "type": "string",
+      "const": ".agents",
+      "description": "Canonical root for contract categories."
+    },
+    "categories": {
+      "$ref": "#/$defs/category_registry"
+    }
+  },
+  "$defs": {
+    "category_registry": {
+      "type": "object",
+      "required": [
+        "agents",
+        "guardrails",
+        "hooks",
+        "instructions",
+        "memories",
+        "permissions",
+        "plugins",
+        "profiles",
+        "prompts",
+        "rules",
+        "settings",
+        "skills",
+        "tools"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "agents": {
+          "$ref": "#/$defs/agents_category"
+        },
+        "guardrails": {
+          "$ref": "#/$defs/freeform_category"
+        },
+        "hooks": {
+          "$ref": "#/$defs/hooks_category"
+        },
+        "instructions": {
+          "$ref": "#/$defs/file_category"
+        },
+        "memories": {
+          "$ref": "#/$defs/freeform_category"
+        },
+        "permissions": {
+          "$ref": "#/$defs/freeform_category"
+        },
+        "plugins": {
+          "$ref": "#/$defs/freeform_category"
+        },
+        "profiles": {
+          "$ref": "#/$defs/freeform_category"
+        },
+        "prompts": {
+          "$ref": "#/$defs/file_category"
+        },
+        "rules": {
+          "$ref": "#/$defs/rules_category"
+        },
+        "settings": {
+          "$ref": "#/$defs/freeform_category"
+        },
+        "skills": {
+          "$ref": "#/$defs/skills_category"
+        },
+        "tools": {
+          "$ref": "#/$defs/tools_category"
+        }
+      }
+    },
+    "category_base": {
+      "type": "object",
+      "required": [
+        "status",
+        "file_patterns",
+        "content_type"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["required", "optional", "forbidden"],
+          "description": "Canonical category requirement in `.agents` trees."
+        },
+        "content_type": {
+          "type": "string",
+          "enum": ["markdown", "json", "toml", "directory"],
+          "description": "Primary payload format."
+        },
+        "file_patterns": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "description": "Glob-style path pattern relative to `.agents/`."
+          }
+        },
+        "notes": {
+          "type": "string",
+          "description": "Category-level contract note."
+        },
+        "front_matter": {
+          "$ref": "#/$defs/front_matter_contract"
+        },
+        "file_shape": {
+          "type": "object",
+          "description": "Optional additional validation hints for category payloads."
+        }
+      }
+    },
+    "file_category": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/category_base"
+        },
+        {
+          "type": "object",
+          "required": ["file_patterns", "content_type"],
+          "properties": {
+            "content_type": {
+              "const": "markdown"
+            },
+            "front_matter": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "required_keys": {
+                  "type": "array",
+                  "maxItems": 0,
+                  "description": "No required front matter keys by default."
+                },
+                "optional_keys": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "rules_category": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/category_base"
+        },
+        {
+          "type": "object",
+          "required": ["file_patterns", "content_type", "front_matter"],
+          "properties": {
+            "content_type": {
+              "const": "markdown"
+            },
+            "file_patterns": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "const": "rules/*.md"
+              }
+            },
+            "front_matter": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["required_keys"],
+              "properties": {
+                "required_keys": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "const": "applyTo"
+                  }
+                },
+                "notes": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "agents_category": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/category_base"
+        },
+        {
+          "type": "object",
+          "required": ["file_patterns", "content_type", "front_matter"],
+          "properties": {
+            "content_type": {
+              "const": "markdown"
+            },
+            "file_patterns": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "const": "agents/*.md"
+              }
+            },
+            "front_matter": {
+              "type": "object",
+              "required": ["required_keys"],
+              "additionalProperties": false,
+              "properties": {
+                "required_keys": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": ["description"]
+                  }
+                },
+                "optional_keys": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": ["name"]
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "hooks_category": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/category_base"
+        },
+        {
+          "type": "object",
+          "required": ["file_patterns", "content_type", "file_shape"],
+          "properties": {
+            "content_type": {
+              "const": "json"
+            },
+            "file_patterns": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "const": "hooks/*.json"
+              }
+            },
+            "file_shape": {
+              "type": "object",
+              "required": ["hooks"],
+              "additionalProperties": false,
+              "properties": {
+                "hooks": {
+                  "type": "object",
+                  "description": "Map of hook event name to one or more commands."
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "skills_category": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/category_base"
+        },
+        {
+          "type": "object",
+          "required": ["file_patterns", "content_type", "front_matter"],
+          "properties": {
+            "content_type": {
+              "const": "markdown"
+            },
+            "file_patterns": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "skills/*/SKILL.md",
+                  "skills/*/scripts/*"
+                ]
+              }
+            },
+            "front_matter": {
+              "type": "object",
+              "required": ["required_keys"],
+              "additionalProperties": false,
+              "properties": {
+                "required_keys": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": ["name", "description"]
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "tools_category": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/category_base"
+        },
+        {
+          "type": "object",
+          "required": ["file_patterns", "content_type", "file_shape"],
+          "properties": {
+            "content_type": {
+              "const": "json"
+            },
+            "file_patterns": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "const": "tools/mcp.json"
+              }
+            },
+            "file_shape": {
+              "$ref": "#/$defs/tools_shape"
+            }
+          }
+        }
+      ]
+    },
+    "freeform_category": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/category_base"
+        },
+        {
+          "type": "object",
+          "required": ["file_patterns", "content_type"],
+          "properties": {
+            "content_type": {
+              "const": "directory"
+            },
+            "file_patterns": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "front_matter_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "required_keys": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "optional_keys": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "tools_shape": {
+      "type": "object",
+      "required": ["mcpServers"],
+      "additionalProperties": false,
+      "properties": {
+        "mcpServers": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/mcp_server"
+          }
+        }
+      }
+    },
+    "mcp_server": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["stdio", "local", "http", "streamable-http", ""]
+        },
+        "command": {
+          "type": "string"
+        },
+        "args": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "env": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "headers": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

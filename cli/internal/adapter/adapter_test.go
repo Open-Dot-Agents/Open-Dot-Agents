@@ -114,6 +114,34 @@ func TestCodexGenerateCheckAndClean(t *testing.T) {
 	runSharedFixture(t, "codex", "basic", false, "AGENTS.md")
 }
 
+func TestCodexUsesCanonicalSkillsWithoutProjection(t *testing.T) {
+	root := t.TempDir()
+	write(t, root, ".agents/skills/release/SKILL.md", "---\nname: release\ndescription: Prepare a release\n---\nReturn ODA_SKILL_OK.\n")
+
+	a, err := NewForTarget(root, "codex", false)
+	if err != nil {
+		t.Fatal(err)
+	}
+	plan, err := a.Plan(false)
+	if err != nil {
+		t.Fatalf("Plan() error = %v", err)
+	}
+	for path := range plan.Outputs {
+		if strings.HasPrefix(path, ".codex/skills/") {
+			t.Fatalf("Plan() projected duplicate Codex skill %q", path)
+		}
+	}
+	if err := a.Generate(false); err != nil {
+		t.Fatalf("Generate() error = %v", err)
+	}
+	if _, err := os.Stat(filepath.Join(root, ".agents/skills/release/SKILL.md")); err != nil {
+		t.Fatalf("canonical skill missing after generation: %v", err)
+	}
+	if _, err := os.Stat(filepath.Join(root, ".codex/skills")); !os.IsNotExist(err) {
+		t.Fatalf("Codex skill projection exists: %v", err)
+	}
+}
+
 func TestClaudeGenerateCheckAndClean(t *testing.T) {
 	runSharedFixture(t, "claude", "basic", false, "CLAUDE.md")
 }
@@ -381,7 +409,7 @@ func TestCodexDefaultStdioMCPTransport(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	want := "[mcp_servers.\"default\"]\ncommand = \"server\"\nargs = [\"--stdio\"]\n"
+	want := "#:schema " + codexConfigSchemaURL + "\n\n[mcp_servers.\"default\"]\ncommand = \"server\"\nargs = [\"--stdio\"]\n"
 	if string(data) != want {
 		t.Fatalf("Codex default stdio config = %q, want %q", data, want)
 	}

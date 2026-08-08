@@ -12,7 +12,7 @@ Skills are on-demand task playbooks that load only when needed.
 
 - GitHub Copilot CLI: `.github/skills/<skill>/SKILL.md`
 - Claude Code: skill-style reusable workflow folders
-- OpenAI Codex CLI: codex-specific skill/task folders
+- OpenAI Codex CLI: reads `.agents/skills/<skill>/SKILL.md` directly
 - `agentskills.io` compatible skill formats
 
 ## Expected content

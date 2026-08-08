@@ -1,5 +1,9 @@
 version: '3'
 
+env:
+  GOCACHE: /tmp/gocache-open-dot-agents
+  GOPATH: /tmp/gopath-open-dot-agents
+
 tasks:
   build:
     desc: Build the oda CLI
@@ -49,6 +53,10 @@ tasks:
     cmds:
       - |
         set -eu
+        compatibility_root="$(mktemp -d /tmp/oda-copilot-fixture.XXXXXX)"
+        trap 'rm -rf -- "$compatibility_root"' EXIT
+        cp -a testdata/shared/basic "$compatibility_root/basic"
+        cp -a testdata/shared/complex "$compatibility_root/complex"
         seed_metadata() {
           local fixture_root="$1"
           mkdir -p "$fixture_root/.agents/schema/v0.0.1"
@@ -57,22 +65,7 @@ tasks:
           cp ../.agents/mappings.yaml "$fixture_root/.agents/mappings.yaml"
           cp ../.agents/manifest.json "$fixture_root/.agents/manifest.json"
         }
-        cleanup_metadata() {
-          local fixture_root="$1"
-          rm -f "$fixture_root/.agents/schema/v0.0.1/agents.schema.json"
-          rm -f "$fixture_root/.agents/schema/v0.0.1/mappings.schema.json"
-          rm -f "$fixture_root/.agents/mappings.yaml"
-          rm -f "$fixture_root/.agents/manifest.json"
-          rm -rf "$fixture_root/.agents/schema"
-        }
-        cleanup() {
-          cleanup_metadata testdata/shared/basic
-          cleanup_metadata testdata/shared/complex
-          go run ./cmd/oda --root testdata/shared/basic --target copilot clean >/dev/null 2>&1 || true
-          go run ./cmd/oda --root testdata/shared/complex --target copilot clean >/dev/null 2>&1 || true
-        }
-        trap cleanup EXIT
-        fixture="testdata/shared/basic"
+        fixture="$compatibility_root/basic"
         seed_metadata "$fixture"
         go run ./cmd/oda --root "$fixture" validate
         go run ./cmd/oda --root "$fixture" generate
@@ -85,7 +78,7 @@ tasks:
           echo "Skipping native Copilot CLI discovery: copilot is not installed."
         fi
         go run ./cmd/oda --root "$fixture" check
-        fixture="testdata/shared/complex"
+        fixture="$compatibility_root/complex"
         seed_metadata "$fixture"
         go run ./cmd/oda --root "$fixture" validate
         go run ./cmd/oda --root "$fixture" generate
@@ -101,12 +94,28 @@ tasks:
         go run ./cmd/oda --root "$fixture" clean
     dir: cli
 
+  test:copilot:real:
+    desc: Run isolated authenticated .agents to Copilot CLI acceptance
+    deps:
+      - build
+    cmds:
+      - bash scripts/test-copilot-real.sh
+    dir: cli
+
   test:codex:
     desc: Run Codex fixtures and native MCP discovery when available
     cmds:
-      - go test ./internal/adapter -run '^(TestCodexGenerateCheckAndClean|TestCodexComplexFixture)$'
+      - cmp ../.agents/manifest.json ../examples/codex-project/.agents/manifest.json
+      - cmp ../.agents/mappings.yaml ../examples/codex-project/.agents/mappings.yaml
+      - cmp ../.agents/schema/v0.0.1/agents.schema.json ../examples/codex-project/.agents/schema/v0.0.1/agents.schema.json
+      - cmp ../.agents/schema/v0.0.1/mappings.schema.json ../examples/codex-project/.agents/schema/v0.0.1/mappings.schema.json
+      - go test ./internal/adapter -run '^(TestCodexGenerateCheckAndClean|TestCodexUsesCanonicalSkillsWithoutProjection|TestCodexComplexFixture)$'
       - |
         set -eu
+        compatibility_root="$(mktemp -d /tmp/oda-codex-fixture.XXXXXX)"
+        trap 'rm -rf -- "$compatibility_root"' EXIT
+        cp -a testdata/shared/basic "$compatibility_root/basic"
+        cp -a testdata/shared/complex "$compatibility_root/complex"
         seed_metadata() {
           local fixture_root="$1"
           mkdir -p "$fixture_root/.agents/schema/v0.0.1"
@@ -115,28 +124,13 @@ tasks:
           cp ../.agents/mappings.yaml "$fixture_root/.agents/mappings.yaml"
           cp ../.agents/manifest.json "$fixture_root/.agents/manifest.json"
         }
-        cleanup_metadata() {
-          local fixture_root="$1"
-          rm -f "$fixture_root/.agents/schema/v0.0.1/agents.schema.json"
-          rm -f "$fixture_root/.agents/schema/v0.0.1/mappings.schema.json"
-          rm -f "$fixture_root/.agents/mappings.yaml"
-          rm -f "$fixture_root/.agents/manifest.json"
-          rm -rf "$fixture_root/.agents/schema"
-        }
-        cleanup() {
-          cleanup_metadata testdata/shared/basic
-          cleanup_metadata testdata/shared/complex
-          go run ./cmd/oda --root testdata/shared/basic --target codex clean >/dev/null 2>&1 || true
-          go run ./cmd/oda --root testdata/shared/complex --target codex clean >/dev/null 2>&1 || true
-        }
-        trap cleanup EXIT
-        fixture="testdata/shared/basic"
+        fixture="$compatibility_root/basic"
         seed_metadata "$fixture"
         go run ./cmd/oda --root "$fixture" --target codex validate
         go run ./cmd/oda --root "$fixture" --target codex generate
         go run ./cmd/oda --root "$fixture" --target codex check
         go run ./cmd/oda --root "$fixture" --target codex clean
-        fixture="testdata/shared/complex"
+        fixture="$compatibility_root/complex"
         seed_metadata "$fixture"
         if go run ./cmd/oda --root "$fixture" --target codex validate; then
           echo "Expected Codex validation to reject rules and hooks." >&2
@@ -155,12 +149,24 @@ tasks:
         fi
     dir: cli
 
+  test:codex:real:
+    desc: Run isolated authenticated .agents to Codex acceptance
+    deps:
+      - build
+    cmds:
+      - bash scripts/test-codex-real.sh
+    dir: cli
+
   test:claude:
     desc: Run Claude Code fixtures and native MCP discovery when available
     cmds:
       - go test ./internal/adapter -run '^(TestClaudeGenerateCheckAndClean|TestClaudeComplexFixture)$'
       - |
         set -eu
+        compatibility_root="$(mktemp -d /tmp/oda-claude-fixture.XXXXXX)"
+        trap 'rm -rf -- "$compatibility_root"' EXIT
+        cp -a testdata/shared/basic "$compatibility_root/basic"
+        cp -a testdata/shared/complex "$compatibility_root/complex"
         seed_metadata() {
           local fixture_root="$1"
           mkdir -p "$fixture_root/.agents/schema/v0.0.1"
@@ -169,28 +175,13 @@ tasks:
           cp ../.agents/mappings.yaml "$fixture_root/.agents/mappings.yaml"
           cp ../.agents/manifest.json "$fixture_root/.agents/manifest.json"
         }
-        cleanup_metadata() {
-          local fixture_root="$1"
-          rm -f "$fixture_root/.agents/schema/v0.0.1/agents.schema.json"
-          rm -f "$fixture_root/.agents/schema/v0.0.1/mappings.schema.json"
-          rm -f "$fixture_root/.agents/mappings.yaml"
-          rm -f "$fixture_root/.agents/manifest.json"
-          rm -rf "$fixture_root/.agents/schema"
-        }
-        cleanup() {
-          cleanup_metadata testdata/shared/basic
-          cleanup_metadata testdata/shared/complex
-          go run ./cmd/oda --root testdata/shared/basic --target claude clean >/dev/null 2>&1 || true
-          go run ./cmd/oda --root testdata/shared/complex --target claude clean >/dev/null 2>&1 || true
-        }
-        trap cleanup EXIT
-        fixture="testdata/shared/basic"
+        fixture="$compatibility_root/basic"
         seed_metadata "$fixture"
         go run ./cmd/oda --root "$fixture" --target claude validate
         go run ./cmd/oda --root "$fixture" --target claude generate
         go run ./cmd/oda --root "$fixture" --target claude check
         go run ./cmd/oda --root "$fixture" --target claude clean
-        fixture="testdata/shared/complex"
+        fixture="$compatibility_root/complex"
         seed_metadata "$fixture"
         go run ./cmd/oda --root "$fixture" --target claude generate
         go run ./cmd/oda --root "$fixture" --target claude check

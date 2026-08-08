@@ -94,15 +94,22 @@ oda check --target all
 ### 4) Verify adapter behavior by target
 
 - `task cli:test:copilot` — Copilot projection validation
+- `task cli:test:copilot:real` — native Copilot discovery plus authenticated instructions, rules, hooks, skills, MCP, and custom-agent acceptance
 - `task cli:test:codex` — Codex projection and MCP transport validation
+- `task cli:test:codex:real` — official-schema validation, strict Codex loading, authenticated discovery, and live subagent acceptance
 - `task cli:test:claude` — Claude projection validation
 - `task cli:test:surface` — CLI command smoke checks
+
+The complete canonical inputs for the live flows are in
+[`examples/copilot-project`](./examples/copilot-project/README.md) and
+[`examples/codex-project`](./examples/codex-project/README.md).
 
 ### 5) Common failure patterns
 
 - `schema not available`: ensure schema files exist under `.agents/schema/v0.0.1/`
 - `unsupported populated categories`: either move/remove files from unsupported directories or use `--allow-unsupported`
 - `generated output is stale` or `no generated compatibility manifest found`: run `oda generate` again
+- `output ".codex/config.toml" exists but is not adapter-owned`: review the dry-run; `--force` replaces the complete file in v0.0.1
 
 ### 6) Contributor checks before PR
 

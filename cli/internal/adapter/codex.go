@@ -14,6 +14,8 @@ import (
 
 type codexRenderer struct{}
 
+const codexConfigSchemaURL = "https://developers.openai.com/codex/config-schema.json"
+
 func (codexRenderer) target() string {
 	return "codex"
 }
@@ -37,7 +39,9 @@ func (codexRenderer) render(base string) (map[string][]byte, error) {
 	if err := codexMCP(base, out); err != nil {
 		return nil, err
 	}
-	if err := copySkills(base, ".codex/skills", out); err != nil {
+	// Codex discovers repository skills directly from .agents/skills. Validate
+	// the canonical skill tree without projecting a duplicate registration.
+	if err := skills(base); err != nil {
 		return nil, err
 	}
 	return out, nil
@@ -138,7 +142,7 @@ func codexMCP(base string, out map[string][]byte) error {
 		}
 	}
 	if len(sections) > 0 {
-		out[".codex/config.toml"] = []byte(strings.Join(sections, "\n\n") + "\n")
+		out[".codex/config.toml"] = []byte("#:schema " + codexConfigSchemaURL + "\n\n" + strings.Join(sections, "\n\n") + "\n")
 	}
 	return nil
 }

@@ -1,2 +1,4 @@
+#:schema https://developers.openai.com/codex/config-schema.json
+
 [mcp_servers."example"]
 command = "example"

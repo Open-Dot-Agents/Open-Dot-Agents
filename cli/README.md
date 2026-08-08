@@ -90,7 +90,9 @@ oda check --root . --target all --format=json --ci
 Target-specific fixture checks:
 
 - `task cli:test:copilot` validates fixture generation for Copilot-compatible projections and runs optional native discovery (`copilot` command present).
+- `task cli:test:copilot:real` runs an isolated, authenticated Copilot CLI acceptance test against `examples/copilot-project`; it exercises native discovery and live instructions, rules, hooks, skills, MCP, and custom agents, and consumes model requests.
 - `task cli:test:codex` validates Codex fixture behavior and MCP generation rules (including transport validation).
+- `task cli:test:codex:real` runs an isolated, authenticated Codex acceptance test against `examples/codex-project`; it requires live services and consumes model tokens.
 - `task cli:test:claude` validates Claude fixture behavior and MCP discovery (`claude` command present).
 - `task cli:test:surface` runs command smoke checks with CLI help/completions.
 - `task cli:verify` runs `test`, `test:copilot`, `test:codex`, and `test:claude` (plus `go vet`).
@@ -114,7 +116,7 @@ Fixture-driven tests validate `basic`, `complex`, and additional edge cases for 
 | `agents/*.md` | Copilot, Codex, Claude agent files |
 | `hooks/*.json` | Copilot, Claude hook projections |
 | `tools/mcp.json` | Copilot, Codex, Claude MCP definitions |
-| `skills/<name>/...` | target-native skill directories |
+| `skills/<name>/...` | Copilot/Claude target directories; Codex reads `.agents/skills` directly |
 
 Per-adapter status values map to: supported, mapped, partial, unsupported.
 
@@ -124,11 +126,21 @@ Troubleshooting:
 - `unsupported populated categories`: either remove non-README files from unsupported category directories or run with `--allow-unsupported`.
 - `no generated compatibility manifest found` or `generated output is stale`: rerun `oda generate` (or `oda generate --force` if needed).
 - `invalid adapter manifest` during `check`/`clean`: run generation from a clean working tree for the same target and review manual edits.
+- `output ".codex/config.toml" exists but is not adapter-owned`: inspect `generate --dry-run --diff`; `--force` replaces the complete Codex config in v0.0.1.
 
 ## Native validation after generation
 
-- Copilot: `copilot instructions`, `copilot skill list`, `copilot mcp list`
-- Codex: `codex mcp list`, `codex agent list`
+- Copilot: `copilot skill list --json`, `copilot mcp list --json`, and `task cli:test:copilot:real` (Copilot CLI has no standalone config schema or doctor command)
+- Codex: `codex --strict-config doctor --json`, `codex mcp list --json`, `codex debug prompt-input`, and `task cli:test:codex:real`
 - Claude: `claude mcp list`, `claude agents list`
 
 Native inspection is optional; fixture checks remain the deterministic base.
+Generated Codex TOML includes OpenAI's official schema directive. The real
+acceptance task downloads that schema and validates the generated document
+before asking the installed Codex CLI to load it strictly. The standalone
+schema check used by that task is:
+
+```bash
+cd cli
+go run ./cmd/codex-config-validator --config /path/to/.codex/config.toml
+```
