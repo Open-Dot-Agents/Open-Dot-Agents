@@ -62,7 +62,7 @@ type parsedCLI struct {
 }
 
 func main() {
-	commands := strings.Join([]string{"validate", "generate", "import", "check", "clean", "guide", "completion"}, ", ")
+	commands := strings.Join([]string{"validate", "generate", "export", "import", "check", "clean", "guide", "completion"}, ", ")
 	targetList := strings.Join(append(adapter.RegisteredTargets(), "all"), ", ")
 	flag.Usage = func() {
 		fmt.Fprintln(os.Stdout, "Open-Dot-Agents CLI (oda)")
@@ -72,11 +72,11 @@ func main() {
 		fmt.Fprintln(os.Stdout, "  oda [options] <command>")
 		fmt.Fprintln(os.Stdout)
 		fmt.Fprintln(os.Stdout, "Purpose:")
-		fmt.Fprintln(os.Stdout, "  Keep `.agents/` as canonical metadata and generate vendor-specific compatibility files.")
+		fmt.Fprintln(os.Stdout, "  Keep `.agents/` canonical and import/export repository-scoped harness configuration.")
 		fmt.Fprintln(os.Stdout)
 		fmt.Fprintln(os.Stdout, "Common workflow:")
 		fmt.Fprintln(os.Stdout, "  1. validate   - verify current .agents tree and mappings/manifest shape")
-		fmt.Fprintln(os.Stdout, "  2. generate   - materialize runtime-specific files (or compare with --dry-run)")
+		fmt.Fprintln(os.Stdout, "  2. export     - materialize runtime-specific files (or compare with --dry-run)")
 		fmt.Fprintln(os.Stdout, "  3. check      - detect drift between tracked source and generated output")
 		fmt.Fprintln(os.Stdout, "  4. clean      - remove generated files for the selected target(s)")
 		fmt.Fprintln(os.Stdout, "  5. guide      - generate a vendor implementation guide from schema + mappings")
@@ -85,7 +85,8 @@ func main() {
 		fmt.Fprintf(os.Stdout, "Targets: %s (or all)\n\n", targetList)
 		fmt.Fprintln(os.Stdout, "Commands:")
 		fmt.Fprintln(os.Stdout, "  validate    Validate `.agents/schema/v0.0.1/*.json`, mappings, manifest compatibility and source shape")
-		fmt.Fprintln(os.Stdout, "  generate    Render configuration files for the selected target(s)")
+		fmt.Fprintln(os.Stdout, "  export      Export `.agents` into the selected target(s)")
+		fmt.Fprintln(os.Stdout, "  generate    Backward-compatible alias for export")
 		fmt.Fprintln(os.Stdout, "  import      Reverse-project from generated target files into `.agents`")
 		fmt.Fprintln(os.Stdout, "  check       Verify generated output matches the target projection plan")
 		fmt.Fprintln(os.Stdout, "  clean       Remove generated files tracked by the target manifest")
@@ -98,13 +99,13 @@ func main() {
 		fmt.Fprintln(os.Stdout, "Options:")
 		fmt.Fprintln(os.Stdout, "  --root PATH             Repository root to operate on (default: \".\")")
 		fmt.Fprintln(os.Stdout, "  --target TARGET         Adapter target (copilot/codex/claude/all)")
-		fmt.Fprintln(os.Stdout, "  --force                 Replace existing generated files (required by generate/import in practice)")
-		fmt.Fprintln(os.Stdout, "  --backup                Back up the destination before a forced generate/import")
+		fmt.Fprintln(os.Stdout, "  --force                 Replace conflicting import/export files after review")
+		fmt.Fprintln(os.Stdout, "  --backup                Back up the destination before a forced import/export")
 		fmt.Fprintln(os.Stdout, "  --backup-dir PATH       Backup root (default: <root>/.oda-backups)")
 		fmt.Fprintln(os.Stdout, "  --allow-unsupported     Permit adapters that would otherwise fail on unsupported categories")
 		fmt.Fprintln(os.Stdout, "  --dry-run               Show what write commands would do without touching files")
-		fmt.Fprintln(os.Stdout, "  --diff                  Include file diff summary lines for dry-run generate/import")
-		fmt.Fprintln(os.Stdout, "  --ci                    Enable CI mode. generate/import/check report drift with non-zero exit status")
+		fmt.Fprintln(os.Stdout, "  --diff                  Include file diff summary lines for dry-run import/export")
+		fmt.Fprintln(os.Stdout, "  --ci                    Enable CI mode. import/export/check report drift with non-zero exit status")
 		fmt.Fprintln(os.Stdout, "  --format text|json      Output format (default: text)")
 		fmt.Fprintln(os.Stdout, "  --help, -h              Show this help")
 		fmt.Fprintln(os.Stdout, "  --version               Print oda version and exit")
@@ -113,7 +114,7 @@ func main() {
 		fmt.Fprintln(os.Stdout, "  oda --target all validate")
 		fmt.Fprintln(os.Stdout, "  oda validate --target all")
 		fmt.Fprintln(os.Stdout, "  oda --target copilot --force --backup generate")
-		fmt.Fprintln(os.Stdout, "  oda --target codex --force --backup generate")
+		fmt.Fprintln(os.Stdout, "  oda --target codex --force --backup export")
 		fmt.Fprintln(os.Stdout, "  oda --target all --force --backup --backup-dir /tmp/oda-backups generate")
 		fmt.Fprintln(os.Stdout, "  oda --target copilot --force --dry-run import")
 		fmt.Fprintln(os.Stdout, "  oda --target copilot --force import")
@@ -122,7 +123,7 @@ func main() {
 		fmt.Fprintln(os.Stdout, "  eval \"$(oda completion bash)\"")
 		fmt.Fprintln(os.Stdout, "  source <(oda completion zsh)")
 		fmt.Fprintln(os.Stdout, "  oda --target codex --ci check")
-		fmt.Fprintln(os.Stdout, "  oda --target copilot --dry-run --diff generate")
+		fmt.Fprintln(os.Stdout, "  oda --target copilot --dry-run --diff export")
 		fmt.Fprintf(os.Stdout, "Known commands: %s\n", strings.TrimSpace(commands))
 	}
 
@@ -300,9 +301,9 @@ func parseCLIArgs(args []string, usage func()) (parsedCLI, error) {
 	fs.StringVar(&parsed.backupDir, "backup-dir", "", "directory where backups are stored (default: <root>/.oda-backups)")
 	fs.BoolVar(&parsed.allowUnsupported, "allow-unsupported", false, "allow populated unsupported categories")
 	fs.BoolVar(&parsed.dryRun, "dry-run", false, "compute changes without applying them")
-	fs.BoolVar(&parsed.diff, "diff", false, "show file-level diff summary (requires generate)")
+	fs.BoolVar(&parsed.diff, "diff", false, "show file-level import/export diff summary")
 	fs.StringVar(&parsed.format, "format", parsed.format, "output format: text or json")
-	fs.BoolVar(&parsed.ci, "ci", false, "non-zero if generate or check would change output")
+	fs.BoolVar(&parsed.ci, "ci", false, "non-zero if import, export, or check would change output")
 	fs.BoolVar(&parsed.help, "help", false, "show help")
 	fs.BoolVar(&parsed.shortHelp, "h", false, "show help")
 	fs.BoolVar(&parsed.version, "version", false, "show version")
@@ -347,7 +348,7 @@ func findCommandArg(args []string) int {
 }
 
 func isKnownCommand(arg string) bool {
-	return arg == "validate" || arg == "generate" || arg == "import" || arg == "check" || arg == "clean" || arg == "guide" || arg == "completion"
+	return arg == "validate" || arg == "generate" || arg == "export" || arg == "import" || arg == "check" || arg == "clean" || arg == "guide" || arg == "completion"
 }
 
 func consumesValue(flagName string) bool {
@@ -386,7 +387,7 @@ func run(ctx runContext, command string, a *adapter.Adapter) commandResult {
 			return commandResult{Command: command, Target: a.Target(), Status: "error", Error: err.Error()}
 		}
 		return commandResult{Command: command, Target: a.Target(), Status: "ok"}
-	case "generate":
+	case "generate", "export":
 		if !ctx.dryRun && ctx.force && ctx.backup {
 			manifestDir, err := backupDirectory(command, a.Target())
 			if err != nil {
@@ -411,7 +412,7 @@ func run(ctx runContext, command string, a *adapter.Adapter) commandResult {
 			var errMsg string
 			if ctx.ciMode && hasChanges(plan) {
 				status = "drift"
-				errMsg = "generated output is out of sync; rerun generate"
+				errMsg = "generated output is out of sync; rerun export"
 			}
 			result := commandResult{Command: command, Target: a.Target(), Status: status, Error: errMsg, Plan: plan}
 			if ctx.diff {
@@ -543,7 +544,7 @@ func printCompletionScript(shell string) error {
 }
 
 func bashCompletionScript() string {
-	commands := strings.Join([]string{"validate", "generate", "import", "check", "clean", "guide", "completion"}, " ")
+	commands := strings.Join([]string{"validate", "generate", "export", "import", "check", "clean", "guide", "completion"}, " ")
 	targets := strings.Join(append(adapter.RegisteredTargets(), "all"), " ")
 	flags := strings.Join([]string{
 		"--help",
@@ -610,7 +611,7 @@ func bashCompletionScript() string {
   fi
 
   case "${command}" in
-    validate|generate|import|check|clean|guide|completion)
+    validate|generate|export|import|check|clean|guide|completion)
       if [[ "${command}" == "completion" ]]; then
         COMPREPLY=( $(compgen -W "bash zsh" -- "${cur}") )
       else
@@ -626,7 +627,7 @@ complete -F _oda_completion -o default oda
 }
 
 func zshCompletionScript() string {
-	commands := strings.Join([]string{"validate", "generate", "import", "check", "clean", "guide", "completion"}, " ")
+	commands := strings.Join([]string{"validate", "generate", "export", "import", "check", "clean", "guide", "completion"}, " ")
 	targets := strings.Join(append(adapter.RegisteredTargets(), "all"), " ")
 	return fmt.Sprintf(`#compdef oda
 _oda() {

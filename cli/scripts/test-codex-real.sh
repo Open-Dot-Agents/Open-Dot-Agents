@@ -54,11 +54,11 @@ jq -e '
     target: "codex",
     status: "ok",
     plan: {
-      create: [".codex/agents/oda-reviewer.toml", ".codex/config.toml", "AGENTS.md"],
+      create: [".codex/agents/oda-reviewer.toml", ".codex/config.toml", ".codex/rules/acceptance.rules", "AGENTS.md", "services/payments/AGENTS.override.md", "services/search/TEAM_GUIDE.md"],
       update: [],
       delete: []
     },
-    diff: ["A .codex/agents/oda-reviewer.toml", "A .codex/config.toml", "A AGENTS.md"]
+    diff: ["A .codex/agents/oda-reviewer.toml", "A .codex/config.toml", "A .codex/rules/acceptance.rules", "A AGENTS.md", "A services/payments/AGENTS.override.md", "A services/search/TEAM_GUIDE.md"]
   }]
 ' "$log_dir/generate-plan.json" >/dev/null
 
@@ -68,6 +68,9 @@ jq -e '
 test -f "$probe_root/AGENTS.md"
 test -f "$probe_root/.codex/agents/oda-reviewer.toml"
 test -f "$probe_root/.codex/config.toml"
+test -f "$probe_root/.codex/rules/acceptance.rules"
+test -f "$probe_root/services/payments/AGENTS.override.md"
+test -f "$probe_root/services/search/TEAM_GUIDE.md"
 test -f "$probe_root/.codex/.open-dot-agents.json"
 test ! -e "$probe_root/.codex/skills"
 test -f "$probe_root/.agents/skills/oda-acceptance/SKILL.md"
@@ -82,14 +85,20 @@ grep -Fx '#:schema https://developers.openai.com/codex/config-schema.json' "$pro
   cd "$probe_root"
   codex --version >"$log_dir/codex-version.txt"
   codex --strict-config doctor --json >"$log_dir/codex-doctor.json" || true
+  codex execpolicy check --pretty --rules .codex/rules/acceptance.rules -- git status --short >"$log_dir/codex-rule-check.json"
   codex mcp list --json >"$log_dir/codex-mcp.json"
   codex debug prompt-input 'Run the Open-Dot-Agents acceptance workflow.' >"$log_dir/codex-prompt.json"
+  codex --cd services/payments debug prompt-input 'State the nested Codex acceptance phrase.' >"$log_dir/codex-nested-prompt.json"
+  codex --cd services/search debug prompt-input 'State the fallback Codex acceptance phrase.' >"$log_dir/codex-fallback-prompt.json"
 )
 
 jq -e '.checks["auth.credentials"].status == "ok" and .checks["config.load"].status == "ok" and .checks["mcp.config"].status == "ok"' "$log_dir/codex-doctor.json" >/dev/null
+jq -e '.decision == "allow"' "$log_dir/codex-rule-check.json" >/dev/null
 jq -e '[.[] | select(.name == "openaiDeveloperDocs" and .enabled == true)] | length == 1' "$log_dir/codex-mcp.json" >/dev/null
 jq -r '.[] | .content[]? | select(.type == "input_text") | .text' "$log_dir/codex-prompt.json" >"$log_dir/codex-prompt.txt"
 grep -F 'ODA_PROJECT_OK' "$log_dir/codex-prompt.txt" >/dev/null
+jq -r '.[] | .content[]? | select(.type == "input_text") | .text' "$log_dir/codex-nested-prompt.json" | grep -F 'ODA_CODEX_NESTED_OK' >/dev/null
+jq -r '.[] | .content[]? | select(.type == "input_text") | .text' "$log_dir/codex-fallback-prompt.json" | grep -F 'ODA_CODEX_FALLBACK_OK' >/dev/null
 test "$(grep -F -c -- '- oda-acceptance:' "$log_dir/codex-prompt.txt")" -eq 1
 grep -F "$probe_root/.agents/skills/oda-acceptance/SKILL.md" "$log_dir/codex-prompt.txt" >/dev/null
 if grep -F "$probe_root/.codex/skills/" "$log_dir/codex-prompt.txt" >/dev/null; then
@@ -124,6 +133,21 @@ if ! jq -s -e 'any(.[]; .type == "item.completed" and .item.type == "mcp_tool_ca
   echo "Live Codex acceptance missing a completed openaiDeveloperDocs MCP call" >&2
   exit 1
 fi
+
+roundtrip_root="$probe_root/.codex-roundtrip"
+mkdir -p "$roundtrip_root/.agents"
+cp -a "$probe_root/.codex" "$roundtrip_root/.codex"
+cp "$probe_root/AGENTS.md" "$roundtrip_root/AGENTS.md"
+cp -a "$probe_root/.agents/skills" "$roundtrip_root/.agents/skills"
+cp -a "$probe_root/services" "$roundtrip_root/services"
+"$oda_bin" --root "$roundtrip_root" --target codex import
+"$oda_bin" --root "$roundtrip_root" --target codex export --force
+diff -ru "$probe_root/.codex" "$roundtrip_root/.codex" >"$log_dir/codex-roundtrip.diff"
+cmp "$probe_root/AGENTS.md" "$roundtrip_root/AGENTS.md"
+diff -ru "$probe_root/services" "$roundtrip_root/services" >"$log_dir/codex-instructions-roundtrip.diff"
+test -f "$roundtrip_root/.agents/.open-dot-agents-import-codex.json"
+rm -rf -- "$roundtrip_root"
+
 if ! jq -s -e 'any(.[]; .type == "item.completed" and .item.type == "collab_tool_call" and .item.status == "completed" and (.item.receiver_thread_ids | length) > 0)' "$log_dir/codex-live.jsonl" >/dev/null; then
   echo "Live Codex acceptance missing a completed custom-agent child thread" >&2
   sed -n '1,160p' "$log_dir/codex-live.stderr" >&2
@@ -144,4 +168,4 @@ test ! -e "$probe_root/.codex"
 test -f "$probe_root/.agents/skills/oda-acceptance/SKILL.md"
 
 acceptance_passed=1
-echo "Real .agents -> Codex acceptance passed."
+echo "Real .agents <-> Codex acceptance passed."

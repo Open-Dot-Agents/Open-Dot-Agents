@@ -22,7 +22,10 @@ as one installable unit rather than individual file copies.
 
 ## Current oda projection
 
-No v0.0.1 adapter emits this category; all three targets are `unsupported`.
+- GitHub Copilot CLI: `mapped` between `.agents/plugins/copilot/**` and
+  `.github/plugin/**`.
+- OpenAI Codex: `mapped` through `.agents/plugins/codex.toml`.
+- Claude Code: `unsupported` by the current adapter.
 
 ## Expected content
 

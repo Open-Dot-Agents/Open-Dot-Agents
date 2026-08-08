@@ -17,6 +17,8 @@ import (
 
 const manifestName = ".open-dot-agents.json"
 
+const importManifestPrefix = ".open-dot-agents-import-"
+
 var commonUnsupportedCategories = []string{
 	"guardrails",
 	"memories",
@@ -58,6 +60,7 @@ func (p GenerationPlan) AllActions() map[GenerationAction][]string {
 
 type manifest struct {
 	Version int               `json:"version"`
+	Target  string            `json:"target,omitempty"`
 	Files   map[string]string `json:"files"`
 }
 
@@ -114,6 +117,18 @@ func (a *Adapter) ImportPlan(force bool) (*GenerationPlan, error) {
 	if err := validateOutputPaths(outputs); err != nil {
 		return nil, err
 	}
+	current, _, err := a.readImportManifest()
+	if err != nil {
+		return nil, err
+	}
+	if !force {
+		for path, hash := range current.Files {
+			data, readErr := os.ReadFile(filepath.Join(a.root, path))
+			if readErr != nil || digest(data) != hash {
+				return nil, fmt.Errorf("imported canonical file %q was modified; rerun with --force after review", path)
+			}
+		}
+	}
 	plan := &GenerationPlan{
 		Outputs: outputs,
 		Create:  make([]string, 0),
@@ -124,26 +139,44 @@ func (a *Adapter) ImportPlan(force bool) (*GenerationPlan, error) {
 		full := filepath.Join(a.root, path)
 		existing, err := os.ReadFile(full)
 		if errors.Is(err, fs.ErrNotExist) {
-			plan.Create = append(plan.Create, path)
+			if _, owned := current.Files[path]; owned {
+				plan.Update = append(plan.Update, path)
+			} else {
+				plan.Create = append(plan.Create, path)
+			}
 			continue
 		}
 		if err != nil {
 			return nil, err
 		}
 		if bytes.Equal(existing, data) {
+			if _, owned := current.Files[path]; !owned && !force {
+				return nil, fmt.Errorf("import output %q exists but is not adapter-owned; rerun with --force after review", path)
+			}
 			continue
 		}
-		if !force {
-			return nil, fmt.Errorf("import would overwrite existing %q; rerun with --force after review", path)
+		if _, owned := current.Files[path]; !owned && !force {
+			return nil, fmt.Errorf("import output %q exists but is not adapter-owned; rerun with --force after review", path)
 		}
 		plan.Update = append(plan.Update, path)
 	}
+	for path := range current.Files {
+		if _, desired := outputs[path]; !desired {
+			plan.Delete = append(plan.Delete, path)
+		}
+	}
 	sort.Strings(plan.Create)
 	sort.Strings(plan.Update)
+	sort.Strings(plan.Delete)
 	return plan, nil
 }
 
 func (a *Adapter) applyImportPlan(plan *GenerationPlan) error {
+	current, _, err := a.readImportManifest()
+	if err != nil {
+		return err
+	}
+	next := manifest{Version: 1, Target: a.Target(), Files: make(map[string]string, len(plan.Outputs))}
 	for path, data := range plan.Outputs {
 		full := filepath.Join(a.root, path)
 		if err := os.MkdirAll(filepath.Dir(full), 0o755); err != nil {
@@ -152,8 +185,24 @@ func (a *Adapter) applyImportPlan(plan *GenerationPlan) error {
 		if err := writeFileAtomically(full, data, 0o644); err != nil {
 			return err
 		}
+		next.Files[path] = digest(data)
 	}
-	return nil
+	for path := range current.Files {
+		if _, retained := next.Files[path]; !retained {
+			if err := os.Remove(filepath.Join(a.root, path)); err != nil && !errors.Is(err, fs.ErrNotExist) {
+				return err
+			}
+		}
+	}
+	data, err := json.MarshalIndent(next, "", "  ")
+	if err != nil {
+		return err
+	}
+	manifestPath := a.importManifestPath()
+	if err := os.MkdirAll(filepath.Dir(manifestPath), 0o755); err != nil {
+		return err
+	}
+	return writeFileAtomically(manifestPath, append(data, '\n'), 0o644)
 }
 
 func (a *Adapter) Plan(force bool) (*GenerationPlan, error) {
@@ -264,15 +313,15 @@ func (a *Adapter) Check() error {
 		return err
 	}
 	if !hasManifest {
-		return errors.New("no generated compatibility manifest found; run generate")
+		return errors.New("no generated compatibility manifest found; run export")
 	}
 	if len(outputs) != len(current.Files) {
-		return errors.New("generated output is stale; run generate")
+		return errors.New("generated output is stale; run export")
 	}
 	for path, want := range outputs {
 		data, readErr := os.ReadFile(filepath.Join(a.root, path))
 		if readErr != nil || !bytes.Equal(data, want) || current.Files[path] != digest(want) {
-			return fmt.Errorf("generated output %q is stale or modified; run generate", path)
+			return fmt.Errorf("generated output %q is stale or modified; run export", path)
 		}
 	}
 	return nil
@@ -379,7 +428,15 @@ func (a *Adapter) unsupported(base string) error {
 }
 
 func (a *Adapter) readManifest() (manifest, bool, error) {
-	data, err := os.ReadFile(a.manifestPath())
+	return readManifestFile(a.manifestPath(), "adapter", "")
+}
+
+func (a *Adapter) readImportManifest() (manifest, bool, error) {
+	return readManifestFile(a.importManifestPath(), "import", a.Target())
+}
+
+func readManifestFile(path, kind, target string) (manifest, bool, error) {
+	data, err := os.ReadFile(path)
 	if errors.Is(err, fs.ErrNotExist) {
 		return manifest{}, false, nil
 	}
@@ -388,14 +445,17 @@ func (a *Adapter) readManifest() (manifest, bool, error) {
 	}
 	var m manifest
 	if err := json.Unmarshal(data, &m); err != nil || m.Version != 1 {
-		return manifest{}, false, errors.New("invalid adapter manifest")
+		return manifest{}, false, fmt.Errorf("invalid %s manifest", kind)
+	}
+	if target != "" && m.Target != target {
+		return manifest{}, false, fmt.Errorf("invalid %s manifest target %q", kind, m.Target)
 	}
 	for path := range m.Files {
 		clean := filepath.Clean(path)
 		if path == "" || filepath.IsAbs(path) || clean == "." || clean == ".." ||
 			strings.HasPrefix(clean, ".."+string(filepath.Separator)) ||
 			filepath.ToSlash(clean) != path {
-			return manifest{}, false, fmt.Errorf("invalid adapter manifest path %q", path)
+			return manifest{}, false, fmt.Errorf("invalid %s manifest path %q", kind, path)
 		}
 	}
 	return m, true, nil
@@ -405,9 +465,27 @@ func (a *Adapter) manifestPath() string {
 	return filepath.Join(a.root, a.renderer.manifestDirectory(), manifestName)
 }
 
+func (a *Adapter) importManifestPath() string {
+	return filepath.Join(a.root, ".agents", importManifestPrefix+a.Target()+".json")
+}
+
 func digest(data []byte) string {
 	sum := sha256.Sum256(data)
 	return hex.EncodeToString(sum[:])
+}
+
+func readSourceFile(path string) ([]byte, error) {
+	info, err := os.Lstat(path)
+	if err != nil {
+		return nil, err
+	}
+	if info.Mode()&os.ModeSymlink != 0 {
+		return nil, fmt.Errorf("refusing symlinked source file %s", path)
+	}
+	if !info.Mode().IsRegular() {
+		return nil, fmt.Errorf("source file %s is not regular", path)
+	}
+	return os.ReadFile(path)
 }
 
 func validateOutputPaths(outputs map[string][]byte) error {

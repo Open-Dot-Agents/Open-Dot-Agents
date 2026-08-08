@@ -27,7 +27,8 @@ neutral home where memory-capable harnesses can consume it consistently.
 
 ## Current oda projection
 
-No v0.0.1 adapter emits this category; all three targets are `unsupported`.
+- OpenAI Codex: `mapped` through `.agents/memories/codex.toml`.
+- GitHub Copilot CLI and Claude Code: `unsupported` by the current adapters.
 
 ## Expected content
 

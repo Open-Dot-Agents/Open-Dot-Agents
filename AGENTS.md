@@ -43,16 +43,16 @@
 | `agents` | mapped | mapped | mapped |
 | `instructions` | supported | supported | supported |
 | `rules` | supported | unsupported | supported |
-| `hooks` | supported | unsupported | supported |
-| `tools` | mapped | partial | mapped |
-| `skills` | mapped | mapped | mapped |
-| `guardrails` | unsupported | unsupported | unsupported |
-| `memories` | unsupported | unsupported | unsupported |
-| `permissions` | unsupported | unsupported | unsupported |
-| `plugins` | unsupported | unsupported | unsupported |
-| `profiles` | unsupported | unsupported | unsupported |
-| `prompts` | unsupported | unsupported | unsupported |
-| `settings` | unsupported | unsupported | unsupported |
+| `hooks` | supported | mapped | supported |
+| `tools` | mapped | mapped | mapped |
+| `skills` | mapped | supported | mapped |
+| `guardrails` | unsupported | mapped | unsupported |
+| `memories` | unsupported | mapped | unsupported |
+| `permissions` | mapped | mapped | unsupported |
+| `plugins` | mapped | mapped | unsupported |
+| `profiles` | unsupported | mapped | unsupported |
+| `prompts` | mapped | unsupported | unsupported |
+| `settings` | mapped | mapped | unsupported |
 
 ## Critical workflows (what to do when editing)
 - Start by reading `README.md` and the target category `README.md` before editing.

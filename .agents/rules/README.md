@@ -23,8 +23,14 @@ Rules are distinct from `../instructions/`:
 
 ## Expected content
 
-- Markdown files with activation metadata (e.g. scope/tags/globs/trigger)
+- Markdown files, optionally in nested directories, with activation metadata
+  (e.g. scope/tags/globs/trigger)
 - optional model-invocation hinting where supported
+
+Copilot rule files discovered below the repository root retain their exact
+repository-relative location under `rules/copilot-project/**`; portable rules
+outside that reserved subtree continue to project into the root
+`.github/instructions/` directory.
 
 ## Contract
 

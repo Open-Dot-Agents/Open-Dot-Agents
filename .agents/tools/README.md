@@ -22,6 +22,8 @@ Context Protocol (MCP) servers.
 - environment-variable placeholders
 
 `oda` adapter input expects a portable MCP definition in `mcp.json`.
+Codex-only server fields are retained under each server's `codex` extension so
+they survive import/export even when the portable MCP shape has no equivalent.
 
 ## Contract
 

@@ -19,8 +19,12 @@ go install ./cmd/oda
 # validate the local repo
 oda validate --root /path/to/repo
 
-# generate one target
-oda generate --root /path/to/repo --target codex
+# export one target (`generate` is retained as an alias)
+oda export --root /path/to/repo --target codex
+
+# import one existing harness into .agents
+oda import --root /path/to/repo --target codex --dry-run --diff
+oda import --root /path/to/repo --target codex
 
 # verify generated files are still current
 oda check --root /path/to/repo --target codex
@@ -56,6 +60,7 @@ oda check --root /path/to/repo-with-agents --target codex
 
 - `validate` — verify `.agents/` contract, schema, mappings, and target compatibility
 - `generate` — write vendor-specific files
+- `export` — explicit alias for `generate`; write `.agents` into a harness
 - `check` — detect drift versus generated manifest
 - `clean` — remove only adapter-generated files
 - `import` — convert vendor files into canonical `.agents/`
@@ -77,6 +82,9 @@ oda check --root /path/to/repo-with-agents --target codex
 `import` requires one explicit source target. `--target all` is intentionally
 rejected because multiple harnesses can define conflicting canonical files. With
 `--force --backup`, import archives the existing `.agents/` tree before writing.
+Each source target owns its imported files through
+`.agents/.open-dot-agents-import-<target>.json`. A later import updates or removes
+only unchanged owned files; edited canonical files require an explicit `--force`.
 
 ## Command examples
 
@@ -90,9 +98,9 @@ oda check --root . --target all --format=json --ci
 Target-specific fixture checks:
 
 - `task cli:test:copilot` validates fixture generation for Copilot-compatible projections and runs optional native discovery (`copilot` command present).
-- `task cli:test:copilot:real` runs an isolated, authenticated Copilot CLI acceptance test against `examples/copilot-project`; it exercises native discovery and live instructions, rules, hooks, skills, MCP, and custom agents, and consumes model requests.
+- `task cli:test:copilot:real` runs an isolated, authenticated Copilot CLI acceptance test against `examples/copilot-project`; it exercises both directions plus native instructions, rules, hooks, skills, MCP, and custom agents, and consumes model requests.
 - `task cli:test:codex` validates Codex fixture behavior and MCP generation rules (including transport validation).
-- `task cli:test:codex:real` runs an isolated, authenticated Codex acceptance test against `examples/codex-project`; it requires live services and consumes model tokens.
+- `task cli:test:codex:real` runs an isolated, authenticated Codex acceptance test against `examples/codex-project`; it exercises both directions, requires live services, and consumes model tokens.
 - `task cli:test:claude` validates Claude fixture behavior and MCP discovery (`claude` command present).
 - `task cli:test:surface` runs command smoke checks with CLI help/completions.
 - `task cli:verify` runs `test`, `test:copilot`, `test:codex`, and `test:claude` (plus `go vet`).
@@ -112,11 +120,35 @@ Fixture-driven tests validate `basic`, `complex`, and additional edge cases for 
 | Source category | Generated output |
 |---|---|
 | `instructions/*.md` | Copilot, Codex, Claude vendor instruction files |
-| `rules/*.md` | Copilot, Claude rule files |
+| `instructions/copilot-project/**` | exact nested Copilot repository instruction paths |
+| `instructions/codex-project/**` | exact Codex nested, override, and configured fallback instruction paths |
+| `rules/**/*.md` | Copilot, Claude rule files with relative paths preserved |
+| `rules/copilot-project/**` | exact nested Copilot `.github/instructions/**` paths |
 | `agents/*.md` | Copilot, Codex, Claude agent files |
 | `hooks/*.json` | Copilot, Claude hook projections |
 | `tools/mcp.json` | Copilot, Codex, Claude MCP definitions |
 | `skills/<name>/...` | Copilot/Claude target directories; Codex reads `.agents/skills` directly |
+| `prompts/*.md` | Copilot `.github/prompts/*.prompt.md` |
+| `plugins/copilot/**` | Copilot `.github/plugin/**` marketplace metadata |
+| `settings/codex.toml` and category `codex.toml` fragments | merged Codex `.codex/config.toml` |
+| `settings/copilot.json` | Copilot `.github/copilot/settings.json` repository settings |
+| `permissions/codex-rules/**/*.rules` | Codex `.codex/rules/**/*.rules` command policies |
+| `permissions/copilot-allowed-models.txt` | Copilot `.github/allowed_models.txt` shared model policy |
+
+Codex import stores the untouched source config at
+`settings/codex.raw.toml` and imported agent TOML under
+`settings/codex-agents/`. These sidecars preserve comments and unknown fields;
+when canonical values are unchanged, export reproduces the original bytes.
+Imported legacy `.codex/skills/**` files are listed in
+`settings/codex-legacy-skills.json`, allowing that source layout to round-trip;
+new canonical skills continue to use only Codex's native `.agents/skills/**`
+discovery path.
+
+Copilot import accepts both project MCP locations, `.mcp.json` and
+`.github/mcp.json`. Source provenance keeps a root-only file at the root and
+recreates dual-source repositories byte-for-byte. If the merged canonical MCP
+is later edited while both source files are still represented, export requires
+the user to consolidate the origins instead of silently repartitioning servers.
 
 Per-adapter status values map to: supported, mapped, partial, unsupported.
 
@@ -126,7 +158,7 @@ Troubleshooting:
 - `unsupported populated categories`: either remove non-README files from unsupported category directories or run with `--allow-unsupported`.
 - `no generated compatibility manifest found` or `generated output is stale`: rerun `oda generate` (or `oda generate --force` if needed).
 - `invalid adapter manifest` during `check`/`clean`: run generation from a clean working tree for the same target and review manual edits.
-- `output ".codex/config.toml" exists but is not adapter-owned`: inspect `generate --dry-run --diff`; `--force` replaces the complete Codex config in v0.0.1.
+- `output ".codex/config.toml" exists but is not adapter-owned`: inspect `export --dry-run --diff`; adopt it with `import` or use `--force --backup`.
 
 ## Native validation after generation
 

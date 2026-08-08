@@ -1,10 +1,14 @@
 package adapter
 
 import (
+	"encoding/json"
 	"os"
 	"path/filepath"
+	"reflect"
 	"strings"
 	"testing"
+
+	"github.com/pelletier/go-toml/v2"
 )
 
 func write(t *testing.T, root, path, content string) {
@@ -63,11 +67,11 @@ func TestGenerateCheckAndClean(t *testing.T) {
 func TestRejectsUnsupportedCategory(t *testing.T) {
 	root := t.TempDir()
 	seedSchemaArtifactsForValidation(t, root)
-	write(t, root, ".agents/prompts/review.md", "Review this.\n")
+	write(t, root, ".agents/guardrails/copilot.json", "{}\n")
 
 	err := New(root, false).Validate()
-	if err == nil || !strings.Contains(err.Error(), "prompts") {
-		t.Fatalf("Validate() error = %v, want unsupported prompts", err)
+	if err == nil || !strings.Contains(err.Error(), "guardrails") {
+		t.Fatalf("Validate() error = %v, want unsupported guardrails", err)
 	}
 	if err := New(root, true).Validate(); err != nil {
 		t.Fatalf("Validate() with acknowledgement error = %v", err)
@@ -160,9 +164,8 @@ func TestCodexComplexFixture(t *testing.T) {
 	}
 	if err := a.Validate(); err == nil ||
 		!strings.Contains(err.Error(), "unsupported populated categories") ||
-		!strings.Contains(err.Error(), "hooks") ||
 		!strings.Contains(err.Error(), "rules") {
-		t.Fatalf("Validate() error = %v, want unsupported hooks and rules", err)
+		t.Fatalf("Validate() error = %v, want unsupported rules", err)
 	}
 	runSharedFixture(t, "codex", "complex", true, "AGENTS.md")
 }
@@ -228,8 +231,8 @@ func TestRendererContracts(t *testing.T) {
 		manifestDir string
 		unsupported []string
 	}{
-		{"copilot", ".github", commonUnsupportedCategories},
-		{"codex", ".codex", append(append([]string{}, commonUnsupportedCategories...), "hooks", "rules")},
+		{"copilot", ".github", []string{"guardrails", "memories", "profiles"}},
+		{"codex", ".codex", []string{"prompts", "rules"}},
 		{"claude", ".claude", commonUnsupportedCategories},
 	}
 	for _, test := range tests {
@@ -249,6 +252,31 @@ func TestRendererContracts(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestVendorSpecificInstructionsDoNotLeakAcrossTargets(t *testing.T) {
+	root := t.TempDir()
+	write(t, root, ".agents/instructions/AGENTS.md", "Shared instructions.\n")
+	write(t, root, ".agents/instructions/copilot-instructions.md", "Copilot only.\n")
+	write(t, root, ".agents/instructions/CLAUDE.md", "Claude only.\n")
+
+	codex, err := NewForTarget(root, "codex", false)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := codex.Generate(false); err != nil {
+		t.Fatal(err)
+	}
+	assertFileEquals(t, filepath.Join(root, "AGENTS.md"), "Shared instructions.\n")
+
+	copilot, err := NewForTarget(root, "copilot", false)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := copilot.Generate(true); err != nil {
+		t.Fatal(err)
+	}
+	assertFileEquals(t, filepath.Join(root, ".github/copilot-instructions.md"), "Copilot only.\n")
 }
 
 func TestRejectsInvalidSharedConfiguration(t *testing.T) {
@@ -341,10 +369,10 @@ func TestCodexMCPTransportVariants(t *testing.T) {
 	for _, test := range []struct {
 		name   string
 		config string
-		want   string
+		server string
 	}{
-		{"local transport", `{"mcpServers":{"local":{"type":"local","command":"server","args":["--stdio"]}}}`, "[mcp_servers.\"local\"]\ncommand = \"server\"\nargs = [\"--stdio\"]\n"},
-		{"streamable http transport", `{"mcpServers":{"remote":{"type":"streamable-http","url":"https://example.test/mcp","headers":{"Authorization":"token"}}}}`, "[mcp_servers.\"remote\"]\nurl = \"https://example.test/mcp\"\n"},
+		{"local transport", `{"mcpServers":{"local":{"type":"local","command":"server","args":["--stdio"]}}}`, "local"},
+		{"streamable http transport", `{"mcpServers":{"remote":{"type":"streamable-http","url":"https://example.test/mcp","headers":{"Authorization":"token"}}}}`, "remote"},
 	} {
 		t.Run(test.name, func(t *testing.T) {
 			root := t.TempDir()
@@ -361,8 +389,13 @@ func TestCodexMCPTransportVariants(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
-			if !strings.Contains(string(got), strings.TrimSuffix(test.want, "\n")) {
-				t.Fatalf("generated config = %q, want includes %q", got, test.want)
+			var parsed map[string]any
+			if err := toml.Unmarshal(got, &parsed); err != nil {
+				t.Fatal(err)
+			}
+			servers, ok := stringMap(parsed["mcp_servers"])
+			if !ok || servers[test.server] == nil {
+				t.Fatalf("generated config = %q, want MCP server %q", got, test.server)
 			}
 		})
 	}
@@ -409,13 +442,18 @@ func TestCodexDefaultStdioMCPTransport(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	want := "#:schema " + codexConfigSchemaURL + "\n\n[mcp_servers.\"default\"]\ncommand = \"server\"\nargs = [\"--stdio\"]\n"
-	if string(data) != want {
-		t.Fatalf("Codex default stdio config = %q, want %q", data, want)
+	var parsed map[string]any
+	if err := toml.Unmarshal(data, &parsed); err != nil {
+		t.Fatal(err)
+	}
+	servers, _ := stringMap(parsed["mcp_servers"])
+	server, _ := stringMap(servers["default"])
+	if server["command"] != "server" || !reflect.DeepEqual(normalizeValue(server["args"]), []any{"--stdio"}) {
+		t.Fatalf("Codex default stdio config = %q", data)
 	}
 }
 
-func TestRejectsUnsafeGeneratedOutputPath(t *testing.T) {
+func TestCodexAgentNameCannotEscapeGeneratedDirectory(t *testing.T) {
 	root := t.TempDir()
 	seedSchemaArtifactsForValidation(t, root)
 	write(t, root, ".agents/agents/reviewer.md", "---\nname: ../../../outside\ndescription: Reviews changes\n---\nReview carefully.\n")
@@ -423,11 +461,14 @@ func TestRejectsUnsafeGeneratedOutputPath(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if err := a.Validate(); err == nil || !strings.Contains(err.Error(), "unsafe generated output path") {
-		t.Fatalf("Validate() error = %v, want unsafe generated path error", err)
+	if err := a.Generate(false); err != nil {
+		t.Fatalf("Generate() error = %v", err)
 	}
 	if _, err := os.Stat(filepath.Join(root, "outside.toml")); !os.IsNotExist(err) {
 		t.Fatalf("unsafe output was created: %v", err)
+	}
+	if _, err := os.Stat(filepath.Join(root, ".codex/agents/reviewer.toml")); err != nil {
+		t.Fatalf("safe filename-derived output missing: %v", err)
 	}
 }
 
@@ -827,6 +868,22 @@ func assertSnapshot(t *testing.T, root, expectedRoot string) {
 		got, err := os.ReadFile(filepath.Join(root, relative))
 		if err != nil {
 			return err
+		}
+		if strings.HasSuffix(relative, ".toml") {
+			var gotTOML, wantTOML map[string]any
+			if gotErr := toml.Unmarshal(got, &gotTOML); gotErr == nil {
+				if wantErr := toml.Unmarshal(want, &wantTOML); wantErr == nil && reflect.DeepEqual(normalizeValue(gotTOML), normalizeValue(wantTOML)) {
+					return nil
+				}
+			}
+		}
+		if strings.HasSuffix(relative, ".json") {
+			var gotJSON, wantJSON any
+			if gotErr := json.Unmarshal(got, &gotJSON); gotErr == nil {
+				if wantErr := json.Unmarshal(want, &wantJSON); wantErr == nil && reflect.DeepEqual(gotJSON, wantJSON) {
+					return nil
+				}
+			}
 		}
 		if string(got) != string(want) {
 			t.Errorf("snapshot mismatch for %s", relative)

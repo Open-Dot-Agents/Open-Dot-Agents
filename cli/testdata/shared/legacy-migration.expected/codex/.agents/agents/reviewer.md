@@ -1,4 +1,4 @@
 ---
-description: Legacy Codex reviewer
+description: "Legacy Codex reviewer"
 ---
 Follow review checklist.

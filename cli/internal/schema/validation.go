@@ -376,7 +376,7 @@ func ValidateCategoryFilePatterns(root string, metadata *SchemaMetadata) error {
 		}
 		matched := false
 		for _, pattern := range patterns {
-			ok, err := path.Match(pattern, relative)
+			ok, err := matchFilePattern(pattern, relative)
 			if err != nil {
 				return fmt.Errorf("invalid file pattern %q for category %q", pattern, category)
 			}
@@ -390,6 +390,28 @@ func ValidateCategoryFilePatterns(root string, metadata *SchemaMetadata) error {
 		}
 		return nil
 	})
+}
+
+func matchFilePattern(pattern, name string) (bool, error) {
+	if !strings.Contains(pattern, "**/") {
+		return path.Match(pattern, name)
+	}
+	parts := strings.SplitN(pattern, "**/", 2)
+	if !strings.HasPrefix(name, parts[0]) {
+		return false, nil
+	}
+	remainder := strings.TrimPrefix(name, parts[0])
+	for {
+		matched, err := path.Match(parts[1], remainder)
+		if err != nil || matched {
+			return matched, err
+		}
+		slash := strings.IndexByte(remainder, '/')
+		if slash < 0 {
+			return false, nil
+		}
+		remainder = remainder[slash+1:]
+	}
 }
 
 func ValidateCategoryStatusAlignment(target string, statusByCategory map[string]string, unsupportedCategories []string) error {

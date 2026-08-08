@@ -1,0 +1,5 @@
+{
+  "name": "oda-acceptance-plugin",
+  "description": "Validates the Open-Dot-Agents Copilot plugin projection.",
+  "version": "1.0.0"
+}

@@ -14,6 +14,7 @@
     - https://learn.chatgpt.com/docs/customization/memories?surface=cli
     - https://docs.devin.ai/desktop/cascade/memories
   permissions:
+    - https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-config-dir-reference#repository-level-models-allowlist-githuballowed_modelstxt
     - https://code.claude.com/docs/en/settings
     - https://learn.chatgpt.com/docs/permissions
     - https://learn.chatgpt.com/docs/agent-approvals-security
@@ -27,6 +28,7 @@
   rules:
     - https://learn.chatgpt.com/docs/agent-configuration/rules
   settings:
+    - https://docs.github.com/en/copilot/concepts/agents/copilot-cli/about-cli-plugins
     - https://learn.chatgpt.com/docs/config-file/config-reference
     - https://code.claude.com/docs/en/settings
   skills:
@@ -75,35 +77,35 @@
       claude: mapped
     guardrails:
       copilot: unsupported
-      codex: unsupported
+      codex: mapped
       claude: unsupported
     hooks:
       copilot: supported
-      codex: unsupported
+      codex: mapped
       claude: supported
     memories:
       copilot: unsupported
-      codex: unsupported
+      codex: mapped
       claude: unsupported
     permissions:
-      copilot: unsupported
-      codex: unsupported
+      copilot: mapped
+      codex: mapped
       claude: unsupported
     plugins:
-      copilot: unsupported
-      codex: unsupported
+      copilot: mapped
+      codex: mapped
       claude: unsupported
     profiles:
       copilot: unsupported
-      codex: unsupported
+      codex: mapped
       claude: unsupported
     prompts:
-      copilot: unsupported
+      copilot: mapped
       codex: unsupported
       claude: unsupported
     settings:
-      copilot: unsupported
-      codex: unsupported
+      copilot: mapped
+      codex: mapped
       claude: unsupported
     skills:
       copilot: mapped
@@ -111,18 +113,17 @@
       claude: mapped
     tools:
       copilot: mapped
-      codex: partial
+      codex: mapped
       claude: mapped
 
   status_notes:
-    plugins:
-      copilot: "GitHub Copilot CLI supports native plugins, but the v0.0.1 oda adapter does not project them."
-    profiles:
-      codex: "Codex supports native profiles, but the v0.0.1 oda adapter does not project them."
+    permissions:
+      copilot: "Shared model policy round-trips through .github/allowed_models.txt; personal permission caches are intentionally excluded."
+    settings:
+      copilot: "Repository plugin activation and marketplace settings round-trip through .github/copilot/settings.json."
     prompts:
-      copilot: "GitHub Copilot CLI supports native prompt files, but the v0.0.1 oda adapter does not project them."
       claude: "Claude Code supports prompt workflows, but the v0.0.1 oda adapter does not project them."
     tools:
-      codex: "Codex supports MCP transport types stdio/local and http/streamable-http."
+      codex: "Codex MCP fields are mapped to portable fields and retained in a codex extension for lossless round trips."
     skills:
       codex: "Codex discovers repository skills directly from .agents/skills; oda does not emit duplicate .codex/skills entries."

@@ -18,7 +18,9 @@ explicitly by user intent.
 
 ## Current oda projection
 
-No v0.0.1 adapter emits this category; all three targets are `unsupported`.
+- GitHub Copilot CLI: `mapped` bidirectionally to
+  `.github/prompts/*.prompt.md`.
+- OpenAI Codex and Claude Code: `unsupported` by the current adapters.
 
 ## Expected content
 

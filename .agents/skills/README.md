@@ -26,6 +26,9 @@ at minimum includes a `SKILL.md` with:
 
 Optional scripts or resources can be added as needed.
 
+`oda import --target codex` also migrates legacy repository `.codex/skills/**`
+trees into this canonical location. All nested skill assets are preserved.
+
 ## Contract
 
 Machine metadata is in `../schema/v0.0.1/agents.schema.json`, including required file

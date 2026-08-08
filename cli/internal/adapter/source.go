@@ -54,12 +54,20 @@ func instructions(base, destination string, out map[string][]byte) error {
 }
 
 func rules(base, destination, suffix string, out map[string][]byte) error {
-	files, err := markdownFiles(filepath.Join(base, "rules"))
+	rulesRoot := filepath.Join(base, "rules")
+	files, err := markdownFilesRecursive(rulesRoot)
 	if err != nil {
 		return err
 	}
 	applied := map[string]string{}
 	for _, file := range files {
+		relative, err := filepath.Rel(rulesRoot, file)
+		if err != nil {
+			return err
+		}
+		if firstPathComponent(relative) == "copilot-project" {
+			continue
+		}
 		data, err := os.ReadFile(file)
 		if err != nil {
 			return err
@@ -76,13 +84,22 @@ func rules(base, destination, suffix string, out map[string][]byte) error {
 			return fmt.Errorf("rule %s and %s both target applyTo %q", filepath.Base(source), filepath.Base(file), applyTo)
 		}
 		applied[applyTo] = file
-		out[filepath.ToSlash(filepath.Join(destination, strings.TrimSuffix(filepath.Base(file), ".md")+suffix))] = data
+		out[filepath.ToSlash(filepath.Join(destination, strings.TrimSuffix(relative, ".md")+suffix))] = data
 	}
 	return nil
 }
 
+func firstPathComponent(path string) string {
+	parts := strings.Split(filepath.ToSlash(path), "/")
+	if len(parts) == 0 {
+		return ""
+	}
+	return parts[0]
+}
+
 func claudeRules(base string, out map[string][]byte) error {
-	files, err := markdownFiles(filepath.Join(base, "rules"))
+	rulesRoot := filepath.Join(base, "rules")
+	files, err := markdownFilesRecursive(rulesRoot)
 	if err != nil {
 		return err
 	}
@@ -119,7 +136,11 @@ func claudeRules(base string, out map[string][]byte) error {
 		output := append([]byte("---\n"), encoded...)
 		output = append(output, []byte("---\n")...)
 		output = append(output, body...)
-		out[filepath.ToSlash(filepath.Join(".claude/rules", filepath.Base(file)))] = output
+		relative, err := filepath.Rel(rulesRoot, file)
+		if err != nil {
+			return err
+		}
+		out[filepath.ToSlash(filepath.Join(".claude/rules", relative))] = output
 	}
 	return nil
 }
@@ -160,6 +181,9 @@ func copyJSON(base, source, destination string, out map[string][]byte) error {
 		if entry.IsDir() || !strings.HasSuffix(entry.Name(), ".json") {
 			continue
 		}
+		if entry.Type()&os.ModeSymlink != 0 {
+			return fmt.Errorf("refusing symlinked source file %s", filepath.Join(source, entry.Name()))
+		}
 		data, err := os.ReadFile(filepath.Join(dir, entry.Name()))
 		if err != nil {
 			return err
@@ -174,7 +198,7 @@ func copyJSON(base, source, destination string, out map[string][]byte) error {
 
 func mcpJSON(base, destination string, out map[string][]byte) error {
 	path := filepath.Join(base, "tools", "mcp.json")
-	data, err := os.ReadFile(path)
+	data, err := readSourceFile(path)
 	if errors.Is(err, fs.ErrNotExist) {
 		return nil
 	}
@@ -213,7 +237,7 @@ func skills(base string) error {
 		if !entry.IsDir() {
 			continue
 		}
-		data, err := os.ReadFile(filepath.Join(dir, entry.Name(), "SKILL.md"))
+		data, err := readSourceFile(filepath.Join(dir, entry.Name(), "SKILL.md"))
 		if err != nil {
 			return fmt.Errorf("skill %s must contain SKILL.md", entry.Name())
 		}
@@ -254,6 +278,9 @@ func copySkills(base, destination string, out map[string][]byte) error {
 			if entry.IsDir() {
 				return nil
 			}
+			if entry.Type()&os.ModeSymlink != 0 {
+				return fmt.Errorf("refusing symlinked skill asset %s", path)
+			}
 			relative, err := filepath.Rel(source, path)
 			if err != nil {
 				return err
@@ -286,7 +313,7 @@ func claudeHooks(base string, out map[string][]byte) error {
 		if entry.IsDir() || !strings.HasSuffix(entry.Name(), ".json") {
 			continue
 		}
-		data, err := os.ReadFile(filepath.Join(dir, entry.Name()))
+		data, err := readSourceFile(filepath.Join(dir, entry.Name()))
 		if err != nil {
 			return err
 		}
@@ -347,11 +374,45 @@ func markdownFiles(dir string) ([]string, error) {
 	var files []string
 	for _, entry := range entries {
 		if !entry.IsDir() && entry.Name() != "README.md" && strings.HasSuffix(entry.Name(), ".md") {
+			if entry.Type()&os.ModeSymlink != 0 {
+				return nil, fmt.Errorf("refusing symlinked markdown file %s", filepath.Join(dir, entry.Name()))
+			}
 			files = append(files, filepath.Join(dir, entry.Name()))
 		}
 	}
 	sort.Strings(files)
 	return files, nil
+}
+
+func markdownFilesRecursive(dir string) ([]string, error) {
+	var files []string
+	info, err := os.Stat(dir)
+	if errors.Is(err, fs.ErrNotExist) {
+		return nil, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+	if !info.IsDir() {
+		return nil, nil
+	}
+	err = filepath.WalkDir(dir, func(path string, entry fs.DirEntry, walkErr error) error {
+		if walkErr != nil {
+			return walkErr
+		}
+		if entry.IsDir() {
+			return nil
+		}
+		if entry.Type()&os.ModeSymlink != 0 {
+			return fmt.Errorf("refusing symlinked markdown file %s", path)
+		}
+		if entry.Name() != "README.md" && strings.HasSuffix(entry.Name(), ".md") {
+			files = append(files, path)
+		}
+		return nil
+	})
+	sort.Strings(files)
+	return files, err
 }
 
 func frontMatter(data []byte) (map[string]any, []byte, error) {

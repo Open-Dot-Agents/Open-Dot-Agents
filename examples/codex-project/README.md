@@ -1,8 +1,14 @@
 # Codex acceptance project
 
 This project is a complete canonical `.agents` example for exercising the
-Open-Dot-Agents Codex adapter. It intentionally contains only categories that
-the v0.0.1 Codex mapping supports: instructions, agents, skills, and tools.
+Open-Dot-Agents Codex adapter. Codex config fields are split across their
+canonical settings, guardrails, hooks, memories, permissions, plugins, and
+profiles categories on import and merged on export. Project command policies
+round-trip between `.agents/permissions/codex-rules/**/*.rules` and
+`.codex/rules/**/*.rules`; this fixture validates one with Codex's native
+`execpolicy check` command.
+The native discovery gate also checks a nested `AGENTS.override.md` and a
+configured `TEAM_GUIDE.md` fallback without making additional model calls.
 
 Run the end-to-end acceptance flow from the repository root:
 
@@ -17,6 +23,7 @@ access, `jq`, and consumes model tokens. Before live discovery, it validates
 the generated TOML against OpenAI's official Codex config JSON Schema and
 loads it through the installed CLI with `--strict-config`.
 
-Do not force generation over an existing hand-authored `.codex/config.toml`
-without reviewing `generate --dry-run --diff`: v0.0.1 owns and replaces the
-complete generated file.
+Adopt an existing hand-authored `.codex/config.toml` with
+`oda import --target codex` before exporting. The import retains its raw bytes
+and unknown fields; review `oda export --target codex --dry-run --diff` before
+using `--force --backup` on an unowned target.

@@ -18,7 +18,9 @@ Profiles are named runtime presets that layer on top of base
 
 ## Current oda projection
 
-No v0.0.1 adapter emits this category; all three targets are `unsupported`.
+- OpenAI Codex: `mapped` through `.agents/profiles/codex.toml` and
+  `[profiles.<name>]` in `.codex/config.toml`.
+- GitHub Copilot CLI and Claude Code: `unsupported` by the current adapters.
 
 ## Expected content
 

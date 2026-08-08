@@ -1,17 +1,17 @@
 package adapter
 
 import (
-	"bufio"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"io/fs"
 	"os"
 	"path/filepath"
-	"regexp"
 	"sort"
 	"strconv"
 	"strings"
+
+	"github.com/pelletier/go-toml/v2"
 )
 
 type importerFunc func(root string) (map[string][]byte, error)
@@ -50,10 +50,19 @@ func addImportOutput(outputs map[string][]byte, path string, data []byte) error 
 func importCopilot(root string) (map[string][]byte, error) {
 	out := make(map[string][]byte)
 
+	if err := importRootInstructions(root, "AGENTS.md", out); err != nil {
+		return nil, err
+	}
 	if err := importCopilotInstructions(root, out); err != nil {
 		return nil, err
 	}
+	if err := importCopilotProjectInstructions(root, out); err != nil {
+		return nil, err
+	}
 	if err := importCopilotRules(root, out); err != nil {
+		return nil, err
+	}
+	if err := importNestedCopilotRules(root, out); err != nil {
 		return nil, err
 	}
 	if err := importCopilotAgents(root, out); err != nil {
@@ -65,11 +74,37 @@ func importCopilot(root string) (map[string][]byte, error) {
 	if err := importCopilotTools(root, out); err != nil {
 		return nil, err
 	}
+	if err := importCopilotSettings(root, out); err != nil {
+		return nil, err
+	}
+	if err := importCopilotAllowedModels(root, out); err != nil {
+		return nil, err
+	}
+	if err := importTree(root, filepath.Join(".github", "skills"), filepath.Join(".agents", "skills"), out, nil); err != nil {
+		return nil, err
+	}
+	if err := importCopilotPrompts(root, out); err != nil {
+		return nil, err
+	}
+	if err := importTree(root, filepath.Join(".github", "plugin"), filepath.Join(".agents", "plugins", "copilot"), out, nil); err != nil {
+		return nil, err
+	}
 	return out, nil
 }
 
+func importRootInstructions(root, name string, out map[string][]byte) error {
+	data, err := readSourceFile(filepath.Join(root, name))
+	if errors.Is(err, fs.ErrNotExist) {
+		return nil
+	}
+	if err != nil {
+		return err
+	}
+	return addImportOutput(out, filepath.ToSlash(filepath.Join(".agents", "instructions", name)), data)
+}
+
 func importCopilotInstructions(root string, out map[string][]byte) error {
-	data, err := os.ReadFile(filepath.Join(root, ".github", "copilot-instructions.md"))
+	data, err := readSourceFile(filepath.Join(root, ".github", "copilot-instructions.md"))
 	if errors.Is(err, fs.ErrNotExist) {
 		return nil
 	}
@@ -79,8 +114,18 @@ func importCopilotInstructions(root string, out map[string][]byte) error {
 	return addImportOutput(out, filepath.ToSlash(filepath.Join(".agents", "instructions", "copilot-instructions.md")), data)
 }
 
+func importCopilotProjectInstructions(root string, out map[string][]byte) error {
+	return importDiscoveredProjectFiles(root, filepath.Join(".agents", "instructions", "copilot-project"), out, func(relative string, entry fs.DirEntry) bool {
+		if relative == "AGENTS.md" || relative == ".github/copilot-instructions.md" {
+			return false
+		}
+		return entry.Name() == "AGENTS.md" || strings.HasSuffix(relative, "/.github/copilot-instructions.md")
+	})
+}
+
 func importCopilotRules(root string, out map[string][]byte) error {
-	rules, err := collectFilesWithSuffix(filepath.Join(root, ".github", "instructions"), ".instructions.md")
+	sourceRoot := filepath.Join(root, ".github", "instructions")
+	rules, err := collectFilesWithSuffix(sourceRoot, ".instructions.md")
 	if err != nil {
 		return err
 	}
@@ -89,13 +134,26 @@ func importCopilotRules(root string, out map[string][]byte) error {
 		if err != nil {
 			return err
 		}
-		name := strings.TrimSuffix(filepath.Base(rule), ".instructions.md")
-		content := fmt.Sprintf("---\napplyTo: \"**/*\"\n---\n%s", normalizeMarkdownBody(data))
-		if err := addImportOutput(out, filepath.ToSlash(filepath.Join(".agents", "rules", name+".md")), []byte(content)); err != nil {
+		relative, err := filepath.Rel(sourceRoot, rule)
+		if err != nil {
+			return err
+		}
+		name := strings.TrimSuffix(relative, ".instructions.md")
+		content := data
+		if _, _, err := frontMatter(data); err != nil {
+			content = []byte(fmt.Sprintf("---\napplyTo: \"**/*\"\n---\n%s", normalizeMarkdownBody(data)))
+		}
+		if err := addImportOutput(out, filepath.ToSlash(filepath.Join(".agents", "rules", name+".md")), content); err != nil {
 			return err
 		}
 	}
 	return nil
+}
+
+func importNestedCopilotRules(root string, out map[string][]byte) error {
+	return importDiscoveredProjectFiles(root, filepath.Join(".agents", "rules", "copilot-project"), out, func(relative string, entry fs.DirEntry) bool {
+		return strings.HasSuffix(entry.Name(), ".instructions.md") && strings.Contains(relative, "/.github/instructions/")
+	})
 }
 
 func importCopilotAgents(root string, out map[string][]byte) error {
@@ -109,8 +167,14 @@ func importCopilotAgents(root string, out map[string][]byte) error {
 			return err
 		}
 		name := strings.TrimSuffix(filepath.Base(path), ".agent.md")
-		content := fmt.Sprintf("---\ndescription: %s\n---\n%s", name, normalizeMarkdownBody(data))
-		if err := addImportOutput(out, filepath.ToSlash(filepath.Join(".agents", "agents", name+".md")), []byte(content)); err != nil {
+		content := data
+		front, _, err := frontMatter(data)
+		if err != nil {
+			content = []byte(fmt.Sprintf("---\ndescription: %s\n---\n%s", name, normalizeMarkdownBody(data)))
+		} else if description, ok := front["description"].(string); !ok || strings.TrimSpace(description) == "" {
+			return fmt.Errorf("%s: front matter requires description", filepath.ToSlash(filepath.Clean(path)))
+		}
+		if err := addImportOutput(out, filepath.ToSlash(filepath.Join(".agents", "agents", name+".md")), content); err != nil {
 			return err
 		}
 	}
@@ -138,25 +202,200 @@ func importCopilotHooks(root string, out map[string][]byte) error {
 }
 
 func importCopilotTools(root string, out map[string][]byte) error {
-	data, err := readMCPFile(root, filepath.Join(".github", "mcp.json"))
+	files := map[string][]byte{}
+	for _, source := range []string{".mcp.json", ".github/mcp.json"} {
+		data, err := readMCPFile(root, filepath.FromSlash(source))
+		if errors.Is(err, fs.ErrNotExist) {
+			continue
+		}
+		if err != nil {
+			return err
+		}
+		var config any
+		if err := json.Unmarshal(data, &config); err != nil {
+			return err
+		}
+		if err := rejectInlineCredentials(config, source); err != nil {
+			return err
+		}
+		files[source] = data
+	}
+	if len(files) == 0 {
+		return nil
+	}
+	canonical := files[".github/mcp.json"]
+	if len(canonical) == 0 {
+		canonical = files[".mcp.json"]
+	}
+	if len(files) == 2 {
+		merged := map[string]json.RawMessage{}
+		for _, source := range []string{".mcp.json", ".github/mcp.json"} {
+			var config struct {
+				Servers map[string]json.RawMessage `json:"mcpServers"`
+			}
+			if err := json.Unmarshal(files[source], &config); err != nil {
+				return err
+			}
+			for name, server := range config.Servers {
+				merged[name] = server
+			}
+		}
+		encoded, err := json.MarshalIndent(struct {
+			Servers map[string]json.RawMessage `json:"mcpServers"`
+		}{Servers: merged}, "", "  ")
+		if err != nil {
+			return err
+		}
+		canonical = append(encoded, '\n')
+	}
+	if err := addImportOutput(out, ".agents/tools/mcp.json", canonical); err != nil {
+		return err
+	}
+	if _, hasRoot := files[".mcp.json"]; !hasRoot {
+		return nil
+	}
+	rawFiles := make(map[string]string, len(files))
+	for path, data := range files {
+		rawFiles[path] = string(data)
+	}
+	provenance, err := json.MarshalIndent(copilotMCPProvenance{CanonicalSHA256: contentSHA256(canonical), Files: rawFiles}, "", "  ")
+	if err != nil {
+		return err
+	}
+	return addImportOutput(out, ".agents/settings/copilot-mcp-provenance.json", append(provenance, '\n'))
+}
+
+func importCopilotSettings(root string, out map[string][]byte) error {
+	data, err := readSourceFile(filepath.Join(root, ".github", "copilot", "settings.json"))
 	if errors.Is(err, fs.ErrNotExist) {
 		return nil
 	}
 	if err != nil {
 		return err
 	}
-	return addImportOutput(out, filepath.ToSlash(filepath.Join(".agents", "tools", "mcp.json")), data)
+	var settings any
+	if err := json.Unmarshal(data, &settings); err != nil {
+		return fmt.Errorf(".github/copilot/settings.json: %w", err)
+	}
+	if _, ok := settings.(map[string]any); !ok {
+		return errors.New(".github/copilot/settings.json must contain a JSON object")
+	}
+	if err := rejectInlineCredentials(settings, ".github/copilot/settings.json"); err != nil {
+		return err
+	}
+	return addImportOutput(out, ".agents/settings/copilot.json", data)
+}
+
+func importCopilotAllowedModels(root string, out map[string][]byte) error {
+	data, err := readSourceFile(filepath.Join(root, ".github", "allowed_models.txt"))
+	if errors.Is(err, fs.ErrNotExist) {
+		return nil
+	}
+	if err != nil {
+		return err
+	}
+	if len(strings.TrimSpace(string(data))) == 0 {
+		return errors.New(".github/allowed_models.txt must not be empty")
+	}
+	return addImportOutput(out, ".agents/permissions/copilot-allowed-models.txt", data)
+}
+
+func importCopilotPrompts(root string, out map[string][]byte) error {
+	paths, err := collectFilesWithSuffix(filepath.Join(root, ".github", "prompts"), ".prompt.md")
+	if err != nil {
+		return err
+	}
+	for _, path := range paths {
+		data, err := os.ReadFile(path)
+		if err != nil {
+			return err
+		}
+		name := strings.TrimSuffix(filepath.Base(path), ".prompt.md")
+		if err := addImportOutput(out, filepath.ToSlash(filepath.Join(".agents", "prompts", name+".md")), data); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func importTree(root, source, destination string, out map[string][]byte, accept func(string) bool) error {
+	sourceRoot := filepath.Join(root, source)
+	info, err := os.Lstat(sourceRoot)
+	if errors.Is(err, fs.ErrNotExist) {
+		return nil
+	}
+	if err != nil {
+		return err
+	}
+	if info.Mode()&os.ModeSymlink != 0 {
+		return fmt.Errorf("refusing symlinked import directory %s", sourceRoot)
+	}
+	if !info.IsDir() {
+		return fmt.Errorf("%s is not a directory", filepath.ToSlash(source))
+	}
+	return filepath.WalkDir(sourceRoot, func(path string, entry fs.DirEntry, walkErr error) error {
+		if walkErr != nil {
+			return walkErr
+		}
+		if entry.IsDir() {
+			return nil
+		}
+		if entry.Type()&os.ModeSymlink != 0 {
+			return fmt.Errorf("refusing symlinked import source %s", path)
+		}
+		relative, err := filepath.Rel(sourceRoot, path)
+		if err != nil {
+			return err
+		}
+		if accept != nil && !accept(relative) {
+			return nil
+		}
+		data, err := os.ReadFile(path)
+		if err != nil {
+			return err
+		}
+		return addImportOutput(out, filepath.ToSlash(filepath.Join(destination, relative)), data)
+	})
+}
+
+func importDiscoveredProjectFiles(root, destination string, out map[string][]byte, accept func(string, fs.DirEntry) bool) error {
+	return filepath.WalkDir(root, func(path string, entry fs.DirEntry, walkErr error) error {
+		if walkErr != nil {
+			return walkErr
+		}
+		relative, err := filepath.Rel(root, path)
+		if err != nil {
+			return err
+		}
+		relative = filepath.ToSlash(relative)
+		if entry.IsDir() {
+			if relative == ".git" || relative == ".agents" {
+				return filepath.SkipDir
+			}
+			return nil
+		}
+		if !accept(relative, entry) {
+			return nil
+		}
+		data, err := readSourceFile(path)
+		if err != nil {
+			return err
+		}
+		return addImportOutput(out, filepath.ToSlash(filepath.Join(destination, relative)), data)
+	})
 }
 
 func importCodex(root string) (map[string][]byte, error) {
 	out := make(map[string][]byte)
+	configData, configErr := readCodexConfig(root)
+	if configErr != nil && !errors.Is(configErr, fs.ErrNotExist) {
+		return nil, configErr
+	}
 
-	data, err := os.ReadFile(filepath.Join(root, "AGENTS.md"))
-	if err == nil {
-		if err := addImportOutput(out, filepath.ToSlash(filepath.Join(".agents", "instructions", "AGENTS.md")), data); err != nil {
-			return nil, err
-		}
-	} else if !errors.Is(err, fs.ErrNotExist) {
+	if err := importRootInstructions(root, "AGENTS.md", out); err != nil {
+		return nil, err
+	}
+	if err := importCodexProjectInstructions(root, configData, out); err != nil {
 		return nil, err
 	}
 
@@ -169,38 +408,55 @@ func importCodex(root string) (map[string][]byte, error) {
 		if err != nil {
 			return nil, err
 		}
-		info, err := parseCodexAgentTOML(data)
-		if err != nil {
-			return nil, err
+		var config map[string]any
+		if err := toml.Unmarshal(data, &config); err != nil {
+			return nil, fmt.Errorf("%s: %w", filepath.ToSlash(filepath.Clean(path)), err)
 		}
 		name := strings.TrimSuffix(filepath.Base(path), ".toml")
-		if info.Name != "" {
-			name = info.Name
+		description, _ := config["description"].(string)
+		if strings.TrimSpace(description) == "" {
+			description = "Imported Codex agent"
 		}
-		content := fmt.Sprintf(
-			"---\ndescription: %s\n---\n%s",
-			strings.TrimSpace(info.Description),
-			normalizeBody(info.Instructions),
-		)
-		if err := addImportOutput(out, filepath.ToSlash(filepath.Join(".agents", "agents", name+".md")), []byte(content)); err != nil {
+		instructions, _ := config["developer_instructions"].(string)
+		if strings.TrimSpace(instructions) == "" {
+			return nil, fmt.Errorf("%s: codex agent file missing developer_instructions", filepath.ToSlash(filepath.Clean(path)))
+		}
+		nameLine := ""
+		if configured, ok := config["name"].(string); ok && strings.TrimSpace(configured) != "" && configured != name {
+			nameLine = "name: " + strconv.Quote(configured) + "\n"
+		}
+		content := []byte(fmt.Sprintf("---\ndescription: %s\n%s---\n%s", strconv.Quote(description), nameLine, normalizeBody(instructions)))
+		if err := addImportOutput(out, filepath.ToSlash(filepath.Join(".agents", "agents", name+".md")), content); err != nil {
+			return nil, err
+		}
+		if err := addImportOutput(out, filepath.ToSlash(filepath.Join(".agents", "settings", "codex-agents", filepath.Base(path))), data); err != nil {
 			return nil, err
 		}
 	}
+	if err := importTree(root, filepath.Join(".codex", "skills"), filepath.Join(".agents", "skills"), out, nil); err != nil {
+		return nil, err
+	}
+	legacySkillFiles, err := collectRelativeImportFiles(filepath.Join(root, ".codex", "skills"))
+	if err != nil {
+		return nil, err
+	}
+	if len(legacySkillFiles) > 0 {
+		encoded, err := json.MarshalIndent(codexLegacySkillsManifest{Files: legacySkillFiles}, "", "  ")
+		if err != nil {
+			return nil, err
+		}
+		if err := addImportOutput(out, ".agents/settings/codex-legacy-skills.json", append(encoded, '\n')); err != nil {
+			return nil, err
+		}
+	}
+	if err := importTree(root, filepath.Join(".codex", "rules"), filepath.Join(".agents", "permissions", "codex-rules"), out, func(path string) bool {
+		return strings.HasSuffix(path, ".rules")
+	}); err != nil {
+		return nil, err
+	}
 
-	mcpData, err := readCodexConfig(root)
-	if !errors.Is(err, fs.ErrNotExist) {
-		if err != nil {
-			return nil, err
-		}
-		mcpJSON, err := parseCodexConfigTOML(mcpData)
-		if err != nil {
-			return nil, err
-		}
-		encoded, err := json.Marshal(mcpJSON)
-		if err != nil {
-			return nil, err
-		}
-		if err := addImportOutput(out, filepath.ToSlash(filepath.Join(".agents", "tools", "mcp.json")), append(encoded, '\n')); err != nil {
+	if !errors.Is(configErr, fs.ErrNotExist) {
+		if err := importCodexConfig(configData, out); err != nil {
 			return nil, err
 		}
 	}
@@ -208,16 +464,66 @@ func importCodex(root string) (map[string][]byte, error) {
 	return out, nil
 }
 
-type codexAgentImport struct {
-	Name         string
-	Description  string
-	Instructions string
+func collectRelativeImportFiles(root string) ([]string, error) {
+	info, err := os.Lstat(root)
+	if errors.Is(err, fs.ErrNotExist) {
+		return nil, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+	if info.Mode()&os.ModeSymlink != 0 || !info.IsDir() {
+		return nil, fmt.Errorf("refusing invalid import directory %s", root)
+	}
+	var files []string
+	err = filepath.WalkDir(root, func(path string, entry fs.DirEntry, walkErr error) error {
+		if walkErr != nil || entry.IsDir() {
+			return walkErr
+		}
+		if entry.Type()&os.ModeSymlink != 0 {
+			return fmt.Errorf("refusing symlinked import source %s", path)
+		}
+		relative, err := filepath.Rel(root, path)
+		if err != nil {
+			return err
+		}
+		files = append(files, filepath.ToSlash(relative))
+		return nil
+	})
+	sort.Strings(files)
+	return files, err
+}
+
+func importCodexProjectInstructions(root string, configData []byte, out map[string][]byte) error {
+	fallbacks := map[string]struct{}{}
+	if len(configData) > 0 {
+		var config map[string]any
+		if err := toml.Unmarshal(configData, &config); err != nil {
+			return err
+		}
+		for _, name := range stringSlice(config["project_doc_fallback_filenames"]) {
+			if strings.TrimSpace(name) == "" || filepath.Base(name) != name {
+				return fmt.Errorf(".codex/config.toml: project_doc_fallback_filenames entry %q must be a filename", name)
+			}
+			fallbacks[name] = struct{}{}
+		}
+	}
+	return importDiscoveredProjectFiles(root, filepath.Join(".agents", "instructions", "codex-project"), out, func(relative string, entry fs.DirEntry) bool {
+		if relative == "AGENTS.md" {
+			return false
+		}
+		if entry.Name() == "AGENTS.md" || entry.Name() == "AGENTS.override.md" {
+			return true
+		}
+		_, ok := fallbacks[entry.Name()]
+		return ok
+	})
 }
 
 func importClaude(root string) (map[string][]byte, error) {
 	out := make(map[string][]byte)
 
-	data, err := os.ReadFile(filepath.Join(root, "CLAUDE.md"))
+	data, err := readSourceFile(filepath.Join(root, "CLAUDE.md"))
 	if err == nil {
 		if err := addImportOutput(out, filepath.ToSlash(filepath.Join(".agents", "instructions", "CLAUDE.md")), data); err != nil {
 			return nil, err
@@ -226,7 +532,8 @@ func importClaude(root string) (map[string][]byte, error) {
 		return nil, err
 	}
 
-	rulePaths, err := collectFilesWithSuffix(filepath.Join(root, ".claude", "rules"), ".md")
+	claudeRulesRoot := filepath.Join(root, ".claude", "rules")
+	rulePaths, err := collectFilesWithSuffix(claudeRulesRoot, ".md")
 	if err != nil {
 		return nil, err
 	}
@@ -246,7 +553,11 @@ func importClaude(root string) (map[string][]byte, error) {
 		if len(paths) == 0 {
 			return nil, fmt.Errorf("rule %s: front matter must include non-empty paths", filepath.ToSlash(filepath.Clean(path)))
 		}
-		name := strings.TrimSuffix(filepath.Base(path), ".md")
+		relative, err := filepath.Rel(claudeRulesRoot, path)
+		if err != nil {
+			return nil, err
+		}
+		name := strings.TrimSuffix(relative, ".md")
 		content := fmt.Sprintf("---\napplyTo: \"%s\"\n---\n%s", strings.Join(paths, ", "), normalizeBody(string(body)))
 		if err := addImportOutput(out, filepath.ToSlash(filepath.Join(".agents", "rules", name+".md")), []byte(content)); err != nil {
 			return nil, err
@@ -299,253 +610,188 @@ func importClaude(root string) (map[string][]byte, error) {
 	return out, nil
 }
 
-func parseCodexAgentTOML(data []byte) (codexAgentImport, error) {
-	var info codexAgentImport
-	scanner := bufio.NewScanner(strings.NewReader(string(data)))
-	for scanner.Scan() {
-		key, value, ok := parseTomlAssignment(scanner.Text())
-		if !ok {
-			continue
-		}
-		switch key {
-		case "name":
-			info.Name = value
-		case "description":
-			info.Description = value
-		case "developer_instructions":
-			info.Instructions = value
-		}
-	}
-	if scanner.Err() != nil {
-		return codexAgentImport{}, scanner.Err()
-	}
-	if info.Description == "" {
-		info.Description = "Imported Codex agent"
-	}
-	if info.Instructions == "" {
-		return codexAgentImport{}, errors.New("codex agent file missing developer_instructions")
-	}
-	return info, nil
-}
-
-var (
-	codexServerRe         = regexp.MustCompile(`^\[mcp_servers\."([^"]+)"\]$`)
-	codexServerBareRe     = regexp.MustCompile(`^\[mcp_servers\.([^\.\]]+)\]$`)
-	codexServerEnvRe      = regexp.MustCompile(`^\[mcp_servers\."([^"]+)"\.env\]$`)
-	codexServerEnvBareRe  = regexp.MustCompile(`^\[mcp_servers\.([^\.\]]+)\.env\]$`)
-	codexServerHdrsRe     = regexp.MustCompile(`^\[mcp_servers\."([^"]+)"\.http_headers\]$`)
-	codexServerHdrsBareRe = regexp.MustCompile(`^\[mcp_servers\.([^\.\]]+)\.http_headers\]$`)
-)
-
 func parseCodexConfigTOML(data []byte) (map[string]any, error) {
-	type codexServer struct {
-		Type    string
-		Command string
-		URL     string
-		Args    []string
-		Env     map[string]string
-		Headers map[string]string
+	var config map[string]any
+	if err := toml.Unmarshal(data, &config); err != nil {
+		return nil, err
 	}
-
-	section := ""
-	subsection := ""
-	servers := map[string]*codexServer{}
-
-	scanner := bufio.NewScanner(strings.NewReader(string(data)))
-	for scanner.Scan() {
-		line := strings.TrimSpace(scanner.Text())
-		if line == "" || strings.HasPrefix(line, "#") {
-			continue
-		}
-		if match := codexServerRe.FindStringSubmatch(line); len(match) > 0 {
-			section = match[1]
-			subsection = ""
-			if servers[section] == nil {
-				servers[section] = &codexServer{}
-			}
-			continue
-		}
-		if match := codexServerBareRe.FindStringSubmatch(line); len(match) > 0 {
-			section = match[1]
-			subsection = ""
-			if servers[section] == nil {
-				servers[section] = &codexServer{}
-			}
-			continue
-		}
-		if match := codexServerEnvRe.FindStringSubmatch(line); len(match) > 0 {
-			section = match[1]
-			subsection = "env"
-			if servers[section] == nil {
-				servers[section] = &codexServer{}
-			}
-			if servers[section].Env == nil {
-				servers[section].Env = map[string]string{}
-			}
-			continue
-		}
-		if match := codexServerEnvBareRe.FindStringSubmatch(line); len(match) > 0 {
-			section = match[1]
-			subsection = "env"
-			if servers[section] == nil {
-				servers[section] = &codexServer{}
-			}
-			if servers[section].Env == nil {
-				servers[section].Env = map[string]string{}
-			}
-			continue
-		}
-		if match := codexServerHdrsRe.FindStringSubmatch(line); len(match) > 0 {
-			section = match[1]
-			subsection = "headers"
-			if servers[section] == nil {
-				servers[section] = &codexServer{}
-			}
-			if servers[section].Headers == nil {
-				servers[section].Headers = map[string]string{}
-			}
-			continue
-		}
-		if match := codexServerHdrsBareRe.FindStringSubmatch(line); len(match) > 0 {
-			section = match[1]
-			subsection = "headers"
-			if servers[section] == nil {
-				servers[section] = &codexServer{}
-			}
-			if servers[section].Headers == nil {
-				servers[section].Headers = map[string]string{}
-			}
-			continue
-		}
-		if section == "" {
-			continue
-		}
-		key, rawValue, ok := parseTomlAssignment(line)
+	servers, _ := stringMap(config["mcp_servers"])
+	portable := map[string]any{}
+	for name, value := range servers {
+		source, ok := stringMap(value)
 		if !ok {
-			continue
+			return nil, fmt.Errorf("codex server %q is not a table", name)
 		}
-		server := servers[section]
-		switch subsection {
-		case "env":
-			server.Env[key] = rawValue
-		case "headers":
-			server.Headers[key] = rawValue
-		default:
-			switch key {
-			case "type":
-				server.Type = rawValue
-			case "command":
-				server.Command = rawValue
-			case "url":
-				server.URL = rawValue
-			case "args":
-				values, err := parseTomlArray(rawValue)
-				if err != nil {
-					return nil, fmt.Errorf("invalid args for server %q: %w", section, err)
-				}
-				server.Args = values
-			}
+		extension := make(map[string]any, len(source))
+		for key, item := range source {
+			extension[key] = item
 		}
-	}
-	if scanner.Err() != nil {
-		return nil, scanner.Err()
-	}
-
-	output := map[string]any{"mcpServers": map[string]any{}}
-	entries := output["mcpServers"].(map[string]any)
-	for name, source := range servers {
+		for _, key := range []string{"command", "args", "env", "cwd", "url", "http_headers"} {
+			delete(extension, key)
+		}
 		server := map[string]any{}
-		if strings.TrimSpace(source.Type) != "" {
-			server["type"] = source.Type
+		if len(extension) > 0 {
+			server["codex"] = extension
 		}
-		if strings.TrimSpace(source.Command) != "" {
-			server["command"] = source.Command
-		}
-		if len(source.Args) > 0 {
-			server["args"] = source.Args
-		}
-		if strings.TrimSpace(source.URL) != "" {
-			server["url"] = source.URL
-			if source.Command == "" && source.Type == "" {
-				server["type"] = "streamable-http"
+		if command, ok := source["command"].(string); ok && command != "" {
+			server["type"] = "stdio"
+			server["command"] = command
+			copyPortableField(source, server, "args", "env", "cwd")
+		} else if url, ok := source["url"].(string); ok && url != "" {
+			server["type"] = "streamable-http"
+			server["url"] = url
+			if headers, exists := source["http_headers"]; exists {
+				server["headers"] = headers
 			}
-		}
-		if len(source.Env) > 0 {
-			server["env"] = source.Env
-		}
-		if len(source.Headers) > 0 {
-			server["headers"] = source.Headers
-		}
-		if source.Command == "" && source.URL == "" {
+		} else {
 			return nil, fmt.Errorf("codex server %q has no command or url", name)
 		}
-		entries[name] = server
+		portable[name] = server
 	}
-	return output, nil
+	return map[string]any{"mcpServers": portable}, nil
+}
+
+var codexConfigCategoryKeys = map[string][]string{
+	"guardrails":  {"allow_login_shell", "sandbox_mode", "sandbox_workspace_write", "shell_environment_policy", "windows"},
+	"hooks":       {"hooks"},
+	"memories":    {"memories"},
+	"permissions": {"approval_policy", "approvals_reviewer", "default_permissions", "include_permissions_instructions", "permissions"},
+	"plugins":     {"marketplaces", "plugins"},
+	"profiles":    {"profiles"},
+}
+
+func importCodexConfig(data []byte, out map[string][]byte) error {
+	var config map[string]any
+	if err := toml.Unmarshal(data, &config); err != nil {
+		return err
+	}
+	if err := rejectInlineCredentials(config, ".codex/config.toml"); err != nil {
+		return err
+	}
+	if err := addImportOutput(out, ".agents/settings/codex.raw.toml", data); err != nil {
+		return err
+	}
+	remaining := make(map[string]any, len(config))
+	for key, value := range config {
+		remaining[key] = value
+	}
+	delete(remaining, "mcp_servers")
+	for category, keys := range codexConfigCategoryKeys {
+		fragment := map[string]any{}
+		for _, key := range keys {
+			if value, ok := remaining[key]; ok {
+				fragment[key] = value
+				delete(remaining, key)
+			}
+		}
+		if err := addCodexFragment(out, category, fragment); err != nil {
+			return err
+		}
+	}
+	if err := addCodexFragment(out, "settings", remaining); err != nil {
+		return err
+	}
+	if _, ok := config["mcp_servers"]; ok {
+		portable, err := parseCodexConfigTOML(data)
+		if err != nil {
+			return err
+		}
+		encoded, err := json.MarshalIndent(portable, "", "  ")
+		if err != nil {
+			return err
+		}
+		if err := addImportOutput(out, ".agents/tools/mcp.json", append(encoded, '\n')); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func rejectInlineCredentials(value any, source string) error {
+	return walkCredentialValues(value, source, "")
+}
+
+func walkCredentialValues(value any, source, path string) error {
+	switch typed := value.(type) {
+	case map[string]any:
+		for key, item := range typed {
+			keyPath := key
+			if path != "" {
+				keyPath = path + "." + key
+			}
+			isEnvironmentHeader := strings.HasSuffix(strings.ToLower(path), "env_http_headers")
+			if text, ok := item.(string); ok && !isEnvironmentHeader && sensitiveCredentialKey(key) && !credentialReference(text) {
+				return fmt.Errorf("%s contains an inline credential at %s; replace it with an environment-variable reference before import", source, keyPath)
+			}
+			if err := walkCredentialValues(item, source, keyPath); err != nil {
+				return err
+			}
+		}
+	case []any:
+		for index, item := range typed {
+			if err := walkCredentialValues(item, source, fmt.Sprintf("%s[%d]", path, index)); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+func sensitiveCredentialKey(key string) bool {
+	normalized := strings.ToLower(strings.ReplaceAll(key, "-", "_"))
+	if strings.HasSuffix(normalized, "_env_var") || strings.HasSuffix(normalized, "_env_vars") {
+		return false
+	}
+	for _, marker := range []string{"authorization", "api_key", "password", "secret", "token"} {
+		if strings.Contains(normalized, marker) {
+			return true
+		}
+	}
+	return false
+}
+
+func credentialReference(value string) bool {
+	trimmed := strings.TrimSpace(value)
+	return trimmed == "" || strings.Contains(trimmed, "$")
+}
+
+func addCodexFragment(out map[string][]byte, category string, fragment map[string]any) error {
+	if len(fragment) == 0 {
+		return nil
+	}
+	data, err := toml.Marshal(fragment)
+	if err != nil {
+		return err
+	}
+	return addImportOutput(out, filepath.ToSlash(filepath.Join(".agents", category, "codex.toml")), data)
 }
 
 func readCodexConfig(root string) ([]byte, error) {
-	data, err := os.ReadFile(filepath.Join(root, ".codex", "config.toml"))
+	data, err := readSourceFile(filepath.Join(root, ".codex", "config.toml"))
 	if errors.Is(err, fs.ErrNotExist) {
 		return nil, fs.ErrNotExist
 	}
 	if err != nil {
 		return nil, err
 	}
-	if _, err := parseCodexConfigTOML(data); err != nil {
+	var config map[string]any
+	if err := toml.Unmarshal(data, &config); err != nil {
 		return nil, err
 	}
 	return data, nil
 }
 
-func parseTomlAssignment(line string) (key string, value string, ok bool) {
-	eq := strings.Index(line, "=")
-	if eq < 0 {
-		return "", "", false
-	}
-	key = strings.TrimSpace(line[:eq])
-	value = strings.TrimSpace(line[eq+1:])
-	if key == "" || value == "" {
-		return "", "", false
-	}
-	if strings.HasPrefix(value, "\"") && strings.HasSuffix(value, "\"") {
-		unquoted, err := strconv.Unquote(value)
-		if err == nil {
-			value = unquoted
-		}
-	}
-	return key, value, true
-}
-
-func parseTomlArray(value string) ([]string, error) {
-	trimmed := strings.TrimSpace(value)
-	if !strings.HasPrefix(trimmed, "[") || !strings.HasSuffix(trimmed, "]") {
-		return nil, errors.New("invalid array value")
-	}
-	items := strings.Split(trimmed[1:len(trimmed)-1], ",")
-	out := make([]string, 0, len(items))
-	for _, item := range items {
-		item = strings.TrimSpace(item)
-		if item == "" {
-			continue
-		}
-		unquoted, err := strconv.Unquote(item)
-		if err != nil {
-			return nil, err
-		}
-		out = append(out, unquoted)
-	}
-	return out, nil
-}
-
 func collectFilesWithSuffix(directory, suffix string) ([]string, error) {
 	paths := make([]string, 0)
-	info, err := os.Stat(directory)
+	info, err := os.Lstat(directory)
 	if errors.Is(err, fs.ErrNotExist) {
 		return paths, nil
 	}
 	if err != nil {
 		return nil, err
+	}
+	if info.Mode()&os.ModeSymlink != 0 {
+		return nil, fmt.Errorf("refusing symlinked import directory %s", directory)
 	}
 	if !info.IsDir() {
 		return paths, nil
@@ -558,6 +804,9 @@ func collectFilesWithSuffix(directory, suffix string) ([]string, error) {
 			return nil
 		}
 		if strings.HasSuffix(entry.Name(), suffix) {
+			if entry.Type()&os.ModeSymlink != 0 {
+				return fmt.Errorf("refusing symlinked import source %s", path)
+			}
 			paths = append(paths, path)
 		}
 		return nil
@@ -569,7 +818,7 @@ func collectFilesWithSuffix(directory, suffix string) ([]string, error) {
 }
 
 func readMCPFile(root string, relativePath string) ([]byte, error) {
-	data, err := os.ReadFile(filepath.Join(root, filepath.FromSlash(relativePath)))
+	data, err := readSourceFile(filepath.Join(root, filepath.FromSlash(relativePath)))
 	if err != nil {
 		return nil, err
 	}
@@ -586,7 +835,7 @@ func readMCPFile(root string, relativePath string) ([]byte, error) {
 }
 
 func readClaudeSettings(root string) ([]byte, error) {
-	data, err := os.ReadFile(filepath.Join(root, ".claude", "settings.json"))
+	data, err := readSourceFile(filepath.Join(root, ".claude", "settings.json"))
 	if err != nil {
 		return nil, err
 	}

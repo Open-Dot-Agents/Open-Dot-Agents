@@ -28,7 +28,9 @@ separately in `../permissions/README.md`.
 
 ## Current oda projection
 
-No v0.0.1 adapter emits this category; all three targets are `unsupported`.
+- OpenAI Codex: `mapped` through `.agents/guardrails/codex.toml`, including
+  sandbox, workspace-write, shell-environment, and Windows controls.
+- GitHub Copilot CLI and Claude Code: `unsupported` by the current adapters.
 
 ## Expected content
 

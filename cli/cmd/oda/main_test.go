@@ -63,6 +63,29 @@ func TestRunGenerateDryRunAndDiff(t *testing.T) {
 	}
 }
 
+func TestRunExportAlias(t *testing.T) {
+	root := t.TempDir()
+	instructionPath := filepath.Join(root, ".agents", "instructions", "team.md")
+	if err := os.MkdirAll(filepath.Dir(instructionPath), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(instructionPath, []byte("Use concise commits.\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	a, err := adapter.NewForTarget(root, "codex", false)
+	if err != nil {
+		t.Fatal(err)
+	}
+	result := run(runContext{root: root}, "export", a)
+	if result.Status != "ok" || result.Command != "export" {
+		t.Fatalf("run(export) = %#v", result)
+	}
+	data, err := os.ReadFile(filepath.Join(root, "AGENTS.md"))
+	if err != nil || string(data) != "Use concise commits.\n" {
+		t.Fatalf("exported AGENTS.md = %q, err = %v", data, err)
+	}
+}
+
 func TestRunGenerateDryRunWithCi(t *testing.T) {
 	root := t.TempDir()
 	instructionPath := filepath.Join(root, ".agents", "instructions", "team.md")
@@ -498,9 +521,12 @@ func TestFindCommandArg(t *testing.T) {
 	}
 }
 
-func TestIsKnownCommandIncludesGuide(t *testing.T) {
+func TestIsKnownCommandIncludesGuideAndExport(t *testing.T) {
 	if !isKnownCommand("guide") {
 		t.Fatal("isKnownCommand(\"guide\") = false, want true")
+	}
+	if !isKnownCommand("export") {
+		t.Fatal("isKnownCommand(\"export\") = false, want true")
 	}
 	if isKnownCommand("unknown") {
 		t.Fatal("isKnownCommand(\"unknown\") = true, want false")
@@ -509,13 +535,13 @@ func TestIsKnownCommandIncludesGuide(t *testing.T) {
 
 func TestCompletionScriptsIncludeGuideAndOptions(t *testing.T) {
 	bashScript := bashCompletionScript()
-	for _, token := range []string{"validate", "generate", "import", "check", "clean", "guide", "completion", "--help", "--target", "--format"} {
+	for _, token := range []string{"validate", "generate", "export", "import", "check", "clean", "guide", "completion", "--help", "--target", "--format"} {
 		if !strings.Contains(bashScript, token) {
 			t.Fatalf("bashCompletionScript() missing %q", token)
 		}
 	}
 	zshScript := zshCompletionScript()
-	for _, token := range []string{"validate", "generate", "import", "check", "clean", "guide", "completion", "--help", "--target", "--format"} {
+	for _, token := range []string{"validate", "generate", "export", "import", "check", "clean", "guide", "completion", "--help", "--target", "--format"} {
 		if !strings.Contains(zshScript, token) {
 			t.Fatalf("zshCompletionScript() missing %q", token)
 		}

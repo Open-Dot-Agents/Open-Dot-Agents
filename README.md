@@ -4,6 +4,9 @@ Open-Dot-Agents defines a practical, vendor-neutral standard for configuring AI
 coding agents. Instead of maintaining separate formats per tool, teams author one
 canonical `.agents/` tree and generate compatible target outputs.
 
+See [COMPATIBILITY.md](./COMPATIBILITY.md) for the requirement-by-requirement
+Codex and Copilot CLI import/export audit and current native acceptance status.
+
 ## Why this project exists
 
 Most harnesses (GitHub Copilot CLI, OpenAI Codex, Anthropic Claude Code, and
@@ -79,8 +82,16 @@ task cli:verify
 
 ```bash
 oda validate --target all
-oda generate --target all
+oda export --target all
 oda check --target all
+```
+
+`generate` remains a backward-compatible alias for `export`. To adopt an
+existing repository, reverse-project one harness at a time:
+
+```bash
+oda import --target codex --dry-run --diff
+oda import --target codex
 ```
 
 ### 3) First-run mismatch flow
@@ -94,9 +105,9 @@ oda check --target all
 ### 4) Verify adapter behavior by target
 
 - `task cli:test:copilot` — Copilot projection validation
-- `task cli:test:copilot:real` — native Copilot discovery plus authenticated instructions, rules, hooks, skills, MCP, and custom-agent acceptance
+- `task cli:test:copilot:real` — bidirectional round trip plus native authenticated instructions, rules, hooks, skills, MCP, and custom-agent acceptance
 - `task cli:test:codex` — Codex projection and MCP transport validation
-- `task cli:test:codex:real` — official-schema validation, strict Codex loading, authenticated discovery, and live subagent acceptance
+- `task cli:test:codex:real` — bidirectional round trip, official-schema validation, strict loading, authenticated discovery, and live subagent acceptance
 - `task cli:test:claude` — Claude projection validation
 - `task cli:test:surface` — CLI command smoke checks
 
@@ -109,7 +120,18 @@ The complete canonical inputs for the live flows are in
 - `schema not available`: ensure schema files exist under `.agents/schema/v0.0.1/`
 - `unsupported populated categories`: either move/remove files from unsupported directories or use `--allow-unsupported`
 - `generated output is stale` or `no generated compatibility manifest found`: run `oda generate` again
-- `output ".codex/config.toml" exists but is not adapter-owned`: review the dry-run; `--force` replaces the complete file in v0.0.1
+- `output ".codex/config.toml" exists but is not adapter-owned`: review the dry-run; use `--force --backup` for the first export
+- `import output ... is not adapter-owned`: review the source and use `--force --backup` to adopt the existing canonical file
+
+Exports are tracked by each target's `.open-dot-agents.json`. Imports use
+target-specific manifests such as
+`.agents/.open-dot-agents-import-codex.json`; these hashes protect edited
+canonical files and allow stale imported files to be removed safely.
+
+Repository-relative instruction precedence is preserved as well: Codex
+overrides/fallback files and nested Copilot instruction locations use the
+documented vendor-extension subtrees under `.agents/instructions/` (and, for
+nested Copilot modular rules, `.agents/rules/copilot-project/`).
 
 ### 6) Contributor checks before PR
 

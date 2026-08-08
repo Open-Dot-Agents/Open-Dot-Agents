@@ -171,7 +171,7 @@
               "type": "array",
               "items": {
                 "type": "string",
-                "const": "rules/*.md"
+                "enum": ["rules/*.md", "rules/**/*.md"]
               }
             },
             "front_matter": {

@@ -33,6 +33,7 @@ tasks:
       - test:copilot
       - test:codex
       - test:claude
+      - test:roundtrip
     cmds:
       - cd cli && go vet ./...
 
@@ -102,6 +103,13 @@ tasks:
       - bash scripts/test-copilot-real.sh
     dir: cli
 
+  test:roundtrip:
+    desc: Verify bidirectional Codex and Copilot import/export fidelity and ownership
+    cmds:
+      - go test ./internal/adapter -run '^(TestImportRoundTripCopilot|TestImportRoundTripCodex|TestCanonicalRoundTripThroughCopilot|TestCanonicalRoundTripThroughCodex|TestImportCopilot.*MCP.*|TestImportManifest.*)$'
+      - go test ./cmd/oda -run 'Export'
+    dir: cli
+
   test:codex:
     desc: Run Codex fixtures and native MCP discovery when available
     cmds:
@@ -112,7 +120,8 @@ tasks:
       - go test ./internal/adapter -run '^(TestCodexGenerateCheckAndClean|TestCodexUsesCanonicalSkillsWithoutProjection|TestCodexComplexFixture)$'
       - |
         set -eu
-        compatibility_root="$(mktemp -d /tmp/oda-codex-fixture.XXXXXX)"
+        repo_root="$(cd .. && pwd)"
+        compatibility_root="$(mktemp -d "$repo_root/.oda-codex-fixture.XXXXXX")"
         trap 'rm -rf -- "$compatibility_root"' EXIT
         cp -a testdata/shared/basic "$compatibility_root/basic"
         cp -a testdata/shared/complex "$compatibility_root/complex"
@@ -132,17 +141,31 @@ tasks:
         go run ./cmd/oda --root "$fixture" --target codex clean
         fixture="$compatibility_root/complex"
         seed_metadata "$fixture"
-        if go run ./cmd/oda --root "$fixture" --target codex validate; then
-          echo "Expected Codex validation to reject rules and hooks." >&2
+        if validation_output="$(go run ./cmd/oda --root "$fixture" --target codex validate 2>&1)"; then
+          echo "Expected Codex validation to reject rules." >&2
           exit 1
         fi
+        if ! printf '%s\n' "$validation_output" | grep -F "unsupported populated categories: rules" >/dev/null; then
+          printf '%s\n' "$validation_output" >&2
+          exit 1
+        fi
+        echo "Strict Codex validation rejection: rules (expected)"
         go run ./cmd/oda --root "$fixture" --target codex --allow-unsupported generate
         go run ./cmd/oda --root "$fixture" --target codex --allow-unsupported check
         if command -v codex >/dev/null 2>&1; then
           (
             cd "$fixture"
-            codex mcp list | grep -F "local-docs"
-            codex mcp list | grep -F "remote-issues"
+            mcp_json="$(codex mcp list --json)"
+            if printf '%s\n' "$mcp_json" | grep -F '"name": "local-docs"' >/dev/null 2>&1; then
+              printf '%s\n' "$mcp_json" | grep -F '"name": "remote-issues"' >/dev/null
+              echo "Native Codex MCP discovery: local-docs, remote-issues"
+            elif printf '%s\n' "$mcp_json" | grep -F '"name": "remote-issues"' >/dev/null 2>&1; then
+              echo "Native Codex MCP discovery is missing local-docs." >&2
+              exit 1
+            else
+              echo "Skipping native Codex project discovery: Codex does not trust this repository."
+              echo "Trust it by starting Codex here, then rerun this task: codex -C \"$repo_root\""
+            fi
           )
         else
           echo "Skipping native Codex discovery: codex is not installed."

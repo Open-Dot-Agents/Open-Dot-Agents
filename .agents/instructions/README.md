@@ -23,8 +23,27 @@ When a harness conflates the two, treat its equivalent file as
 ## Vendor mappings
 
 - Claude Code: `CLAUDE.md`
-- GitHub Copilot CLI: `AGENTS.md`, `.github/copilot-instructions.md`
-- OpenAI Codex CLI: `AGENTS.md`
+- GitHub Copilot CLI: repository-path `AGENTS.md` files and
+  `.github/copilot-instructions.md` files
+- OpenAI Codex CLI: repository-path `AGENTS.md`, `AGENTS.override.md`, and
+  configured fallback instruction filenames
+
+For Copilot exports, canonical `instructions/AGENTS.md` remains the root
+`AGENTS.md`; other instruction files are merged into
+`.github/copilot-instructions.md`. Both files import back independently.
+
+Lossless path-specific harness extensions are stored without changing their
+bytes or relative paths:
+
+- `instructions/copilot-project/**` maps to Copilot's nested repository
+  instruction paths.
+- `instructions/codex-project/**` maps to Codex's nested instructions,
+  overrides, and filenames declared by `project_doc_fallback_filenames`.
+
+Nested Copilot `.github/instructions/**/*.instructions.md` files use the
+parallel `rules/copilot-project/**` passthrough because they remain scoped
+rules. These reserved subtrees preserve harness precedence while keeping the
+portable root forms concise.
 
 ## Expected content
 

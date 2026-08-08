@@ -17,12 +17,12 @@ Typical hook points include:
 
 - GitHub Copilot CLI hooks in `.github/hooks/*.json`
 - Claude Code hooks in `.claude/settings.json`
-- OpenAI Codex CLI lifecycle hooks via `requirements.toml`
+- OpenAI Codex CLI hooks in `.codex/config.toml`
 
 ## Current oda projection
 
 - GitHub Copilot CLI: `supported`
-- OpenAI Codex: `unsupported`
+- OpenAI Codex: `mapped` through `.agents/hooks/codex.toml`
 - Anthropic Claude Code: `supported`
 
 ## Expected content

@@ -18,7 +18,13 @@ Settings define the base runtime configuration for the active agent session.
 
 ## Current oda projection
 
-No v0.0.1 adapter emits this category; all three targets are `unsupported`.
+- OpenAI Codex: `mapped` through `.agents/settings/codex.toml`. Import also
+  records `codex.raw.toml` and `codex-agents/*.toml` as lossless provenance
+  sidecars for comments and vendor fields that have no canonical equivalent.
+- GitHub Copilot CLI: `mapped` byte-for-byte between
+  `.agents/settings/copilot.json` and `.github/copilot/settings.json`, including
+  repository `enabledPlugins` and `extraKnownMarketplaces` configuration.
+- Claude Code: `unsupported` by the current adapter.
 
 ## Expected content
 

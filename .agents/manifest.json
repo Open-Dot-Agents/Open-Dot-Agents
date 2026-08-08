@@ -22,25 +22,25 @@
   ],
   "unsupported": {
     "permissions": [
-      "No v0.0.1 adapter emits permission policy; native harness controls remain outside the current projection."
+      "Codex permission policy and Copilot shared model policy are mapped; Claude remains unsupported."
     ],
     "plugins": [
-      "GitHub Copilot CLI has native plugins, but no v0.0.1 adapter emits plugin packages."
+      "Copilot and Codex plugins are mapped; Claude remains unsupported."
     ],
     "profiles": [
-      "Codex has native profiles, but no v0.0.1 adapter emits profile configuration."
+      "Codex profiles are mapped; Copilot and Claude remain unsupported."
     ],
     "prompts": [
-      "Harnesses expose prompt workflows, but no v0.0.1 adapter emits prompt templates."
+      "Copilot prompts are mapped; Codex and Claude remain unsupported."
     ],
     "settings": [
-      "Settings are adapter-specific in current projections."
+      "Codex and Copilot settings are mapped; Claude remains unsupported."
     ],
     "memories": [
-      "Memories remain out-of-band in this repository version."
+      "Codex memories are mapped; Copilot and Claude remain unsupported."
     ],
     "guardrails": [
-      "Primarily represented by sandbox/approval settings in target configs."
+      "Codex guardrails are mapped; Copilot and Claude remain unsupported."
     ]
   },
   "compatibility_notes": [
