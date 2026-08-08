@@ -119,7 +119,7 @@ jq -e --arg path "$probe_root/.github/mcp.json" '
 ' "$log_dir/copilot-mcp.json" >/dev/null
 grep -F 'oda-acceptance-plugin' "$log_dir/copilot-plugins.txt" >/dev/null
 
-live_prompt='Do not modify files or run shell commands. State the project acceptance phrase. For acceptance.txt, state the scoped rule phrase. Invoke the oda-acceptance skill and capture its acceptance phrase. Call the openaiDeveloperDocs MCP server to search for GitHub Copilot CLI custom agents. Return one compact JSON object with keys project, rule, skill, and mcp.'
+live_prompt="Do not modify files or run shell commands. Use the file-view tool to read $probe_root/acceptance.txt and $probe_root/.github/instructions/acceptance.instructions.md. Copy their exact acceptance phrases without renaming them. Invoke the oda-acceptance skill and capture its acceptance phrase. Call the openaiDeveloperDocs MCP server to search for GitHub Copilot CLI custom agents. Return one compact JSON object with keys project, rule, skill, and mcp."
 if ! (
   cd "$probe_root"
   copilot --no-auto-update --no-remote --no-remote-export --disable-builtin-mcps --allow-all-tools --allow-url=developers.openai.com --output-format json -p "$live_prompt" >"$log_dir/copilot-live.jsonl" 2>"$log_dir/copilot-live.stderr"
@@ -129,7 +129,7 @@ if ! (
   exit 1
 fi
 
-nested_prompt="You must use the file-view tool to read $probe_root/services/api/acceptance.txt. Do not modify files or run shell commands. Then copy the exact nested Copilot acceptance phrase and the exact nested scoped-rule phrase. Return one compact JSON object with keys nested and nested_rule."
+nested_prompt="Do not modify files or run shell commands. Use the file-view tool to read $probe_root/services/api/acceptance.txt, $probe_root/services/api/AGENTS.md, and $probe_root/services/api/.github/instructions/acceptance.instructions.md. Copy the exact nested acceptance phrases without renaming them. Return one compact JSON object with keys nested and nested_rule."
 if ! (
   cd "$probe_root/services/api"
   copilot --no-auto-update --no-remote --no-remote-export --disable-builtin-mcps --allow-all-tools --output-format json -p "$nested_prompt" >"$log_dir/copilot-nested.jsonl" 2>"$log_dir/copilot-nested.stderr"
@@ -163,20 +163,32 @@ assert_live_marker "$log_dir/copilot-live.jsonl" 'ODA_PROJECT_OK' 'project instr
 assert_live_marker "$log_dir/copilot-live.jsonl" 'ODA_RULE_OK' 'scoped rule marker'
 assert_live_marker "$log_dir/copilot-nested.jsonl" 'ODA_COPILOT_NESTED_OK' 'nested project instruction marker'
 assert_live_marker "$log_dir/copilot-nested.jsonl" 'ODA_COPILOT_NESTED_RULE_OK' 'nested scoped-rule marker'
-if ! jq -s -e '
-  . as $events
-  | any($events[];
-      .type == "tool.execution_start"
-      and .data.toolName == "view"
-      and (.data.toolCallId as $id
-        | any($events[];
-            .type == "tool.execution_complete"
-            and .data.toolCallId == $id
-            and .data.success == true)))
-' "$log_dir/copilot-nested.jsonl" >/dev/null; then
-  echo "Live Copilot nested acceptance missing a completed file-view call" >&2
-  exit 1
-fi
+
+assert_completed_view() {
+  local file="$1"
+  local path="$2"
+  if ! jq -s -e --arg path "$path" '
+    . as $events
+    | any($events[];
+        .type == "tool.execution_start"
+        and .data.toolName == "view"
+        and .data.arguments.path == $path
+        and (.data.toolCallId as $id
+          | any($events[];
+              .type == "tool.execution_complete"
+              and .data.toolCallId == $id
+              and .data.success == true)))
+  ' "$file" >/dev/null; then
+    echo "Live Copilot acceptance missing a completed view of $path" >&2
+    exit 1
+  fi
+}
+
+assert_completed_view "$log_dir/copilot-live.jsonl" "$probe_root/acceptance.txt"
+assert_completed_view "$log_dir/copilot-live.jsonl" "$probe_root/.github/instructions/acceptance.instructions.md"
+assert_completed_view "$log_dir/copilot-nested.jsonl" "$probe_root/services/api/acceptance.txt"
+assert_completed_view "$log_dir/copilot-nested.jsonl" "$probe_root/services/api/AGENTS.md"
+assert_completed_view "$log_dir/copilot-nested.jsonl" "$probe_root/services/api/.github/instructions/acceptance.instructions.md"
 assert_live_marker "$log_dir/copilot-live.jsonl" 'ODA_SKILL_OK' 'skill marker'
 assert_live_marker "$log_dir/copilot-agent.jsonl" 'ODA_AGENT_OK' 'custom-agent marker'
 assert_live_marker "$log_dir/copilot-hook.txt" 'ODA_HOOK_OK' 'hook marker'

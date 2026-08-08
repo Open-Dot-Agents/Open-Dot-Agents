@@ -3,7 +3,7 @@
 This fixture exercises a real `.agents` projection into GitHub Copilot CLI
 instructions, scoped rules, custom agents, hooks, skills, and MCP configuration.
 The deterministic round-trip gate also covers prompt files, plugin metadata,
-nested repository instruction discovery, and both import/export directions.
+nested repository instruction paths, and both import/export directions.
 It also loads the repository-level `.github/copilot/settings.json` projection
 used for declarative plugin and marketplace activation.
 The native CLI also mounts the generated `.github/plugin/plugin.json` through

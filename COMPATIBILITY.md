@@ -31,7 +31,7 @@ Codex acceptance.
 |---|---|---:|---:|---|
 | Root and nested `AGENTS.md` | `instructions/AGENTS.md`, `instructions/copilot-project/**` | yes | yes | authenticated native discovery |
 | Root and nested `.github/copilot-instructions.md` | root canonical file plus `instructions/copilot-project/**` | yes | yes | authenticated native discovery |
-| `.github/instructions/**/*.instructions.md` at documented discovery roots | portable `rules/**` or exact `rules/copilot-project/**` | yes | yes | authenticated dynamic file-path discovery |
+| `.github/instructions/**/*.instructions.md` at documented discovery roots | portable `rules/**` or exact `rules/copilot-project/**` | yes | yes | authenticated exact-file reads and deterministic round trip |
 | `.github/agents/*.agent.md` | `agents/*.md` | yes | yes | authenticated custom-agent invocation |
 | `.github/hooks/*.json` | `hooks/*.json` | yes | yes | authenticated hook execution |
 | `.github/skills/**` | `skills/**` | yes | yes | native skill inventory and invocation |
