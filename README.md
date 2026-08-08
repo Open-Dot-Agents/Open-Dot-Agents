@@ -6,7 +6,8 @@ canonical `.agents/` tree and generate compatible target outputs.
 
 ## Why this project exists
 
-Most harnesses (Copilot, Codex, Claude, and others) represent the same ideas with
+Most harnesses (GitHub Copilot CLI, OpenAI Codex, Anthropic Claude Code, and
+others) represent the same ideas with
 different schemas. Open-Dot-Agents normalizes those ideas into one contract:
 
 - always-on instructions and scoped rules
@@ -54,21 +55,78 @@ Category documentation:
 
 Machine-readable contracts:
 
-- `.agents/schema/v1/agents.schema.json`
-- `.agents/schema/v1/mappings.schema.json`
+- `.agents/schema/v0.0.1/agents.schema.json`
+- `.agents/schema/v0.0.1/mappings.schema.json`
 - `.agents/manifest.json`
 
-## Quick start
+## Getting started in 10 minutes
+
+Use this section as the canonical onboarding reference.
+
+### 1) Install and verify the CLI
 
 ```bash
+cd /path/to/Open-Dot-Agents
 cd cli
 go install ./cmd/oda
-oda validate --root /path/to/repo
-oda generate --root /path/to/repo --target all
-oda check --root /path/to/repo --target all
+cd ..
+task cli:build
+export PATH="/path/to/Open-Dot-Agents/cli/bin:$PATH"
+task cli:verify
 ```
 
-Helpful flags:
+### 2) Validate a target repository with `.agents`
+
+```bash
+oda validate --target all
+oda generate --target all
+oda check --target all
+```
+
+### 3) First-run mismatch flow
+
+```bash
+oda validate --target all --allow-unsupported
+oda generate --target all --force
+oda check --target all
+```
+
+### 4) Verify adapter behavior by target
+
+- `task cli:test:copilot` — Copilot projection validation
+- `task cli:test:codex` — Codex projection and MCP transport validation
+- `task cli:test:claude` — Claude projection validation
+- `task cli:test:surface` — CLI command smoke checks
+
+### 5) Common failure patterns
+
+- `schema not available`: ensure schema files exist under `.agents/schema/v0.0.1/`
+- `unsupported populated categories`: either move/remove files from unsupported directories or use `--allow-unsupported`
+- `generated output is stale` or `no generated compatibility manifest found`: run `oda generate` again
+
+### 6) Contributor checks before PR
+
+- Read `AGENTS.md`, root `README.md`, and relevant `.agents/*/README.md`
+- Ensure `.agents/mappings.yaml` and behavior docs are aligned for any status change
+- Keep category names exact (`instructions`, `rules`, `tools`, ...)
+- Run `task cli:verify` before opening the PR
+
+The CLI uses `v0.0.1` schema artifacts in `.agents/schema/v0.0.1/*` and mapping metadata in `.agents/mappings.yaml` to enforce:
+
+- `supported` output emitted directly from `.agents`
+- `mapped` output emitted through a target transform
+- `partial` partial output projection for a category
+- `unsupported` no output emitted by current adapters
+
+These values describe adapter projection only, not full native capability.
+
+## Supported harness tools
+
+- [<img src="https://api.iconify.design/simple-icons/github.svg?color=%23181717" width="14" height="14" style="vertical-align:middle;" alt="GitHub Copilot CLI" /> GitHub Copilot CLI](https://docs.github.com/en/copilot)
+- [<img src="https://api.iconify.design/simple-icons/openai.svg?color=%23412991" width="14" height="14" style="vertical-align:middle;" alt="OpenAI Codex" /> OpenAI Codex](https://learn.chatgpt.com/docs/)
+- [<img src="https://api.iconify.design/simple-icons/anthropic.svg?color=%23121212" width="14" height="14" style="vertical-align:middle;" alt="Anthropic Claude Code" /> Anthropic Claude Code](https://code.claude.com/docs/)
+
+Helpful flags and one-liners:
 
 - `--target all` for registry-wide runs
 - `--dry-run` to preview writes
@@ -76,9 +134,22 @@ Helpful flags:
 - `--format=json` for machine-readable output
 - `--ci` for strict CI behavior
 
-## Roadmap and status
+```bash
+oda --root . --help
+oda --root . validate --target all --format=json
+oda --root . check --target all --ci
+```
 
-See [ROADMAP.md](./ROADMAP.md) for the milestone plan and current status.
+## Project status
+
+The v0.0.1 canonical contract and adapters for GitHub Copilot CLI, OpenAI Codex, and
+Anthropic Claude Code are implemented. Current work focuses on compatibility,
+release stability, and adoption of the `.agents` mapping model. The initial
+project release is planned as `v0.0.1`.
+
+Mapping statuses describe what the current `oda` adapters emit, not every native
+feature available in each harness. See [the v0.0.1 schema notes](.agents/schema/v0.0.1/README.md)
+for the status definitions.
 
 ## License
 

@@ -22,9 +22,9 @@ func TestResolveTargetsAll(t *testing.T) {
 		t.Fatalf("resolveTargets(\"all\") returned no targets")
 	}
 	want := map[string]struct{}{
-		"copilot":      {},
-		"codex":        {},
-		"claude":       {},
+		"copilot": {},
+		"codex":   {},
+		"claude":  {},
 	}
 	for _, target := range targets {
 		delete(want, target)
@@ -300,7 +300,7 @@ func TestRunValidateFailsWithMissingRequiredSchemaKey(t *testing.T) {
 func TestRunValidateFailsOnMappingsManifestVersionMismatch(t *testing.T) {
 	root := t.TempDir()
 	seedValidationArtifactsForTests(t, root)
-	if err := mutateMappingsManifestValue(root, ".agents/mappings.yaml", "format_version", 2); err != nil {
+	if err := mutateMappingsManifestValue(root, ".agents/mappings.yaml", "format_version", "v0.0.2"); err != nil {
 		t.Fatal(err)
 	}
 	write(t, root, ".agents/instructions/team.md", "Use concise commits.\n")
@@ -312,7 +312,7 @@ func TestRunValidateFailsOnMappingsManifestVersionMismatch(t *testing.T) {
 	if result.Status != "error" {
 		t.Fatalf("run(validate) status = %q, err = %q", result.Status, result.Error)
 	}
-	if !strings.Contains(result.Error, "mappings manifest format_version must be 1") {
+	if !strings.Contains(result.Error, "mappings manifest format_version must be \"v0.0.1\"") {
 		t.Fatalf("run(validate) error = %q, want mappings manifest format_version error", result.Error)
 	}
 }
@@ -525,10 +525,10 @@ func TestCompletionScriptsIncludeGuideAndOptions(t *testing.T) {
 func seedValidationArtifactsForTests(t *testing.T, root string) {
 	t.Helper()
 	sourceRoot := filepath.Join("..", "..", "..", ".agents")
-	if err := copyArtifact(t, filepath.Join(sourceRoot, "schema", "v1", "agents.schema.json"), filepath.Join(root, ".agents", "schema", "v1", "agents.schema.json")); err != nil {
+	if err := copyArtifact(t, filepath.Join(sourceRoot, "schema", "v0.0.1", "agents.schema.json"), filepath.Join(root, ".agents", "schema", "v0.0.1", "agents.schema.json")); err != nil {
 		t.Fatal(err)
 	}
-	if err := copyArtifact(t, filepath.Join(sourceRoot, "schema", "v1", "mappings.schema.json"), filepath.Join(root, ".agents", "schema", "v1", "mappings.schema.json")); err != nil {
+	if err := copyArtifact(t, filepath.Join(sourceRoot, "schema", "v0.0.1", "mappings.schema.json"), filepath.Join(root, ".agents", "schema", "v0.0.1", "mappings.schema.json")); err != nil {
 		t.Fatal(err)
 	}
 	if err := copyArtifact(t, filepath.Join(sourceRoot, "mappings.yaml"), filepath.Join(root, ".agents", "mappings.yaml")); err != nil {
@@ -607,7 +607,7 @@ func mutateMappingsManifestValue(root, relativePath, key string, value any) erro
 
 func removeSchemaRequiredKey(t *testing.T, root, filename, key string) {
 	t.Helper()
-	data, err := os.ReadFile(filepath.Join(root, ".agents", "schema", "v1", filename))
+	data, err := os.ReadFile(filepath.Join(root, ".agents", "schema", "v0.0.1", filename))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -631,7 +631,7 @@ func removeSchemaRequiredKey(t *testing.T, root, filename, key string) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(root, ".agents", "schema", "v1", filename), updated, 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(root, ".agents", "schema", "v0.0.1", filename), updated, 0o644); err != nil {
 		t.Fatal(err)
 	}
 }

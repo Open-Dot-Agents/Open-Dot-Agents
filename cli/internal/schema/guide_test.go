@@ -67,7 +67,7 @@ func TestRenderVendorGuideMarkdownIncludesTargetAndStatus(t *testing.T) {
 	if !strings.Contains(markdown, "# Vendor implementation guide") {
 		t.Fatal("RenderVendorGuideMarkdown() missing header")
 	}
-	if !strings.Contains(markdown, "## Target: GitHub Copilot (copilot)") {
+	if !strings.Contains(markdown, "## Target: GitHub Copilot CLI (copilot)") {
 		t.Fatal("RenderVendorGuideMarkdown() missing target heading")
 	}
 	if !strings.Contains(markdown, "| Category | Status | Notes |") {
@@ -81,10 +81,10 @@ func TestRenderVendorGuideMarkdownIncludesTargetAndStatus(t *testing.T) {
 func seedGuideArtifactsForTests(t *testing.T, root string) {
 	t.Helper()
 	sourceRoot := filepath.Join("..", "..", "..", ".agents")
-	if err := copyArtifact(t, filepath.Join(sourceRoot, "schema", "v1", "agents.schema.json"), filepath.Join(root, ".agents", "schema", "v1", "agents.schema.json")); err != nil {
+	if err := copyArtifact(t, filepath.Join(sourceRoot, "schema", "v0.0.1", "agents.schema.json"), filepath.Join(root, ".agents", "schema", "v0.0.1", "agents.schema.json")); err != nil {
 		t.Fatal(err)
 	}
-	if err := copyArtifact(t, filepath.Join(sourceRoot, "schema", "v1", "mappings.schema.json"), filepath.Join(root, ".agents", "schema", "v1", "mappings.schema.json")); err != nil {
+	if err := copyArtifact(t, filepath.Join(sourceRoot, "schema", "v0.0.1", "mappings.schema.json"), filepath.Join(root, ".agents", "schema", "v0.0.1", "mappings.schema.json")); err != nil {
 		t.Fatal(err)
 	}
 	if err := copyArtifact(t, filepath.Join(sourceRoot, "mappings.yaml"), filepath.Join(root, ".agents", "mappings.yaml")); err != nil {

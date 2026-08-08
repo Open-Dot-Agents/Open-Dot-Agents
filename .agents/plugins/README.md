@@ -20,6 +20,10 @@ as one installable unit rather than individual file copies.
 - Other harnesses: usually emulate via direct repository sharing of equivalent
   category folders and files
 
+## Current oda projection
+
+No v0.0.1 adapter emits this category; all three targets are `unsupported`.
+
 ## Expected content
 
 - plugin manifest (name, version, description, compatibility metadata)
@@ -28,6 +32,6 @@ as one installable unit rather than individual file copies.
 
 ## Contract
 
-Machine metadata is in `../schema/v1/agents.schema.json`.
+Machine metadata is in `../schema/v0.0.1/agents.schema.json`.
 
 See `../mappings.yaml` for vendor-specific plugin documentation.

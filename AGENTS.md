@@ -1,15 +1,15 @@
 # AGENTS.md
 
 ## What this repository is
-- This repo is a **specification project**, not an executable app.
-- The core artifact is the vendor-neutral `.agents/` standard documented in `README.md` and `.agents/**/README.md`.
-- Most changes are documentation and schema/mapping updates; there is no discovered build/test pipeline.
+- This repo defines the vendor-neutral `.agents/` standard and includes the Go-based `oda` compatibility CLI.
+- The standard is documented in `README.md` and `.agents/**/README.md`; schemas and mappings are machine-readable.
+- CLI build and verification tasks are exposed through `task cli:build`, `task cli:test`, and `task cli:verify`.
 
 ## Big-picture architecture
 - `README.md` defines the 13-category model and the intent behind each category.
-- `.agents/mappings.yaml` is the cross-vendor translation layer (Copilot, Claude, Codex, Cursor, Windsurf, Devin).
+- `.agents/mappings.yaml` is the cross-vendor translation layer (GitHub Copilot CLI, OpenAI Codex, Anthropic Claude Code).
 - Each category directory under `.agents/` contains its local contract in `README.md` (scope, examples, file-shape expectations).
-- Example integration config lives in `.agents/tools/mcp.example.json` (`mcpServers` map).
+- Portable MCP integration config lives in `.agents/tools/mcp.json` (`mcpServers` map).
 
 ## Category boundaries you must preserve
 - `instructions` = always-on, unconditional agent behavior context.
@@ -25,9 +25,34 @@
 - Follow file-shape conventions documented per category:
   - skills: one subfolder per skill containing `SKILL.md` (+ optional scripts)
   - agents: one Markdown file per agent with front-matter + system prompt
-  - prompts: one Markdown file per reusable prompt template
-  - hooks: JSON/YAML definitions
+- prompts: one Markdown file per reusable prompt template
+- hooks: JSON/YAML definitions
 - Keep examples vendor-neutral unless explicitly documenting a vendor mapping.
+
+## Mapping and compatibility guide
+
+- Status values describe projection behavior, not native harness capability:
+  - `supported` emitted directly from `.agents`
+  - `mapped` emitted through a target transform
+  - `partial` only part of the category is currently projected
+  - `unsupported` not emitted by v0.0.1 adapters
+- `v0.0.1` mapping matrix:
+
+| Category | Copilot | Codex | Claude |
+|---|---|---|---|
+| `agents` | mapped | mapped | mapped |
+| `instructions` | supported | supported | supported |
+| `rules` | supported | unsupported | supported |
+| `hooks` | supported | unsupported | supported |
+| `tools` | mapped | partial | mapped |
+| `skills` | mapped | mapped | mapped |
+| `guardrails` | unsupported | unsupported | unsupported |
+| `memories` | unsupported | unsupported | unsupported |
+| `permissions` | unsupported | unsupported | unsupported |
+| `plugins` | unsupported | unsupported | unsupported |
+| `profiles` | unsupported | unsupported | unsupported |
+| `prompts` | unsupported | unsupported | unsupported |
+| `settings` | unsupported | unsupported | unsupported |
 
 ## Critical workflows (what to do when editing)
 - Start by reading `README.md` and the target category `README.md` before editing.
@@ -39,6 +64,5 @@
 
 ## Known constraints and assumptions
 - `.gitignore` currently tracks `.agents/` and ignores other dotfiles; do not assume hidden-tool configs are versioned unless intentionally added.
-- No discoverable CI/test commands were found in tracked docs; verify expectations with maintainers before introducing automation.
+- Use `task cli:verify` as the production verification gate for CLI or mapping changes.
 - This repository appears to be an evolving proposal; favor minimal, precise diffs and preserve existing category semantics.
-

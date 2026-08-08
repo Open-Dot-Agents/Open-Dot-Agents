@@ -16,6 +16,10 @@ Profiles are named runtime presets that layer on top of base
   example scope/precedence settings), but keep it as a distinct layer only when
   user-selected switching is explicit
 
+## Current oda projection
+
+No v0.0.1 adapter emits this category; all three targets are `unsupported`.
+
 ## Expected content
 
 - one profile entry per mode with override values only
@@ -24,6 +28,6 @@ Profiles are named runtime presets that layer on top of base
 
 ## Contract
 
-Machine metadata is in `../schema/v1/agents.schema.json`.
+Machine metadata is in `../schema/v0.0.1/agents.schema.json`.
 
 See `../mappings.yaml` for vendor documentation.

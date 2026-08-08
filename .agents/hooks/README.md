@@ -19,6 +19,12 @@ Typical hook points include:
 - Claude Code hooks in `.claude/settings.json`
 - OpenAI Codex CLI lifecycle hooks via `requirements.toml`
 
+## Current oda projection
+
+- GitHub Copilot CLI: `supported`
+- OpenAI Codex: `unsupported`
+- Anthropic Claude Code: `supported`
+
 ## Expected content
 
 Each hook entry should define:
@@ -32,7 +38,7 @@ Format is usually JSON or YAML depending on the target harness.
 
 ## Contract
 
-Machine metadata is in `../schema/v1/agents.schema.json`, including
+Machine metadata is in `../schema/v0.0.1/agents.schema.json`, including
 `hooks/*.json` payload expectations and merge behavior.
 
 See `../mappings.yaml` for links to vendor docs.

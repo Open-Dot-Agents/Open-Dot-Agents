@@ -28,7 +28,7 @@ Optional scripts or resources can be added as needed.
 
 ## Contract
 
-Machine metadata is in `../schema/v1/agents.schema.json`, including required file
+Machine metadata is in `../schema/v0.0.1/agents.schema.json`, including required file
 layout and front matter.
 
 See `../mappings.yaml` for vendor documentation.

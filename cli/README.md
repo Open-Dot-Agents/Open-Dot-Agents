@@ -29,6 +29,29 @@ oda check --root /path/to/repo --target codex
 oda clean --root /path/to/repo --target codex
 ```
 
+## Operator workflow
+
+Canonical onboarding for command operators:
+
+```bash
+cd /path/to/Open-Dot-Agents
+task cli:build
+task cli:verify
+
+cd /path/to/target-repo-with-agents
+oda validate --root /path/to/repo-with-agents
+oda generate --root /path/to/repo-with-agents --target all
+oda check --root /path/to/repo-with-agents --target all
+```
+
+For first-run unsupported-category mismatches:
+
+```bash
+oda validate --root /path/to/repo-with-agents --target codex --allow-unsupported
+oda generate --root /path/to/repo-with-agents --target codex --force
+oda check --root /path/to/repo-with-agents --target codex
+```
+
 ## Core commands
 
 - `validate` — verify `.agents/` contract, schema, mappings, and target compatibility
@@ -51,6 +74,10 @@ oda clean --root /path/to/repo --target codex
 - `--allow-unsupported` — explicitly proceed with unsupported populated categories
 - `--ci` — return non-zero on drift in scripted runs
 
+`import` requires one explicit source target. `--target all` is intentionally
+rejected because multiple harnesses can define conflicting canonical files. With
+`--force --backup`, import archives the existing `.agents/` tree before writing.
+
 ## Command examples
 
 ```bash
@@ -59,6 +86,14 @@ oda validate --root . --target all
 oda generate --root . --target all --dry-run --diff
 oda check --root . --target all --format=json --ci
 ```
+
+Target-specific fixture checks:
+
+- `task cli:test:copilot` validates fixture generation for Copilot-compatible projections and runs optional native discovery (`copilot` command present).
+- `task cli:test:codex` validates Codex fixture behavior and MCP generation rules (including transport validation).
+- `task cli:test:claude` validates Claude fixture behavior and MCP discovery (`claude` command present).
+- `task cli:test:surface` runs command smoke checks with CLI help/completions.
+- `task cli:verify` runs `test`, `test:copilot`, `test:codex`, and `test:claude` (plus `go vet`).
 
 ## Verification flow
 
@@ -80,6 +115,15 @@ Fixture-driven tests validate `basic`, `complex`, and additional edge cases for 
 | `hooks/*.json` | Copilot, Claude hook projections |
 | `tools/mcp.json` | Copilot, Codex, Claude MCP definitions |
 | `skills/<name>/...` | target-native skill directories |
+
+Per-adapter status values map to: supported, mapped, partial, unsupported.
+
+Troubleshooting:
+
+- `schema not available`: ensure `.agents/schema/v0.0.1/agents.schema.json` and `.agents/schema/v0.0.1/mappings.schema.json` exist.
+- `unsupported populated categories`: either remove non-README files from unsupported category directories or run with `--allow-unsupported`.
+- `no generated compatibility manifest found` or `generated output is stale`: rerun `oda generate` (or `oda generate --force` if needed).
+- `invalid adapter manifest` during `check`/`clean`: run generation from a clean working tree for the same target and review manual edits.
 
 ## Native validation after generation
 

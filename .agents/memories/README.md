@@ -21,10 +21,13 @@ neutral home where memory-capable harnesses can consume it consistently.
 
 ## Vendor mappings
 
-- Windsurf Cascade: first-class memory integration
 - GitHub Copilot CLI: experimental memory-oriented behavior
 - Claude Code / OpenAI Codex CLI: fold long-horizon context into
   instruction-like config when no native memory file exists
+
+## Current oda projection
+
+No v0.0.1 adapter emits this category; all three targets are `unsupported`.
 
 ## Expected content
 
@@ -37,6 +40,6 @@ including:
 
 ## Contract
 
-Machine metadata is in `../schema/v1/agents.schema.json`.
+Machine metadata is in `../schema/v0.0.1/agents.schema.json`.
 
 See `../mappings.yaml` for vendor references.

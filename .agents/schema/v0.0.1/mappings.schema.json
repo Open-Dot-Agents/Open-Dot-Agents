@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://open-dot-agents.local/schema/v1/mappings.schema.json",
-  "title": "Open-Dot-Agents mappings contract v1",
+  "$id": "https://open-dot-agents.local/schema/v0.0.1/mappings.schema.json",
+  "title": "Open-Dot-Agents mappings contract v0.0.1",
   "description": "Machine-readable mapping metadata for category support across target adapters.",
   "type": "object",
   "required": [".agents"],
@@ -156,8 +156,8 @@
       "additionalProperties": false,
       "properties": {
         "format_version": {
-          "type": "integer",
-          "const": 1
+          "type": "string",
+          "const": "v0.0.1"
         },
         "canonical_root": {
           "type": "string",

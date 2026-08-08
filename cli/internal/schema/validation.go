@@ -16,10 +16,11 @@ import (
 )
 
 const (
-	agentsSchemaFile   = ".agents/schema/v1/agents.schema.json"
-	mappingsSchemaFile = ".agents/schema/v1/mappings.schema.json"
-	mappingsFile       = ".agents/mappings.yaml"
-	agentsManifestFile = ".agents/manifest.json"
+	schemaFormatVersion = "v0.0.1"
+	agentsSchemaFile    = ".agents/schema/v0.0.1/agents.schema.json"
+	mappingsSchemaFile  = ".agents/schema/v0.0.1/mappings.schema.json"
+	mappingsFile        = ".agents/mappings.yaml"
+	agentsManifestFile  = ".agents/manifest.json"
 )
 
 const (
@@ -143,8 +144,8 @@ func LoadMetadata(root string, strict bool) (*SchemaMetadata, error) {
 		return nil, fmt.Errorf("agents schema missing format_version definition")
 	}
 	constantVersion, ok := formatVersionRaw["const"]
-	if !ok || asInt(constantVersion) != 1 {
-		return nil, fmt.Errorf("agents schema requires format_version const == 1")
+	if !ok || !asStringMatches(constantVersion, schemaFormatVersion) {
+		return nil, fmt.Errorf("agents schema requires format_version const == %q", schemaFormatVersion)
 	}
 	canonicalRootRaw, ok := asObject(properties["canonical_root"])
 	if !ok {
@@ -236,8 +237,8 @@ func parseMappingsStatus(root string, metadata *SchemaMetadata, strict bool) (ma
 	if !ok {
 		return nil, fmt.Errorf("mappings missing agents.manifest block")
 	}
-	if asInt(manifestRaw["format_version"]) != 1 {
-		return nil, fmt.Errorf("mappings manifest format_version must be 1")
+	if !asStringMatches(manifestRaw["format_version"], schemaFormatVersion) {
+		return nil, fmt.Errorf("mappings manifest format_version must be %q", schemaFormatVersion)
 	}
 	if !asStringMatches(manifestRaw["canonical_root"], ".agents") {
 		return nil, fmt.Errorf("mappings manifest canonical_root must be \".agents\"")
@@ -433,8 +434,8 @@ func ValidateAgentsManifestCompatibility(root string) error {
 	if err := json.Unmarshal(data, &manifest); err != nil {
 		return fmt.Errorf("invalid .agents/manifest.json: %w", err)
 	}
-	if asInt(manifest["format_version"]) != 1 {
-		return fmt.Errorf(".agents/manifest.json requires format_version == \"1\"")
+	if !asStringMatches(manifest["format_version"], schemaFormatVersion) {
+		return fmt.Errorf(".agents/manifest.json requires format_version == %q", schemaFormatVersion)
 	}
 	if !asStringMatches(manifest["canonical_root"], ".agents") {
 		return fmt.Errorf(".agents/manifest.json requires canonical_root == \".agents\"")

@@ -51,16 +51,16 @@ tasks:
         set -eu
         seed_metadata() {
           local fixture_root="$1"
-          mkdir -p "$fixture_root/.agents/schema/v1"
-          cp ../.agents/schema/v1/agents.schema.json "$fixture_root/.agents/schema/v1/agents.schema.json"
-          cp ../.agents/schema/v1/mappings.schema.json "$fixture_root/.agents/schema/v1/mappings.schema.json"
+          mkdir -p "$fixture_root/.agents/schema/v0.0.1"
+          cp ../.agents/schema/v0.0.1/agents.schema.json "$fixture_root/.agents/schema/v0.0.1/agents.schema.json"
+          cp ../.agents/schema/v0.0.1/mappings.schema.json "$fixture_root/.agents/schema/v0.0.1/mappings.schema.json"
           cp ../.agents/mappings.yaml "$fixture_root/.agents/mappings.yaml"
           cp ../.agents/manifest.json "$fixture_root/.agents/manifest.json"
         }
         cleanup_metadata() {
           local fixture_root="$1"
-          rm -f "$fixture_root/.agents/schema/v1/agents.schema.json"
-          rm -f "$fixture_root/.agents/schema/v1/mappings.schema.json"
+          rm -f "$fixture_root/.agents/schema/v0.0.1/agents.schema.json"
+          rm -f "$fixture_root/.agents/schema/v0.0.1/mappings.schema.json"
           rm -f "$fixture_root/.agents/mappings.yaml"
           rm -f "$fixture_root/.agents/manifest.json"
           rm -rf "$fixture_root/.agents/schema"
@@ -109,16 +109,16 @@ tasks:
         set -eu
         seed_metadata() {
           local fixture_root="$1"
-          mkdir -p "$fixture_root/.agents/schema/v1"
-          cp ../.agents/schema/v1/agents.schema.json "$fixture_root/.agents/schema/v1/agents.schema.json"
-          cp ../.agents/schema/v1/mappings.schema.json "$fixture_root/.agents/schema/v1/mappings.schema.json"
+          mkdir -p "$fixture_root/.agents/schema/v0.0.1"
+          cp ../.agents/schema/v0.0.1/agents.schema.json "$fixture_root/.agents/schema/v0.0.1/agents.schema.json"
+          cp ../.agents/schema/v0.0.1/mappings.schema.json "$fixture_root/.agents/schema/v0.0.1/mappings.schema.json"
           cp ../.agents/mappings.yaml "$fixture_root/.agents/mappings.yaml"
           cp ../.agents/manifest.json "$fixture_root/.agents/manifest.json"
         }
         cleanup_metadata() {
           local fixture_root="$1"
-          rm -f "$fixture_root/.agents/schema/v1/agents.schema.json"
-          rm -f "$fixture_root/.agents/schema/v1/mappings.schema.json"
+          rm -f "$fixture_root/.agents/schema/v0.0.1/agents.schema.json"
+          rm -f "$fixture_root/.agents/schema/v0.0.1/mappings.schema.json"
           rm -f "$fixture_root/.agents/mappings.yaml"
           rm -f "$fixture_root/.agents/manifest.json"
           rm -rf "$fixture_root/.agents/schema"
@@ -163,16 +163,16 @@ tasks:
         set -eu
         seed_metadata() {
           local fixture_root="$1"
-          mkdir -p "$fixture_root/.agents/schema/v1"
-          cp ../.agents/schema/v1/agents.schema.json "$fixture_root/.agents/schema/v1/agents.schema.json"
-          cp ../.agents/schema/v1/mappings.schema.json "$fixture_root/.agents/schema/v1/mappings.schema.json"
+          mkdir -p "$fixture_root/.agents/schema/v0.0.1"
+          cp ../.agents/schema/v0.0.1/agents.schema.json "$fixture_root/.agents/schema/v0.0.1/agents.schema.json"
+          cp ../.agents/schema/v0.0.1/mappings.schema.json "$fixture_root/.agents/schema/v0.0.1/mappings.schema.json"
           cp ../.agents/mappings.yaml "$fixture_root/.agents/mappings.yaml"
           cp ../.agents/manifest.json "$fixture_root/.agents/manifest.json"
         }
         cleanup_metadata() {
           local fixture_root="$1"
-          rm -f "$fixture_root/.agents/schema/v1/agents.schema.json"
-          rm -f "$fixture_root/.agents/schema/v1/mappings.schema.json"
+          rm -f "$fixture_root/.agents/schema/v0.0.1/agents.schema.json"
+          rm -f "$fixture_root/.agents/schema/v0.0.1/mappings.schema.json"
           rm -f "$fixture_root/.agents/mappings.yaml"
           rm -f "$fixture_root/.agents/manifest.json"
           rm -rf "$fixture_root/.agents/schema"

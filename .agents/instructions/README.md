@@ -32,7 +32,7 @@ One or more Markdown files containing high-level global guidance.
 
 ## Contract
 
-Machine metadata is in `../schema/v1/agents.schema.json`, including filename and
+Machine metadata is in `../schema/v0.0.1/agents.schema.json`, including filename and
 parser expectations.
 
 See `../mappings.yaml` for canonical vendor documentation.
