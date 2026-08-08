@@ -25,7 +25,7 @@ Context Protocol (MCP) servers.
 
 ## Contract
 
-Machine metadata is in `../schema/v1/agents.schema.json`, including expected
+Machine metadata is in `../schema/v0.0.1/agents.schema.json`, including expected
 `tools/mcp.json` shape and supported transports.
 
 See `../mappings.yaml` for vendor references.

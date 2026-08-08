@@ -1,15 +1,15 @@
 # AGENTS.md
 
 ## What this repository is
-- This repo is a **specification project**, not an executable app.
-- The core artifact is the vendor-neutral `.agents/` standard documented in `README.md` and `.agents/**/README.md`.
-- Most changes are documentation and schema/mapping updates; there is no discovered build/test pipeline.
+- This repo defines the vendor-neutral `.agents/` standard and includes the Go-based `oda` compatibility CLI.
+- The standard is documented in `README.md` and `.agents/**/README.md`; schemas and mappings are machine-readable.
+- CLI build and verification tasks are exposed through `task cli:build`, `task cli:test`, and `task cli:verify`.
 
 ## Big-picture architecture
 - `README.md` defines the 13-category model and the intent behind each category.
-- `.agents/mappings.yaml` is the cross-vendor translation layer (Copilot, Claude, Codex, Cursor, Windsurf, Devin).
+- `.agents/mappings.yaml` is the cross-vendor translation layer (GitHub Copilot CLI, OpenAI Codex, Anthropic Claude Code).
 - Each category directory under `.agents/` contains its local contract in `README.md` (scope, examples, file-shape expectations).
-- Example integration config lives in `.agents/tools/mcp.example.json` (`mcpServers` map).
+- Portable MCP integration config lives in `.agents/tools/mcp.json` (`mcpServers` map).
 
 ## Category boundaries you must preserve
 - `instructions` = always-on, unconditional agent behavior context.
@@ -39,6 +39,5 @@
 
 ## Known constraints and assumptions
 - `.gitignore` currently tracks `.agents/` and ignores other dotfiles; do not assume hidden-tool configs are versioned unless intentionally added.
-- No discoverable CI/test commands were found in tracked docs; verify expectations with maintainers before introducing automation.
+- Use `task cli:verify` as the production verification gate for CLI or mapping changes.
 - This repository appears to be an evolving proposal; favor minimal, precise diffs and preserve existing category semantics.
-

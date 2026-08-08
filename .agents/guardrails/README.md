@@ -26,6 +26,10 @@ separately in `../permissions/README.md`.
 - OpenAI Codex CLI sandbox modes
 - Generic agent runtime sandbox models used across vendors
 
+## Current oda projection
+
+No v0.0.1 adapter emits this category; all three targets are `unsupported`.
+
 ## Expected content
 
 This category typically maps to harness configuration blocks that define:
@@ -37,6 +41,6 @@ This category typically maps to harness configuration blocks that define:
 
 ## Contract
 
-Machine-readable fields are defined in `../schema/v1/agents.schema.json`.
+Machine-readable fields are defined in `../schema/v0.0.1/agents.schema.json`.
 
 See `../mappings.yaml` for canonical links.

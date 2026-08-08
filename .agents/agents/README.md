@@ -12,7 +12,7 @@ Use this category for role-specific behavior that should be reusable across task
 
 ## Mappings
 
-- GitHub Copilot: `.github/agents/*.md`
+- GitHub Copilot CLI: `.github/agents/*.md`
 - OpenAI Codex CLI: `.codex/agents/*.toml`
 - Claude Code: `.claude/agents/*.md`
 
@@ -25,4 +25,4 @@ Use this category for role-specific behavior that should be reusable across task
 
 ## Contract
 
-See `../schema/v1/agents.schema.json` for filename and front-matter requirements.
+See `../schema/v0.0.1/agents.schema.json` for filename and front-matter requirements.

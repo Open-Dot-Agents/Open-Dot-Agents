@@ -28,7 +28,7 @@ Rules are distinct from `../instructions/`:
 
 ## Contract
 
-Machine metadata is in `../schema/v1/agents.schema.json`, including filename and
+Machine metadata is in `../schema/v0.0.1/agents.schema.json`, including filename and
 required front matter.
 
 See `../mappings.yaml` for vendor documentation.

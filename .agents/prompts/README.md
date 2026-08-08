@@ -16,12 +16,16 @@ explicitly by user intent.
 - Claude Code: slash-command based custom prompts
 - OpenAI Codex CLI: custom slash commands / workflows
 
+## Current oda projection
+
+No v0.0.1 adapter emits this category; all three targets are `unsupported`.
+
 ## Expected content
 
 One file per prompt template, typically Markdown with variable placeholders.
 
 ## Contract
 
-Machine metadata is in `../schema/v1/agents.schema.json`.
+Machine metadata is in `../schema/v0.0.1/agents.schema.json`.
 
 See `../mappings.yaml` for canonical links.

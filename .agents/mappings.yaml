@@ -40,13 +40,13 @@
     - https://learn.chatgpt.com/docs/extend/mcp?surface=cli
 
   manifest:
-    format_version: 1
+    format_version: "v0.0.1"
     canonical_root: .agents
 
   targets:
     copilot:
       id: copilot
-      name: GitHub Copilot
+      name: GitHub Copilot CLI
       docs:
         - https://docs.github.com/
     codex:
@@ -115,5 +115,12 @@
       claude: mapped
 
   status_notes:
+    plugins:
+      copilot: "GitHub Copilot CLI supports native plugins, but the v0.0.1 oda adapter does not project them."
+    profiles:
+      codex: "Codex supports native profiles, but the v0.0.1 oda adapter does not project them."
+    prompts:
+      copilot: "GitHub Copilot CLI supports native prompt files, but the v0.0.1 oda adapter does not project them."
+      claude: "Claude Code supports prompt workflows, but the v0.0.1 oda adapter does not project them."
     tools:
       codex: "Codex supports MCP transport types stdio/local and http/streamable-http."

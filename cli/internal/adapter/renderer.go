@@ -12,20 +12,46 @@ type renderer interface {
 	render(base string) (map[string][]byte, error)
 }
 
-type TargetCapabilities struct {
-	Instructions bool `json:"instructions"`
-	Rules        bool `json:"rules"`
-	Agents       bool `json:"agents"`
-	Hooks        bool `json:"hooks"`
-	Skills       bool `json:"skills"`
-	MCP          bool `json:"mcp"`
+type TargetInfo struct {
+	ID                    string            `json:"id"`
+	ManifestDirectory     string            `json:"manifestDirectory"`
+	UnsupportedCategories []string          `json:"unsupportedCategories"`
+	CategoryStatuses      map[string]string `json:"categoryStatuses"`
 }
 
-type TargetInfo struct {
-	ID                    string             `json:"id"`
-	ManifestDirectory     string             `json:"manifestDirectory"`
-	UnsupportedCategories []string           `json:"unsupportedCategories"`
-	Capabilities          TargetCapabilities `json:"capabilities"`
+var categoryOrder = []string{
+	"instructions", "rules", "agents", "guardrails", "hooks", "memories",
+	"permissions", "plugins", "profiles", "prompts", "settings", "skills", "tools",
+}
+
+var statusesByTarget = map[string]map[string]string{
+	"copilot": {
+		"instructions": categoryStatusSupported, "rules": categoryStatusSupported,
+		"agents": categoryStatusMapped, "guardrails": categoryStatusUnsupported,
+		"hooks": categoryStatusSupported, "memories": categoryStatusUnsupported,
+		"permissions": categoryStatusUnsupported, "plugins": categoryStatusUnsupported,
+		"profiles": categoryStatusUnsupported, "prompts": categoryStatusUnsupported,
+		"settings": categoryStatusUnsupported, "skills": categoryStatusMapped,
+		"tools": categoryStatusMapped,
+	},
+	"codex": {
+		"instructions": categoryStatusSupported, "rules": categoryStatusUnsupported,
+		"agents": categoryStatusMapped, "guardrails": categoryStatusUnsupported,
+		"hooks": categoryStatusUnsupported, "memories": categoryStatusUnsupported,
+		"permissions": categoryStatusUnsupported, "plugins": categoryStatusUnsupported,
+		"profiles": categoryStatusUnsupported, "prompts": categoryStatusUnsupported,
+		"settings": categoryStatusUnsupported, "skills": categoryStatusMapped,
+		"tools": categoryStatusPartial,
+	},
+	"claude": {
+		"instructions": categoryStatusSupported, "rules": categoryStatusSupported,
+		"agents": categoryStatusMapped, "guardrails": categoryStatusUnsupported,
+		"hooks": categoryStatusSupported, "memories": categoryStatusUnsupported,
+		"permissions": categoryStatusUnsupported, "plugins": categoryStatusUnsupported,
+		"profiles": categoryStatusUnsupported, "prompts": categoryStatusUnsupported,
+		"settings": categoryStatusUnsupported, "skills": categoryStatusMapped,
+		"tools": categoryStatusMapped,
+	},
 }
 
 var rendererRegistry = map[string]renderer{}
@@ -82,34 +108,17 @@ func TargetInfos() []TargetInfo {
 			ID:                    id,
 			ManifestDirectory:     r.manifestDirectory(),
 			UnsupportedCategories: append([]string{}, r.unsupportedCategories()...),
-			Capabilities:          capabilitiesFrom(rendererUnsupportedToMap(r.unsupportedCategories())),
+			CategoryStatuses:      categoryStatuses(id),
 		})
 	}
 	return infos
 }
 
-func rendererUnsupportedToMap(unsupported []string) map[string]bool {
-	supported := map[string]bool{
-		"instructions": true,
-		"rules":        true,
-		"agents":       true,
-		"hooks":        true,
-		"skills":       true,
-		"tools":        true,
+func categoryStatuses(target string) map[string]string {
+	configured := statusesByTarget[target]
+	statuses := make(map[string]string, len(categoryOrder))
+	for _, category := range categoryOrder {
+		statuses[category] = configured[category]
 	}
-	for _, category := range unsupported {
-		supported[category] = false
-	}
-	return supported
-}
-
-func capabilitiesFrom(supported map[string]bool) TargetCapabilities {
-	return TargetCapabilities{
-		Instructions: supported["instructions"],
-		Rules:        supported["rules"],
-		Agents:       supported["agents"],
-		Hooks:        supported["hooks"],
-		Skills:       supported["skills"],
-		MCP:          supported["tools"],
-	}
+	return statuses
 }

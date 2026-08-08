@@ -84,7 +84,7 @@ func main() {
 		fmt.Fprintln(os.Stdout)
 		fmt.Fprintf(os.Stdout, "Targets: %s (or all)\n\n", targetList)
 		fmt.Fprintln(os.Stdout, "Commands:")
-		fmt.Fprintln(os.Stdout, "  validate    Validate `.agents/schema/v1/*.json`, mappings, manifest compatibility and source shape")
+		fmt.Fprintln(os.Stdout, "  validate    Validate `.agents/schema/v0.0.1/*.json`, mappings, manifest compatibility and source shape")
 		fmt.Fprintln(os.Stdout, "  generate    Render configuration files for the selected target(s)")
 		fmt.Fprintln(os.Stdout, "  import      Reverse-project from generated target files into `.agents`")
 		fmt.Fprintln(os.Stdout, "  check       Verify generated output matches the target projection plan")
@@ -93,13 +93,13 @@ func main() {
 		fmt.Fprintln(os.Stdout, "  completion  Print shell completion script (bash/zsh)")
 		fmt.Fprintln(os.Stdout, "Validation details:")
 		fmt.Fprintln(os.Stdout, "  - `validate` checks schema files, mapping status matrix, front-matter requirements, and unsupported categories.")
-		fmt.Fprintln(os.Stdout, "  - If `.agents/schema/v1/*` or `.agents/mappings.yaml` are missing, validation reports a clear `schema not available` error.")
+		fmt.Fprintln(os.Stdout, "  - If `.agents/schema/v0.0.1/*` or `.agents/mappings.yaml` are missing, validation reports a clear `schema not available` error.")
 		fmt.Fprintln(os.Stdout)
 		fmt.Fprintln(os.Stdout, "Options:")
 		fmt.Fprintln(os.Stdout, "  --root PATH             Repository root to operate on (default: \".\")")
 		fmt.Fprintln(os.Stdout, "  --target TARGET         Adapter target (copilot/codex/claude/all)")
 		fmt.Fprintln(os.Stdout, "  --force                 Replace existing generated files (required by generate/import in practice)")
-		fmt.Fprintln(os.Stdout, "  --backup                Back up the existing generated target directory before generate/import")
+		fmt.Fprintln(os.Stdout, "  --backup                Back up the destination before a forced generate/import")
 		fmt.Fprintln(os.Stdout, "  --backup-dir PATH       Backup root (default: <root>/.oda-backups)")
 		fmt.Fprintln(os.Stdout, "  --allow-unsupported     Permit adapters that would otherwise fail on unsupported categories")
 		fmt.Fprintln(os.Stdout, "  --dry-run               Show what write commands would do without touching files")
@@ -115,7 +115,7 @@ func main() {
 		fmt.Fprintln(os.Stdout, "  oda --target copilot --force --backup generate")
 		fmt.Fprintln(os.Stdout, "  oda --target codex --force --backup generate")
 		fmt.Fprintln(os.Stdout, "  oda --target all --force --backup --backup-dir /tmp/oda-backups generate")
-		fmt.Fprintln(os.Stdout, "  oda --target all --force --dry-run import")
+		fmt.Fprintln(os.Stdout, "  oda --target copilot --force --dry-run import")
 		fmt.Fprintln(os.Stdout, "  oda --target copilot --force import")
 		fmt.Fprintln(os.Stdout, "  oda guide")
 		fmt.Fprintln(os.Stdout, "  oda completion")
@@ -149,6 +149,10 @@ func main() {
 		os.Exit(2)
 	}
 	command := parsed.command
+	if err := validateCommandTarget(command, parsed.target); err != nil {
+		fmt.Fprintln(os.Stderr, "oda:", err)
+		os.Exit(2)
+	}
 	if command == "completion" {
 		if len(parsed.commandArgs) > 1 {
 			fmt.Fprintln(os.Stderr, "oda: completion accepts at most one optional shell argument")
@@ -242,13 +246,14 @@ func main() {
 		}
 	}
 	if ctx.jsonOut {
-		out := commandOutput{Command: command, Targets: results}
-		payload, marshalErr := json.MarshalIndent(out, "", "  ")
-		if marshalErr != nil {
-			fmt.Fprintln(os.Stderr, "oda:", marshalErr)
+		if err := writeJSONOutput(os.Stdout, command, results); err != nil {
+			fmt.Fprintln(os.Stderr, "oda:", err)
 			os.Exit(1)
 		}
-		fmt.Println(string(payload))
+		if failed {
+			os.Exit(1)
+		}
+		return
 	}
 	if command == "guide" {
 		if failed {
@@ -291,7 +296,7 @@ func parseCLIArgs(args []string, usage func()) (parsedCLI, error) {
 	fs.StringVar(&parsed.root, "root", parsed.root, "repository root")
 	fs.StringVar(&parsed.target, "target", parsed.target, "target adapter or 'all'")
 	fs.BoolVar(&parsed.force, "force", false, "replace a generated compatibility tree")
-	fs.BoolVar(&parsed.backup, "backup", false, "backup existing generated target directory before generating")
+	fs.BoolVar(&parsed.backup, "backup", false, "backup the destination before a forced generate/import")
 	fs.StringVar(&parsed.backupDir, "backup-dir", "", "directory where backups are stored (default: <root>/.oda-backups)")
 	fs.BoolVar(&parsed.allowUnsupported, "allow-unsupported", false, "allow populated unsupported categories")
 	fs.BoolVar(&parsed.dryRun, "dry-run", false, "compute changes without applying them")
@@ -361,6 +366,19 @@ func resolveTargets(target string) ([]string, error) {
 	return []string{target}, nil
 }
 
+func validateCommandTarget(command, target string) error {
+	if command == "import" && target == "all" {
+		return fmt.Errorf("import requires one explicit source target; --target all is not supported")
+	}
+	return nil
+}
+
+func writeJSONOutput(w io.Writer, command string, results []commandResult) error {
+	encoder := json.NewEncoder(w)
+	encoder.SetIndent("", "  ")
+	return encoder.Encode(commandOutput{Command: command, Targets: results})
+}
+
 func run(ctx runContext, command string, a *adapter.Adapter) commandResult {
 	switch command {
 	case "validate":
@@ -370,16 +388,13 @@ func run(ctx runContext, command string, a *adapter.Adapter) commandResult {
 		return commandResult{Command: command, Target: a.Target(), Status: "ok"}
 	case "generate":
 		if !ctx.dryRun && ctx.force && ctx.backup {
-			manifestDir, err := targetManifestDirectory(a.Target())
+			manifestDir, err := backupDirectory(command, a.Target())
 			if err != nil {
 				return commandResult{Command: command, Target: a.Target(), Status: "error", Error: err.Error()}
 			}
 			backupPath, err := backupGeneratedOutput(ctx.root, manifestDir, ctx.backupDir)
 			if err != nil {
 				return commandResult{Command: command, Target: a.Target(), Status: "error", Error: err.Error()}
-			}
-			if backupPath != "" {
-				fmt.Printf("oda: %s: backing up %s to %s\n", a.Target(), manifestDir, backupPath)
 			}
 			// Plan after backup so backup snapshots pre-generation state.
 			if err := a.Generate(ctx.force); err != nil {
@@ -410,16 +425,13 @@ func run(ctx runContext, command string, a *adapter.Adapter) commandResult {
 		return commandResult{Command: command, Target: a.Target(), Status: "ok"}
 	case "import":
 		if !ctx.dryRun && ctx.force && ctx.backup {
-			manifestDir, err := targetManifestDirectory(a.Target())
+			manifestDir, err := backupDirectory(command, a.Target())
 			if err != nil {
 				return commandResult{Command: command, Target: a.Target(), Status: "error", Error: err.Error()}
 			}
 			backupPath, err := backupGeneratedOutput(ctx.root, manifestDir, ctx.backupDir)
 			if err != nil {
 				return commandResult{Command: command, Target: a.Target(), Status: "error", Error: err.Error()}
-			}
-			if backupPath != "" {
-				fmt.Printf("oda: %s: backing up %s to %s\n", a.Target(), manifestDir, backupPath)
 			}
 			if err := a.Import(ctx.force); err != nil {
 				return commandResult{Command: command, Target: a.Target(), Status: "error", Backup: backupPath, Error: err.Error()}
@@ -504,6 +516,13 @@ func targetManifestDirectory(target string) (string, error) {
 		}
 	}
 	return "", fmt.Errorf("unknown target %q", target)
+}
+
+func backupDirectory(command, target string) (string, error) {
+	if command == "import" {
+		return ".agents", nil
+	}
+	return targetManifestDirectory(target)
 }
 
 func printCompletionScript(shell string) error {

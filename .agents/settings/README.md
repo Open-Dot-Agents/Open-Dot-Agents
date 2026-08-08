@@ -16,12 +16,16 @@ Settings define the base runtime configuration for the active agent session.
 - Claude Code: non-permission/non-hook settings in `.claude/settings.json`
 - GitHub Copilot CLI configuration primitives
 
+## Current oda projection
+
+No v0.0.1 adapter emits this category; all three targets are `unsupported`.
+
 ## Expected content
 
 Base configuration values that represent the "current" session defaults.
 
 ## Contract
 
-Machine metadata is in `../schema/v1/agents.schema.json`.
+Machine metadata is in `../schema/v0.0.1/agents.schema.json`.
 
 See `../mappings.yaml` for canonical vendor documentation.

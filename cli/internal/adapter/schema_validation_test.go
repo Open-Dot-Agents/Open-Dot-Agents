@@ -108,7 +108,7 @@ func TestValidateRejectsMappingsMissingTargetStatusEntries(t *testing.T) {
 func TestValidateRejectsMappingsManifestFormatVersionMismatch(t *testing.T) {
 	root := t.TempDir()
 	seedSchemaArtifactsForValidation(t, root)
-	if err := mutateMappingsManifestValue(root, ".agents/mappings.yaml", "format_version", 2); err != nil {
+	if err := mutateMappingsManifestValue(root, ".agents/mappings.yaml", "format_version", "v0.0.2"); err != nil {
 		t.Fatal(err)
 	}
 	write(t, root, ".agents/instructions/team.md", "Use concise commits.\n")
@@ -117,7 +117,7 @@ func TestValidateRejectsMappingsManifestFormatVersionMismatch(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if err := a.Validate(); err == nil || !strings.Contains(err.Error(), "mappings manifest format_version must be 1") {
+	if err := a.Validate(); err == nil || !strings.Contains(err.Error(), "mappings manifest format_version must be \"v0.0.1\"") {
 		t.Fatalf("Validate() error = %v, want mappings manifest format mismatch error", err)
 	}
 }
@@ -142,7 +142,7 @@ func TestValidateRejectsMappingsCanonicalRootMismatch(t *testing.T) {
 func TestValidateRejectsManifestCompatibilityMismatch(t *testing.T) {
 	root := t.TempDir()
 	seedSchemaArtifactsForValidation(t, root)
-	if err := mutateManifestValue(root, ".agents/manifest.json", "format_version", float64(2)); err != nil {
+	if err := mutateManifestValue(root, ".agents/manifest.json", "format_version", "v0.0.2"); err != nil {
 		t.Fatal(err)
 	}
 	write(t, root, ".agents/instructions/team.md", "Use concise commits.\n")
@@ -151,7 +151,7 @@ func TestValidateRejectsManifestCompatibilityMismatch(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if err := a.Validate(); err == nil || !strings.Contains(err.Error(), "format_version == \"1\"") {
+	if err := a.Validate(); err == nil || !strings.Contains(err.Error(), "format_version == \"v0.0.1\"") {
 		t.Fatalf("Validate() error = %v, want manifest format_version mismatch error", err)
 	}
 }
@@ -196,7 +196,7 @@ func TestValidateRejectsMissingAgentsSchema(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if err := a.Validate(); err == nil || !strings.Contains(err.Error(), "schema not available: .agents/schema/v1/agents.schema.json") {
+	if err := a.Validate(); err == nil || !strings.Contains(err.Error(), "schema not available: .agents/schema/v0.0.1/agents.schema.json") {
 		t.Fatalf("Validate() error = %v, want agents schema unavailable error", err)
 	}
 }
@@ -251,7 +251,7 @@ func TestGenerateAllowsMissingManifestCompatibilityFile(t *testing.T) {
 }
 
 func removeSchemaRequiredKey(root, filename, key string) error {
-	data, err := os.ReadFile(filepath.Join(root, ".agents", "schema", "v1", filename))
+	data, err := os.ReadFile(filepath.Join(root, ".agents", "schema", "v0.0.1", filename))
 	if err != nil {
 		return err
 	}
@@ -275,7 +275,7 @@ func removeSchemaRequiredKey(root, filename, key string) error {
 	if err != nil {
 		return err
 	}
-	return os.WriteFile(filepath.Join(root, ".agents", "schema", "v1", filename), updated, 0o644)
+	return os.WriteFile(filepath.Join(root, ".agents", "schema", "v0.0.1", filename), updated, 0o644)
 }
 
 func mutateMappingsStatus(root, relativePath, rootKey, category, target, value string) error {

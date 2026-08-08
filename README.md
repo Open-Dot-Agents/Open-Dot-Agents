@@ -6,7 +6,8 @@ canonical `.agents/` tree and generate compatible target outputs.
 
 ## Why this project exists
 
-Most harnesses (Copilot, Codex, Claude, and others) represent the same ideas with
+Most harnesses (GitHub Copilot CLI, OpenAI Codex, Anthropic Claude Code, and
+others) represent the same ideas with
 different schemas. Open-Dot-Agents normalizes those ideas into one contract:
 
 - always-on instructions and scoped rules
@@ -54,8 +55,8 @@ Category documentation:
 
 Machine-readable contracts:
 
-- `.agents/schema/v1/agents.schema.json`
-- `.agents/schema/v1/mappings.schema.json`
+- `.agents/schema/v0.0.1/agents.schema.json`
+- `.agents/schema/v0.0.1/mappings.schema.json`
 - `.agents/manifest.json`
 
 ## Quick start
@@ -68,6 +69,12 @@ oda generate --root /path/to/repo --target all
 oda check --root /path/to/repo --target all
 ```
 
+## Supported harness tools
+
+- [<img src="https://api.iconify.design/simple-icons/github.svg?color=%23181717" width="14" height="14" style="vertical-align:middle;" alt="GitHub Copilot CLI" /> GitHub Copilot CLI](https://docs.github.com/en/copilot)
+- [<img src="https://api.iconify.design/simple-icons/openai.svg?color=%23412991" width="14" height="14" style="vertical-align:middle;" alt="OpenAI Codex" /> OpenAI Codex](https://learn.chatgpt.com/docs/)
+- [<img src="https://api.iconify.design/simple-icons/anthropic.svg?color=%23121212" width="14" height="14" style="vertical-align:middle;" alt="Anthropic Claude Code" /> Anthropic Claude Code](https://code.claude.com/docs/)
+
 Helpful flags:
 
 - `--target all` for registry-wide runs
@@ -76,9 +83,16 @@ Helpful flags:
 - `--format=json` for machine-readable output
 - `--ci` for strict CI behavior
 
-## Roadmap and status
+## Project status
 
-See [ROADMAP.md](./ROADMAP.md) for the milestone plan and current status.
+The v0.0.1 canonical contract and adapters for GitHub Copilot CLI, OpenAI Codex, and
+Anthropic Claude Code are implemented. Current work focuses on compatibility,
+release stability, and adoption of the `.agents` mapping model. The initial
+project release is planned as `v0.0.1`.
+
+Mapping statuses describe what the current `oda` adapters emit, not every native
+feature available in each harness. See [the v0.0.1 schema notes](.agents/schema/v0.0.1/README.md)
+for the status definitions.
 
 ## License
 

@@ -1,16 +1,16 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://open-dot-agents.local/schema/v1/agents.schema.json",
-  "title": "Open-Dot-Agents v1 source contract",
+  "$id": "https://open-dot-agents.local/schema/v0.0.1/agents.schema.json",
+  "title": "Open-Dot-Agents v0.0.1 source contract",
   "description": "Machine-readable contract for the `.agents/` repository layout.",
   "type": "object",
   "required": ["format_version", "canonical_root", "categories"],
   "additionalProperties": false,
   "properties": {
     "format_version": {
-      "type": "integer",
-      "const": 1,
-      "description": "Schema contract major version."
+      "type": "string",
+      "const": "v0.0.1",
+      "description": "Schema contract version."
     },
     "canonical_root": {
       "type": "string",

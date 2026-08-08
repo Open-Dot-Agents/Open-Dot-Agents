@@ -51,6 +51,10 @@ oda clean --root /path/to/repo --target codex
 - `--allow-unsupported` — explicitly proceed with unsupported populated categories
 - `--ci` — return non-zero on drift in scripted runs
 
+`import` requires one explicit source target. `--target all` is intentionally
+rejected because multiple harnesses can define conflicting canonical files. With
+`--force --backup`, import archives the existing `.agents/` tree before writing.
+
 ## Command examples
 
 ```bash

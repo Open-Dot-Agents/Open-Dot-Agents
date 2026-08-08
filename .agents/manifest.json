@@ -1,9 +1,9 @@
 {
-  "format_version": 1,
+  "format_version": "v0.0.1",
   "canonical_root": ".agents",
   "schemas": {
-    "contracts": ".agents/schema/v1/agents.schema.json",
-    "mappings": ".agents/schema/v1/mappings.schema.json"
+    "contracts": ".agents/schema/v0.0.1/agents.schema.json",
+    "mappings": ".agents/schema/v0.0.1/mappings.schema.json"
   },
   "supports": [
     "instructions",
@@ -22,16 +22,16 @@
   ],
   "unsupported": {
     "permissions": [
-      "Codex no direct file-backed mapping currently; represented in adapter projection."
+      "No v0.0.1 adapter emits permission policy; native harness controls remain outside the current projection."
     ],
     "plugins": [
-      "No first-class vendor support outside Copilot."
+      "GitHub Copilot CLI has native plugins, but no v0.0.1 adapter emits plugin packages."
     ],
     "profiles": [
-      "Only Codex has native profile section support."
+      "Codex has native profiles, but no v0.0.1 adapter emits profile configuration."
     ],
     "prompts": [
-      "Prompt templates are not currently projected outside Copilot and Claude."
+      "Harnesses expose prompt workflows, but no v0.0.1 adapter emits prompt templates."
     ],
     "settings": [
       "Settings are adapter-specific in current projections."
@@ -45,7 +45,8 @@
   },
   "compatibility_notes": [
     "Schema and mapping metadata are expected to be used by vendor tooling.",
-    "Adapters may reject unsupported categories unless `--allow-unsupported` is set.",
+    "Mapping status describes the current oda projection, not every native harness capability.",
+    "Adapters may reject populated unsupported categories unless `--allow-unsupported` is set.",
     "MCP transport support is adapter-specific."
   ]
 }
