@@ -1,0 +1,7 @@
+{
+  "id": "preferred-test-command",
+  "content": "Use task test for focused verification.",
+  "provenance": "session:example",
+  "createdAt": "2026-08-09T00:00:00Z",
+  "sensitivity": "internal"
+}

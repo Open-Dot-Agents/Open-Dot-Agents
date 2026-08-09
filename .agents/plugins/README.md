@@ -20,7 +20,7 @@ as one installable unit rather than individual file copies.
 - Other harnesses: usually emulate via direct repository sharing of equivalent
   category folders and files
 
-## Current oda projection
+## Reference adapter projection
 
 - GitHub Copilot CLI: `mapped` between `.agents/plugins/copilot/**` and
   `.github/plugin/**`.
@@ -33,8 +33,8 @@ as one installable unit rather than individual file copies.
 - package contents for included categories
 - optional installation metadata
 
-## Contract
+## V1 contract
 
-Machine metadata is in `../schema/v0.0.1/agents.schema.json`.
-
-See `../mappings.yaml` for vendor-specific plugin documentation.
+Configuration bundles use `plugin.json` and reverse-DNS identifiers. They are
+distinct from executable dota adapter plugins. See
+`../../spec/v1/schema/plugin.schema.json`.

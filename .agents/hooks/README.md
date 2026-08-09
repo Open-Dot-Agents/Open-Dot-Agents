@@ -19,7 +19,7 @@ Typical hook points include:
 - Claude Code hooks in `.claude/settings.json`
 - OpenAI Codex CLI hooks in `.codex/config.toml`
 
-## Current oda projection
+## Reference adapter projection
 
 - GitHub Copilot CLI: `supported`
 - OpenAI Codex: `mapped` through `.agents/hooks/codex.toml`
@@ -34,11 +34,10 @@ Each hook entry should define:
 - optional arguments and environment
 - failure handling semantics where supported
 
-Format is usually JSON or YAML depending on the target harness.
+V1 hook files are strict JSON and use the portable event, action, timeout,
+priority, matcher, and failure semantics defined by the specification.
 
-## Contract
+## V1 contract
 
-Machine metadata is in `../schema/v0.0.1/agents.schema.json`, including
-`hooks/*.json` payload expectations and merge behavior.
-
-See `../mappings.yaml` for links to vendor docs.
+See `../../spec/v1/schema/hooks.schema.json`. Adapter-specific hook fields must
+be preserved under `../extensions/` and reported in loss diagnostics.

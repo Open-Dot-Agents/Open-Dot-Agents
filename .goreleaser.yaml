@@ -1,38 +1,65 @@
 version: 2
 
-project_name: oda
+project_name: dota
 
 builds:
-  - id: oda
+  - id: dota
     dir: cli
-    main: ./cmd/oda
-    binary: oda
-    env:
-      - CGO_ENABLED=0
-    goos:
-      - darwin
-      - linux
-      - windows
-    goarch:
-      - amd64
-      - arm64
-    ldflags:
-      - -s -w -X main.version={{ .Tag }}
+    main: ./cmd/dota
+    binary: dota
+    env: [CGO_ENABLED=0]
+    goos: [darwin, linux, windows]
+    goarch: [amd64, arm64]
+    ldflags: ["-s -w -X main.version={{ .Tag }}"]
+    mod_timestamp: "{{ .CommitTimestamp }}"
+  - id: dota-adapter-codex
+    dir: cli
+    main: ./cmd/dota-adapter-codex
+    binary: dota-adapter-codex
+    env: [CGO_ENABLED=0]
+    goos: [darwin, linux, windows]
+    goarch: [amd64, arm64]
+    ldflags: ["-s -w -X main.version={{ .Tag }}"]
+    mod_timestamp: "{{ .CommitTimestamp }}"
+  - id: dota-adapter-copilot
+    dir: cli
+    main: ./cmd/dota-adapter-copilot
+    binary: dota-adapter-copilot
+    env: [CGO_ENABLED=0]
+    goos: [darwin, linux, windows]
+    goarch: [amd64, arm64]
+    ldflags: ["-s -w -X main.version={{ .Tag }}"]
+    mod_timestamp: "{{ .CommitTimestamp }}"
+  - id: dota-adapter-claude
+    dir: cli
+    main: ./cmd/dota-adapter-claude
+    binary: dota-adapter-claude
+    env: [CGO_ENABLED=0]
+    goos: [darwin, linux, windows]
+    goarch: [amd64, arm64]
+    ldflags: ["-s -w -X main.version={{ .Tag }}"]
     mod_timestamp: "{{ .CommitTimestamp }}"
 
 archives:
   - ids:
-      - oda
-    formats:
-      - tar.gz
+      - dota
+      - dota-adapter-codex
+      - dota-adapter-copilot
+      - dota-adapter-claude
+    formats: [tar.gz]
     format_overrides:
       - goos: windows
-        formats:
-          - zip
+        formats: [zip]
     name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
 
 checksum:
   name_template: checksums.txt
+  algorithm: sha256
+
+sboms:
+  - artifacts: archive
+    documents:
+      - "{{ .ArtifactName }}.spdx.sbom"
 
 changelog:
   use: git
@@ -42,9 +69,10 @@ release:
   draft: true
   name_template: "Open-Dot-Agents {{ .Tag }}"
   header: |
-    Open-Dot-Agents {{ .Tag }} is the first packaged release of the vendor-neutral
-    `.agents/` standard and the `oda` compatibility CLI.
+    Open-Dot-Agents {{ .Tag }} is a release candidate of the vendor-neutral
+    `.agents/` v1 standard, the `dota` trusted host, and the external Codex,
+    Copilot, and Claude reference adapters.
   footer: |
-    The Codex repository configuration and custom-agent registration round-trip
-    correctly, but live custom-agent child spawning remains a documented Codex
-    runtime limitation. See `COMPATIBILITY.md` for the exact acceptance boundary.
+    This is a clean break from v0.0.1. Verify `checksums.txt` and the SPDX SBOM
+    before installing executables. See `COMPATIBILITY.md` for the exact native
+    acceptance boundary.

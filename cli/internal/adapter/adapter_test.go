@@ -602,7 +602,7 @@ func TestRejectsMalformedHooksAndSkills(t *testing.T) {
 			target:  "copilot",
 			path:    ".agents/skills/release/note.md",
 			content: "Release notes.\n",
-			want:    "entry \"skills/release/note.md\" does not match allowed file patterns for",
+			want:    "skill release must contain SKILL.md",
 		},
 		{
 			name:    "skill front matter is malformed",
@@ -805,11 +805,7 @@ func copyTree(t *testing.T, source, destination string) {
 
 func seedSchemaArtifactsForValidation(t *testing.T, root string) {
 	t.Helper()
-
-	sourceRoot := filepath.Join("..", "..", "..", ".agents")
-	copyTree(t, filepath.Join(sourceRoot, "schema"), filepath.Join(root, ".agents", "schema"))
-	copyFile(t, filepath.Join(sourceRoot, "mappings.yaml"), filepath.Join(root, ".agents", "mappings.yaml"))
-	copyFile(t, filepath.Join(sourceRoot, "manifest.json"), filepath.Join(root, ".agents", "manifest.json"))
+	_ = root
 }
 
 func copyFile(t *testing.T, source, destination string) {

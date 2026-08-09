@@ -21,13 +21,11 @@ Context Protocol (MCP) servers.
 - secure connection metadata (excluding secrets)
 - environment-variable placeholders
 
-`oda` adapter input expects a portable MCP definition in `mcp.json`.
-Codex-only server fields are retained under each server's `codex` extension so
-they survive import/export even when the portable MCP shape has no equivalent.
+Vendor-only server fields are retained under `../extensions/` so they survive
+import/export even when the portable MCP shape has no equivalent.
 
-## Contract
+## V1 contract
 
-Machine metadata is in `../schema/v0.0.1/agents.schema.json`, including expected
-`tools/mcp.json` shape and supported transports.
-
-See `../mappings.yaml` for vendor references.
+`mcp.json` uses strict JSON and portable `stdio` or `streamable-http`
+transports. Credential values must be environment references. See
+`../../spec/v1/schema/mcp.schema.json`.

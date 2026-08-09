@@ -49,9 +49,7 @@ portable root forms concise.
 
 One or more Markdown files containing high-level global guidance.
 
-## Contract
+## V1 contract
 
-Machine metadata is in `../schema/v0.0.1/agents.schema.json`, including filename and
-parser expectations.
-
-See `../mappings.yaml` for canonical vendor documentation.
+Files are UTF-8 Markdown. Optional integer `priority` front matter controls
+ascending order; equal priority is ordered by normalized relative path.

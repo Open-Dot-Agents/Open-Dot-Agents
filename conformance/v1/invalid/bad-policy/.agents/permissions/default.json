@@ -1,0 +1,5 @@
+{
+  "rules": [
+    { "id": "unsafe", "decision": "sometimes", "match": { "tool": "shell" } }
+  ]
+}

@@ -16,7 +16,7 @@ Profiles are named runtime presets that layer on top of base
   example scope/precedence settings), but keep it as a distinct layer only when
   user-selected switching is explicit
 
-## Current oda projection
+## Reference adapter projection
 
 - OpenAI Codex: `mapped` through `.agents/profiles/codex.toml` and
   `[profiles.<name>]` in `.codex/config.toml`.
@@ -28,8 +28,7 @@ Profiles are named runtime presets that layer on top of base
 - minimal diff versus `../settings/` defaults
 - optional profile-specific policy/tool adjustments
 
-## Contract
+## V1 contract
 
-Machine metadata is in `../schema/v0.0.1/agents.schema.json`.
-
-See `../mappings.yaml` for vendor documentation.
+Profiles use strict JSON and RFC 7396 JSON Merge Patch. Inheritance cycles are
+invalid. See `../../spec/v1/schema/profiles.schema.json`.

@@ -1,197 +1,126 @@
 # Open-Dot-Agents
 
-Open-Dot-Agents defines a practical, vendor-neutral standard for configuring AI
-coding agents. Instead of maintaining separate formats per tool, teams author one
-canonical `.agents/` tree and generate compatible target outputs.
+Open-Dot-Agents is the vendor-neutral standard for repository-scoped AI agent
+configuration. A project owns one portable `.agents/` tree; explicitly locked,
+out-of-process adapters translate that tree to and from individual harnesses.
 
-See [COMPATIBILITY.md](./COMPATIBILITY.md) for the requirement-by-requirement
-Codex and Copilot CLI import/export audit and current native acceptance status.
+The current contract is **1.0.0-rc.1**. It is a clean break: v0 trees and the
+former CLI are intentionally unsupported.
 
-## Why this project exists
+## The standard
 
-Most harnesses (GitHub Copilot CLI, OpenAI Codex, Anthropic Claude Code, and
-others) represent the same ideas with
-different schemas. Open-Dot-Agents normalizes those ideas into one contract:
+The specification preserves thirteen categories without pretending every
+harness represents each one natively:
 
-- always-on instructions and scoped rules
-- agent and skill definitions
-- hooks and lifecycle automation
-- safety controls and permissions
-- tooling integrations (MCP and beyond)
+| Conformance tier | Categories |
+| --- | --- |
+| Core | `instructions`, `rules`, `agents`, `skills`, `tools` |
+| Automation and packaging | `hooks`, `prompts`, `plugins` |
+| Policy and configuration | `permissions`, `guardrails`, `profiles`, `settings` |
+| Runtime state | `memories` |
 
-## Canonical `.agents/` layout
+Core implementations support the first tier. Full implementations support all
+thirteen categories. Vendor-only data is preserved under
+`.agents/extensions/<reverse-dns-id>/`; it never becomes a hidden fourteenth
+category.
 
 ```text
 .agents/
-├── agents/        Persona and sub-agent definitions
-├── guardrails/    Sandbox and hard runtime boundaries
-├── hooks/         Lifecycle hook definitions
-├── instructions/  Unconditional behavioral guidance
-├── memories/      Persistent memory structures
-├── permissions/   Allow/deny/ask action policies
-├── plugins/       Installable configuration bundles
-├── profiles/      Named runtime presets
-├── prompts/       Reusable prompt templates
-├── rules/         Scoped and conditional behavior
-├── settings/      Base runtime defaults
-├── skills/        On-demand task playbooks
-├── tools/         External integrations
-├── mappings.yaml  Target mapping and status metadata
-└── schema/        Versioned machine-readable contracts
+├── manifest.json
+├── adapters.lock.json
+├── agents/        ├── hooks/         ├── memories/      ├── profiles/
+├── guardrails/    ├── instructions/  ├── permissions/   ├── prompts/
+├── plugins/       ├── rules/         ├── settings/      ├── skills/
+├── tools/
+├── extensions/<reverse-dns-id>/
+└── .dota/{import,export}/
 ```
 
-Category documentation:
+The normative sources are:
 
-- [`agents`](./.agents/agents/README.md)
-- [`guardrails`](./.agents/guardrails/README.md)
-- [`hooks`](./.agents/hooks/README.md)
-- [`instructions`](./.agents/instructions/README.md)
-- [`memories`](./.agents/memories/README.md)
-- [`permissions`](./.agents/permissions/README.md)
-- [`plugins`](./.agents/plugins/README.md)
-- [`profiles`](./.agents/profiles/README.md)
-- [`prompts`](./.agents/prompts/README.md)
-- [`rules`](./.agents/rules/README.md)
-- [`settings`](./.agents/settings/README.md)
-- [`skills`](./.agents/skills/README.md)
-- [`tools`](./.agents/tools/README.md)
+- [Specification 1.0.0-rc.1](spec/v1/SPEC.md)
+- [Adapter Protocol 1.0](spec/v1/ADAPTER_PROTOCOL.md)
+- [Stable diagnostic registry](spec/v1/DIAGNOSTICS.md)
+- [JSON Schemas](spec/v1/schema/)
+- [Conformance fixtures](conformance/v1/)
+- category contracts in [`.agents/`](.agents/)
 
-Machine-readable contracts:
+## Quick start
 
-- `.agents/schema/v0.0.1/agents.schema.json`
-- `.agents/schema/v0.0.1/mappings.schema.json`
-- `.agents/manifest.json`
-
-## Getting started in 10 minutes
-
-Use this section as the canonical onboarding reference.
-
-### 1) Install and verify the CLI
-
-Install the released Go module:
+Install the RC from the nested Go module:
 
 ```bash
-go install github.com/Open-Dot-Agents/Open-Dot-Agents/cli/cmd/oda@v0.0.1
-oda --version
+go install github.com/Open-Dot-Agents/Open-Dot-Agents/cli/cmd/dota@v1.0.0-rc.1
+dota --version
 ```
 
-Prebuilt Linux, macOS, and Windows archives for amd64 and arm64 are available
-from [GitHub Releases](https://github.com/Open-Dot-Agents/Open-Dot-Agents/releases).
-Every release includes `checksums.txt` with SHA-256 hashes.
-
-To build from a local checkout instead:
+Or build the CLI and all three reference adapters from this checkout:
 
 ```bash
-cd /path/to/Open-Dot-Agents
-cd cli
-go install ./cmd/oda
-cd ..
 task cli:build
-export PATH="/path/to/Open-Dot-Agents/cli/bin:$PATH"
 task cli:verify
 ```
 
-### 2) Validate a target repository with `.agents`
+Initialize and validate a tree:
 
 ```bash
-oda validate --target all
-oda export --target all
-oda check --target all
+dota init --root /path/to/project
+dota validate --root /path/to/project
+dota inspect --root /path/to/project
 ```
 
-`generate` remains a backward-compatible alias for `export`. To adopt an
-existing repository, reverse-project one harness at a time:
+Adapters are never discovered from `PATH`. Add an executable explicitly; this
+records its identity and SHA-256 checksum in `.agents/adapters.lock.json`:
 
 ```bash
-oda import --target codex --dry-run --diff
-oda import --target codex
+dota adapter add \
+  --root /path/to/project \
+  --id org.open-dot-agents.codex \
+  --version 1.0.0-rc.1 \
+  --path /path/to/dota-adapter-codex
+
+dota adapter doctor --root /path/to/project --adapter org.open-dot-agents.codex
+dota export --root /path/to/project --adapter org.open-dot-agents.codex --dry-run --json
+dota export --root /path/to/project --adapter org.open-dot-agents.codex
+dota check --root /path/to/project --adapter org.open-dot-agents.codex
 ```
 
-### 3) First-run mismatch flow
+Local-path locks are for development and are rejected by `--ci`. Released
+adapters use publisher manifests with per-platform artifact URLs and checksums:
 
 ```bash
-oda validate --target all --allow-unsupported
-oda generate --target all --force
-oda check --target all
+dota adapter add --root /path/to/project --manifest https://example.org/adapter.json
+dota adapter install --root /path/to/project
 ```
 
-### 4) Verify adapter behavior by target
+## Trust model
 
-- `task cli:test:copilot` — Copilot projection validation
-- `task cli:test:copilot:real` — bidirectional round trip plus native authenticated instructions, rules, hooks, skills, MCP, and custom-agent acceptance
-- `task cli:test:codex` — Codex projection and MCP transport validation
-- `task cli:test:codex:real` — bidirectional round trip, official-schema validation, strict loading, authenticated discovery, and live subagent acceptance
-- `task cli:test:claude` — Claude projection validation
-- `task cli:test:surface` — CLI command smoke checks
+Adapters are JSON-RPC 2.0 executables using LSP `Content-Length` framing. They
+receive a filtered snapshot and return diagnostics, explicit loss reports, and
+a deterministic file plan. They do not write the workspace. The trusted `dota`
+host validates paths, rejects symlinks and collisions, applies files atomically,
+tracks ownership under `.agents/.dota/`, and protects modified output.
 
-The complete canonical inputs for the live flows are in
-[`examples/copilot-project`](./examples/copilot-project/README.md) and
-[`examples/codex-project`](./examples/codex-project/README.md).
+Checksums prove artifact integrity, not publisher trust. Review an adapter and
+its publisher before locking it. See [SECURITY.md](SECURITY.md) for the threat
+model and reporting process.
 
-### 5) Common failure patterns
+## Reference adapters
 
-- `schema not available`: ensure schema files exist under `.agents/schema/v0.0.1/`
-- `unsupported populated categories`: either move/remove files from unsupported directories or use `--allow-unsupported`
-- `generated output is stale` or `no generated compatibility manifest found`: run `oda generate` again
-- `output ".codex/config.toml" exists but is not adapter-owned`: review the dry-run; use `--force --backup` for the first export
-- `import output ... is not adapter-owned`: review the source and use `--force --backup` to adopt the existing canonical file
+This repository ships external reference adapters for OpenAI Codex, GitHub
+Copilot CLI, and Anthropic Claude Code. Their compatibility status describes
+projection behavior, not features built into `dota`; see
+[COMPATIBILITY.md](COMPATIBILITY.md) for the evidence boundary.
 
-Exports are tracked by each target's `.open-dot-agents.json`. Imports use
-target-specific manifests such as
-`.agents/.open-dot-agents-import-codex.json`; these hashes protect edited
-canonical files and allow stale imported files to be removed safely.
+## Contributing
 
-Repository-relative instruction precedence is preserved as well: Codex
-overrides/fallback files and nested Copilot instruction locations use the
-documented vendor-extension subtrees under `.agents/instructions/` (and, for
-nested Copilot modular rules, `.agents/rules/copilot-project/`).
-
-### 6) Contributor checks before PR
-
-- Read `AGENTS.md`, root `README.md`, and relevant `.agents/*/README.md`
-- Ensure `.agents/mappings.yaml` and behavior docs are aligned for any status change
-- Keep category names exact (`instructions`, `rules`, `tools`, ...)
-- Run `task cli:verify` before opening the PR
-
-The CLI uses `v0.0.1` schema artifacts in `.agents/schema/v0.0.1/*` and mapping metadata in `.agents/mappings.yaml` to enforce:
-
-- `supported` output emitted directly from `.agents`
-- `mapped` output emitted through a target transform
-- `partial` partial output projection for a category
-- `unsupported` no output emitted by current adapters
-
-These values describe adapter projection only, not full native capability.
-
-## Supported harness tools
-
-- [<img src="https://api.iconify.design/simple-icons/github.svg?color=%23181717" width="14" height="14" style="vertical-align:middle;" alt="GitHub Copilot CLI" /> GitHub Copilot CLI](https://docs.github.com/en/copilot)
-- [<img src="https://api.iconify.design/simple-icons/openai.svg?color=%23412991" width="14" height="14" style="vertical-align:middle;" alt="OpenAI Codex" /> OpenAI Codex](https://learn.chatgpt.com/docs/)
-- [<img src="https://api.iconify.design/simple-icons/anthropic.svg?color=%23121212" width="14" height="14" style="vertical-align:middle;" alt="Anthropic Claude Code" /> Anthropic Claude Code](https://code.claude.com/docs/)
-
-Helpful flags and one-liners:
-
-- `--target all` for registry-wide runs
-- `--dry-run` to preview writes
-- `--diff` for file-level change summaries
-- `--format=json` for machine-readable output
-- `--ci` for strict CI behavior
+Specification changes use the RFC process in [CONTRIBUTING.md](CONTRIBUTING.md)
+and [GOVERNANCE.md](GOVERNANCE.md). Before submitting a change, run:
 
 ```bash
-oda --root . --help
-oda --root . validate --target all --format=json
-oda --root . check --target all --ci
+task cli:verify
+task cli:release:check  # when GoReleaser is installed
 ```
-
-## Project status
-
-The v0.0.1 canonical contract and adapters for GitHub Copilot CLI, OpenAI Codex, and
-Anthropic Claude Code are implemented. Current work focuses on compatibility,
-release stability, and adoption of the `.agents` mapping model. The initial
-project release is `v0.0.1`; see [CHANGELOG.md](./CHANGELOG.md) for release notes.
-
-Mapping statuses describe what the current `oda` adapters emit, not every native
-feature available in each harness. See [the v0.0.1 schema notes](.agents/schema/v0.0.1/README.md)
-for the status definitions.
 
 ## License
 

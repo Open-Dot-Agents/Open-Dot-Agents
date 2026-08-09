@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://open-dot-agents.github.io/Open-Dot-Agents/spec/v1/schema/settings.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "defaultAgent": { "type": "string" },
+    "defaultProfile": { "type": "string" },
+    "maxParallelAgents": { "type": "integer", "minimum": 1 },
+    "extensions": { "type": "object", "additionalProperties": true }
+  }
+}

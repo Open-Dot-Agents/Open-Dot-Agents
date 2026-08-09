@@ -23,7 +23,8 @@ access, `jq`, and consumes model tokens. Before live discovery, it validates
 the generated TOML against OpenAI's official Codex config JSON Schema and
 loads it through the installed CLI with `--strict-config`.
 
-Adopt an existing hand-authored `.codex/config.toml` with
-`oda import --target codex` before exporting. The import retains its raw bytes
-and unknown fields; review `oda export --target codex --dry-run --diff` before
-using `--force --backup` on an unowned target.
+Adopt an existing hand-authored `.codex/config.toml` by locking a Codex adapter
+and running `dota import --adapter org.open-dot-agents.codex`. The import retains
+raw bytes and unknown fields; review `dota export --adapter
+org.open-dot-agents.codex --dry-run --json` before using `--force --backup` on
+an unowned target.

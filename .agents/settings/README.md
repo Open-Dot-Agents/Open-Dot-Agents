@@ -16,7 +16,7 @@ Settings define the base runtime configuration for the active agent session.
 - Claude Code: non-permission/non-hook settings in `.claude/settings.json`
 - GitHub Copilot CLI configuration primitives
 
-## Current oda projection
+## Reference adapter projection
 
 - OpenAI Codex: `mapped` through `.agents/settings/codex.toml`. Import also
   records `codex.raw.toml` and `codex-agents/*.toml` as lossless provenance
@@ -30,8 +30,8 @@ Settings define the base runtime configuration for the active agent session.
 
 Base configuration values that represent the "current" session defaults.
 
-## Contract
+## V1 contract
 
-Machine metadata is in `../schema/v0.0.1/agents.schema.json`.
-
-See `../mappings.yaml` for canonical vendor documentation.
+Portable settings use strict JSON and the fields in
+`../../spec/v1/schema/settings.schema.json`. Vendor settings belong under
+`../extensions/`.

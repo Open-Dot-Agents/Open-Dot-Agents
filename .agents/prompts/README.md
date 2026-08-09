@@ -16,7 +16,7 @@ explicitly by user intent.
 - Claude Code: slash-command based custom prompts
 - OpenAI Codex CLI: custom slash commands / workflows
 
-## Current oda projection
+## Reference adapter projection
 
 - GitHub Copilot CLI: `mapped` bidirectionally to
   `.github/prompts/*.prompt.md`.
@@ -26,8 +26,7 @@ explicitly by user intent.
 
 One file per prompt template, typically Markdown with variable placeholders.
 
-## Contract
+## V1 contract
 
-Machine metadata is in `../schema/v0.0.1/agents.schema.json`.
-
-See `../mappings.yaml` for canonical links.
+Prompt Markdown requires `name` and `description` front matter. Optional
+`inputs` declare string parameters referenced as `{{inputs.<name>}}`.

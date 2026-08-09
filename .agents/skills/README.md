@@ -26,12 +26,10 @@ at minimum includes a `SKILL.md` with:
 
 Optional scripts or resources can be added as needed.
 
-`oda import --target codex` also migrates legacy repository `.codex/skills/**`
-trees into this canonical location. All nested skill assets are preserved.
+All nested skill assets are preserved by conforming adapters.
 
-## Contract
+## V1 contract
 
-Machine metadata is in `../schema/v0.0.1/agents.schema.json`, including required file
-layout and front matter.
-
-See `../mappings.yaml` for vendor documentation.
+Skills conform directly to the Agent Skills specification, including directory
+name, front-matter constraints, and progressive-disclosure layout. Dota does
+not define a competing skill dialect.

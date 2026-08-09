@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://open-dot-agents.github.io/Open-Dot-Agents/spec/v1/schema/memory.schema.json",
+  "type": "object",
+  "required": ["id", "content", "provenance", "createdAt", "sensitivity"],
+  "additionalProperties": false,
+  "properties": {
+    "id": { "type": "string", "minLength": 1 },
+    "content": { "type": "string", "minLength": 1 },
+    "provenance": { "type": "string", "minLength": 1 },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "expiresAt": { "type": "string", "format": "date-time" },
+    "scope": { "type": "string" },
+    "sensitivity": { "enum": ["public", "internal", "confidential"] }
+  }
+}

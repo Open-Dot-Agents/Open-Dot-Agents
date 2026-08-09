@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://open-dot-agents.github.io/Open-Dot-Agents/spec/v1/schema/manifest.schema.json",
+  "title": "Open-Dot-Agents manifest",
+  "type": "object",
+  "required": ["specVersion", "conformance"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string", "format": "uri" },
+    "specVersion": { "const": "1.0.0-rc.1" },
+    "conformance": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "enum": ["core", "automation", "policy", "state", "full"] }
+    },
+    "extensions": {
+      "type": "object",
+      "propertyNames": { "$ref": "common.schema.json#/$defs/reverseDnsId" },
+      "additionalProperties": true
+    }
+  }
+}

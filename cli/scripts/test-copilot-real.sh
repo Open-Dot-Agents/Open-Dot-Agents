@@ -4,15 +4,17 @@ set -euo pipefail
 script_dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 repo_root=$(CDPATH= cd -- "$script_dir/../.." && pwd)
 example_root="$repo_root/examples/copilot-project"
-oda_bin="$repo_root/cli/bin/oda"
-probe_root=$(mktemp -d "$repo_root/.oda-copilot-real.XXXXXX")
+dota_bin="$repo_root/cli/bin/dota"
+adapter_bin="$repo_root/cli/bin/dota-adapter-copilot"
+adapter_id="org.open-dot-agents.copilot"
+probe_root=$(mktemp -d "$repo_root/.dota-copilot-real.XXXXXX")
 log_dir="$probe_root/.acceptance-logs"
 acceptance_passed=0
 
 cleanup() {
   if [ "$acceptance_passed" -eq 1 ]; then
     case "$probe_root" in
-      "$repo_root"/.oda-copilot-real.*) rm -rf -- "$probe_root" ;;
+      "$repo_root"/.dota-copilot-real.*) rm -rf -- "$probe_root" ;;
       *) echo "Refusing to clean unexpected probe path: $probe_root" >&2 ;;
     esac
   else
@@ -32,28 +34,23 @@ require_command copilot
 require_command git
 require_command jq
 
-if [ ! -x "$oda_bin" ]; then
-  echo "oda binary not found at $oda_bin; run task cli:build" >&2
+if [ ! -x "$dota_bin" ] || [ ! -x "$adapter_bin" ]; then
+  echo "dota binaries not found; run task cli:build" >&2
   exit 1
 fi
 
 cp -a "$example_root/." "$probe_root/"
 git -C "$probe_root" init --quiet
-mkdir -p "$probe_root/.agents/schema/v0.0.1" "$log_dir"
-cp "$repo_root/.agents/manifest.json" "$probe_root/.agents/manifest.json"
-cp "$repo_root/.agents/mappings.yaml" "$probe_root/.agents/mappings.yaml"
-cp "$repo_root/.agents/schema/v0.0.1/agents.schema.json" "$probe_root/.agents/schema/v0.0.1/agents.schema.json"
-cp "$repo_root/.agents/schema/v0.0.1/mappings.schema.json" "$probe_root/.agents/schema/v0.0.1/mappings.schema.json"
+mkdir -p "$log_dir"
 
-"$oda_bin" --root "$probe_root" --target copilot validate
-"$oda_bin" --root "$probe_root" --target copilot generate --dry-run --diff --format=json >"$log_dir/generate-plan.json"
+"$dota_bin" adapter add --root "$probe_root" --id "$adapter_id" --version dev --path "$adapter_bin"
+"$dota_bin" adapter doctor --root "$probe_root" --adapter "$adapter_id"
+"$dota_bin" validate --root "$probe_root" --adapter "$adapter_id"
+"$dota_bin" export --root "$probe_root" --adapter "$adapter_id" --dry-run --json >"$log_dir/export-plan.json"
 jq -e '
-  .targets == [{
-    command: "generate",
-    target: "copilot",
-    status: "ok",
-    plan: {
-      create: [
+  .command == "export" and .status == "ok"
+  and .adapter.id == "org.open-dot-agents.copilot"
+  and .changes.create == [
         ".github/agents/oda-reviewer.agent.md",
         ".github/copilot-instructions.md",
         ".github/copilot/settings.json",
@@ -64,27 +61,13 @@ jq -e '
         ".github/skills/oda-acceptance/SKILL.md",
         "services/api/.github/instructions/acceptance.instructions.md",
         "services/api/AGENTS.md"
-      ],
-      update: [],
-      delete: []
-    },
-    diff: [
-      "A .github/agents/oda-reviewer.agent.md",
-      "A .github/copilot-instructions.md",
-      "A .github/copilot/settings.json",
-      "A .github/hooks/acceptance.json",
-      "A .github/instructions/acceptance.instructions.md",
-      "A .github/mcp.json",
-      "A .github/plugin/plugin.json",
-      "A .github/skills/oda-acceptance/SKILL.md",
-      "A services/api/.github/instructions/acceptance.instructions.md",
-      "A services/api/AGENTS.md"
-    ]
-  }]
-' "$log_dir/generate-plan.json" >/dev/null
+      ]
+  and (.changes.update == null) and (.changes.delete == null)
+  and (.data.losses == []) and (.data.diagnostics == [])
+' "$log_dir/export-plan.json" >/dev/null
 
-"$oda_bin" --root "$probe_root" --target copilot generate
-"$oda_bin" --root "$probe_root" --target copilot check --ci
+"$dota_bin" export --root "$probe_root" --adapter "$adapter_id"
+"$dota_bin" check --root "$probe_root" --adapter "$adapter_id"
 
 test -f "$probe_root/.github/copilot-instructions.md"
 test -f "$probe_root/.github/copilot/settings.json"
@@ -94,7 +77,7 @@ test -f "$probe_root/.github/hooks/acceptance.json"
 test -f "$probe_root/.github/skills/oda-acceptance/SKILL.md"
 test -f "$probe_root/.github/mcp.json"
 test -f "$probe_root/.github/plugin/plugin.json"
-test -f "$probe_root/.github/.open-dot-agents.json"
+test -f "$probe_root/.agents/.dota/export/$adapter_id.json"
 test -f "$probe_root/services/api/AGENTS.md"
 test -f "$probe_root/services/api/.github/instructions/acceptance.instructions.md"
 jq -e '.version == 1 and (.hooks.userPromptSubmitted | length) == 1' "$probe_root/.github/hooks/acceptance.json" >/dev/null
@@ -208,26 +191,31 @@ if ! jq -s -e '
 fi
 
 roundtrip_root="$probe_root/.copilot-roundtrip"
-mkdir -p "$roundtrip_root"
+mkdir -p "$roundtrip_root/.agents"
+cp "$probe_root/.agents/manifest.json" "$roundtrip_root/.agents/manifest.json"
 cp -a "$probe_root/.github" "$roundtrip_root/.github"
 cp -a "$probe_root/services" "$roundtrip_root/services"
-"$oda_bin" --root "$roundtrip_root" --target copilot import
-"$oda_bin" --root "$roundtrip_root" --target copilot export --force
+"$dota_bin" adapter add --root "$roundtrip_root" --id "$adapter_id" --version dev --path "$adapter_bin"
+"$dota_bin" import --root "$roundtrip_root" --adapter "$adapter_id"
+"$dota_bin" validate --root "$roundtrip_root"
+"$dota_bin" export --root "$roundtrip_root" --adapter "$adapter_id" --force
 diff -ru "$probe_root/.github" "$roundtrip_root/.github" >"$log_dir/copilot-roundtrip.diff"
 diff -ru "$probe_root/services" "$roundtrip_root/services" >"$log_dir/copilot-instructions-roundtrip.diff"
-test -f "$roundtrip_root/.agents/.open-dot-agents-import-copilot.json"
+test -f "$roundtrip_root/.agents/.dota/import/$adapter_id.json"
 rm -rf -- "$roundtrip_root"
 
 printf '\nDrift marker.\n' >>"$probe_root/.agents/instructions/acceptance.md"
-if "$oda_bin" --root "$probe_root" --target copilot check --ci >"$log_dir/drift-check.txt" 2>&1; then
+if "$dota_bin" check --root "$probe_root" --adapter "$adapter_id" >"$log_dir/drift-check.txt" 2>&1; then
   echo "Expected canonical instruction drift to fail check --ci" >&2
   exit 1
 fi
-"$oda_bin" --root "$probe_root" --target copilot generate
-"$oda_bin" --root "$probe_root" --target copilot check --ci
-"$oda_bin" --root "$probe_root" --target copilot clean
+"$dota_bin" export --root "$probe_root" --adapter "$adapter_id"
+"$dota_bin" check --root "$probe_root" --adapter "$adapter_id"
+"$dota_bin" clean --root "$probe_root" --adapter "$adapter_id"
 
-test ! -e "$probe_root/.github"
+if [ -d "$probe_root/.github" ]; then
+  test -z "$(find "$probe_root/.github" -type f -print -quit)"
+fi
 test -f "$probe_root/services/api/acceptance.txt"
 test ! -e "$probe_root/services/api/AGENTS.md"
 test -f "$probe_root/.agents/skills/oda-acceptance/SKILL.md"

@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://open-dot-agents.github.io/Open-Dot-Agents/spec/v1/schema/policy.schema.json",
+  "type": "object",
+  "required": ["rules"],
+  "additionalProperties": false,
+  "properties": {
+    "rules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "decision", "match"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "decision": { "enum": ["allow", "ask", "deny"] },
+          "match": { "type": "object", "minProperties": 1 },
+          "reason": { "type": "string" }
+        }
+      }
+    }
+  }
+}

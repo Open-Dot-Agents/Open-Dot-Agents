@@ -26,7 +26,7 @@ separately in `../permissions/README.md`.
 - OpenAI Codex CLI sandbox modes
 - Generic agent runtime sandbox models used across vendors
 
-## Current oda projection
+## Reference adapter projection
 
 - OpenAI Codex: `mapped` through `.agents/guardrails/codex.toml`, including
   sandbox, workspace-write, shell-environment, and Windows controls.
@@ -41,8 +41,7 @@ This category typically maps to harness configuration blocks that define:
 - command/session execution limits
 - other non-negotiable execution boundaries
 
-## Contract
+## V1 contract
 
-Machine-readable fields are defined in `../schema/v0.0.1/agents.schema.json`.
-
-See `../mappings.yaml` for canonical links.
+Portable fields are defined by `../../spec/v1/schema/guardrails.schema.json`.
+Guardrails are hard limits and cannot be weakened by permissions or profiles.

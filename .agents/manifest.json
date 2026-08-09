@@ -1,52 +1,7 @@
 {
-  "format_version": "v0.0.1",
-  "canonical_root": ".agents",
-  "schemas": {
-    "contracts": ".agents/schema/v0.0.1/agents.schema.json",
-    "mappings": ".agents/schema/v0.0.1/mappings.schema.json"
-  },
-  "supports": [
-    "instructions",
-    "rules",
-    "agents",
-    "hooks",
-    "permissions",
-    "guardrails",
-    "memories",
-    "plugins",
-    "profiles",
-    "prompts",
-    "settings",
-    "tools",
-    "skills"
-  ],
-  "unsupported": {
-    "permissions": [
-      "Codex permission policy and Copilot shared model policy are mapped; Claude remains unsupported."
-    ],
-    "plugins": [
-      "Copilot and Codex plugins are mapped; Claude remains unsupported."
-    ],
-    "profiles": [
-      "Codex profiles are mapped; Copilot and Claude remain unsupported."
-    ],
-    "prompts": [
-      "Copilot prompts are mapped; Codex and Claude remain unsupported."
-    ],
-    "settings": [
-      "Codex and Copilot settings are mapped; Claude remains unsupported."
-    ],
-    "memories": [
-      "Codex memories are mapped; Copilot and Claude remain unsupported."
-    ],
-    "guardrails": [
-      "Codex guardrails are mapped; Copilot and Claude remain unsupported."
-    ]
-  },
-  "compatibility_notes": [
-    "Schema and mapping metadata are expected to be used by vendor tooling.",
-    "Mapping status describes the current oda projection, not every native harness capability.",
-    "Adapters may reject populated unsupported categories unless `--allow-unsupported` is set.",
-    "MCP transport support is adapter-specific."
+  "$schema": "https://open-dot-agents.github.io/Open-Dot-Agents/spec/v1/schema/manifest.schema.json",
+  "specVersion": "1.0.0-rc.1",
+  "conformance": [
+    "full"
   ]
 }

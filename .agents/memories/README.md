@@ -25,22 +25,13 @@ neutral home where memory-capable harnesses can consume it consistently.
 - Claude Code / OpenAI Codex CLI: fold long-horizon context into
   instruction-like config when no native memory file exists
 
-## Current oda projection
+## Reference adapter projection
 
 - OpenAI Codex: `mapped` through `.agents/memories/codex.toml`.
 - GitHub Copilot CLI and Claude Code: `unsupported` by the current adapters.
 
-## Expected content
+## V1 contract
 
-Structured or semi-structured notes that represent persisted context,
-including:
-
-- task preferences
-- workspace conventions
-- persistent user instructions
-
-## Contract
-
-Machine metadata is in `../schema/v0.0.1/agents.schema.json`.
-
-See `../mappings.yaml` for vendor references.
+Memories are runtime-created JSON records, never hand-authored policy. Records
+must include provenance, creation time, and sensitivity and must not contain
+secrets. See `../../spec/v1/schema/memory.schema.json`.

@@ -1,0 +1,14 @@
+{
+  "filesystem": {
+    "read": ["**"],
+    "write": ["src/**"]
+  },
+  "network": {
+    "mode": "deny",
+    "hosts": []
+  },
+  "process": {
+    "maxSeconds": 300,
+    "maxChildren": 8
+  }
+}

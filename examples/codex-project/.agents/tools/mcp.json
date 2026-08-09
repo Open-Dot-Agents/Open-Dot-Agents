@@ -1,7 +1,7 @@
 {
   "mcpServers": {
     "openaiDeveloperDocs": {
-      "type": "http",
+      "type": "streamable-http",
       "url": "https://developers.openai.com/mcp"
     }
   }

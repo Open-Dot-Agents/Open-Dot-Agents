@@ -6,268 +6,172 @@ env:
 
 tasks:
   build:
-    desc: Build the oda CLI
+    desc: Build dota and the reference adapter executables
+    run: once
     cmds:
-      - cd cli && go build -o bin/oda ./cmd/oda
-    sources:
-      - cli/**/*.go
-      - cli/go.mod
-      - cli/go.sum
-    generates:
-      - cli/bin/oda
+      - cd cli && go build -o bin/dota ./cmd/dota
+      - cd cli && go build -o bin/dota-adapter-codex ./cmd/dota-adapter-codex
+      - cd cli && go build -o bin/dota-adapter-copilot ./cmd/dota-adapter-copilot
+      - cd cli && go build -o bin/dota-adapter-claude ./cmd/dota-adapter-claude
 
   install:
-    desc: Install the oda CLI with Go
+    desc: Install dota with Go
     cmds:
-      - cd cli && go install ./cmd/oda
+      - cd cli && go install ./cmd/dota
 
   test:
-    desc: Run CLI unit tests
+    desc: Run all Go unit and conformance tests
     cmds:
       - cd cli && go test ./...
 
+  test:schemas:
+    desc: Validate every normative JSON Schema
+    cmds:
+      - for: sources
+        cmd: jq empty {{.ITEM}}
+    sources:
+      - spec/v1/schema/*.json
+
+  test:architecture:
+    desc: Enforce the out-of-process adapter boundary
+    cmds:
+      - '! rg -n "internal/adapter($|[^s])" cli/cmd/dota cli/internal/dotacore cli/pkg/adapterprotocol'
+      - rg -n 'adapterprotocol.Serve' cli/cmd/dota-adapter-*/main.go
+
+  test:conformance:
+    desc: Exercise v1 tree and language-neutral adapter conformance
+    deps: [build]
+    cmds:
+      - |
+        set -eu
+        fixture_root="$(mktemp -d /tmp/dota-conformance.XXXXXX)"
+        trap 'rm -rf -- "$fixture_root"' EXIT
+        cp -a conformance/v1/valid/minimal/. "$fixture_root/"
+        cli/bin/dota conformance tree --root "$fixture_root"
+        cli/bin/dota adapter add \
+          --root "$fixture_root" \
+          --id org.open-dot-agents.fixture \
+          --version 1.0.0 \
+          --path "$PWD/conformance/adapters/python/dota_adapter_fixture.py"
+        cli/bin/dota conformance adapter --root "$fixture_root" --adapter org.open-dot-agents.fixture
+        cli/bin/dota export --root "$fixture_root" --adapter org.open-dot-agents.fixture
+        cli/bin/dota check --root "$fixture_root" --adapter org.open-dot-agents.fixture
+        cli/bin/dota clean --root "$fixture_root" --adapter org.open-dot-agents.fixture
+        cli/bin/dota import --root "$fixture_root" --adapter org.open-dot-agents.fixture
+        cli/bin/dota validate --root "$fixture_root"
+        cli/bin/dota check --root "$fixture_root" --adapter org.open-dot-agents.fixture --operation import
+        cli/bin/dota clean --root "$fixture_root" --adapter org.open-dot-agents.fixture --operation import
+      - |
+        set -eu
+        fixture_root="$(mktemp -d /tmp/dota-reference-adapter.XXXXXX)"
+        trap 'rm -rf -- "$fixture_root"' EXIT
+        cp -a conformance/v1/valid/minimal/. "$fixture_root/"
+        cli/bin/dota adapter add \
+          --root "$fixture_root" \
+          --id org.open-dot-agents.copilot \
+          --version dev \
+          --path "$PWD/cli/bin/dota-adapter-copilot"
+        cli/bin/dota export --root "$fixture_root" --adapter org.open-dot-agents.copilot
+        cli/bin/dota check --root "$fixture_root" --adapter org.open-dot-agents.copilot
+        cli/bin/dota clean --root "$fixture_root" --adapter org.open-dot-agents.copilot
+
+  test:surface:
+    desc: Smoke-test the public dota command surface
+    deps: [build]
+    cmds:
+      - cli/bin/dota --version
+      - cli/bin/dota --help
+      - cli/bin/dota validate --root . --json
+      - cli/bin/dota inspect --root . --json
+
+  test:reference-adapters:
+    desc: Exercise every external reference adapter against v1 trees
+    deps: [build]
+    cmds:
+      - |
+        set -eu
+        fixture_root="$(mktemp -d /tmp/dota-reference-codex.XXXXXX)"
+        trap 'rm -rf -- "$fixture_root"' EXIT
+        cp -a examples/codex-project/. "$fixture_root/"
+        cli/bin/dota adapter add --root "$fixture_root" --id org.open-dot-agents.codex --version dev --path "$PWD/cli/bin/dota-adapter-codex"
+        cli/bin/dota conformance adapter --root "$fixture_root" --adapter org.open-dot-agents.codex
+        cli/bin/dota export --root "$fixture_root" --adapter org.open-dot-agents.codex
+        cli/bin/dota check --root "$fixture_root" --adapter org.open-dot-agents.codex
+        test -f "$fixture_root/.codex/config.toml"
+        test -f "$fixture_root/.codex/rules/acceptance.rules"
+        cli/bin/dota clean --root "$fixture_root" --adapter org.open-dot-agents.codex
+        test ! -f "$fixture_root/.codex/config.toml"
+      - |
+        set -eu
+        fixture_root="$(mktemp -d /tmp/dota-reference-copilot.XXXXXX)"
+        trap 'rm -rf -- "$fixture_root"' EXIT
+        cp -a examples/copilot-project/. "$fixture_root/"
+        cli/bin/dota adapter add --root "$fixture_root" --id org.open-dot-agents.copilot --version dev --path "$PWD/cli/bin/dota-adapter-copilot"
+        cli/bin/dota conformance adapter --root "$fixture_root" --adapter org.open-dot-agents.copilot
+        cli/bin/dota export --root "$fixture_root" --adapter org.open-dot-agents.copilot
+        cli/bin/dota check --root "$fixture_root" --adapter org.open-dot-agents.copilot
+        jq -e '.mcpServers.openaiDeveloperDocs.type == "http"' "$fixture_root/.github/mcp.json" >/dev/null
+        grep -F 'applyTo: acceptance.txt' "$fixture_root/.github/instructions/acceptance.instructions.md" >/dev/null
+        test -f "$fixture_root/.github/hooks/acceptance.json"
+        test -f "$fixture_root/.github/plugin/plugin.json"
+        cli/bin/dota clean --root "$fixture_root" --adapter org.open-dot-agents.copilot
+        test ! -f "$fixture_root/.github/mcp.json"
+      - |
+        set -eu
+        fixture_root="$(mktemp -d /tmp/dota-reference-claude.XXXXXX)"
+        trap 'rm -rf -- "$fixture_root"' EXIT
+        cp -a conformance/v1/valid/full/. "$fixture_root/"
+        cli/bin/dota adapter add --root "$fixture_root" --id org.open-dot-agents.claude --version dev --path "$PWD/cli/bin/dota-adapter-claude"
+        cli/bin/dota conformance adapter --root "$fixture_root" --adapter org.open-dot-agents.claude
+        cli/bin/dota export --root "$fixture_root" --adapter org.open-dot-agents.claude
+        cli/bin/dota check --root "$fixture_root" --adapter org.open-dot-agents.claude
+        test -f "$fixture_root/CLAUDE.md"
+        test -f "$fixture_root/.mcp.json"
+        cli/bin/dota clean --root "$fixture_root" --adapter org.open-dot-agents.claude
+        test ! -f "$fixture_root/CLAUDE.md"
+
+  test:codex:real:
+    desc: Run the authenticated Codex reference-adapter acceptance probe
+    deps: [build]
+    cmds:
+      - bash cli/scripts/test-codex-real.sh
+
+  test:copilot:real:
+    desc: Run the authenticated Copilot reference-adapter acceptance probe
+    deps: [build]
+    cmds:
+      - bash cli/scripts/test-copilot-real.sh
+
   verify:
-    desc: Run production verification gates
-    deps:
-      - test
-      - test:copilot
-      - test:codex
-      - test:claude
-      - test:roundtrip
+    desc: Run the production v1 verification gate
+    deps: [test, test:schemas, test:architecture, test:conformance, test:reference-adapters, test:surface]
     cmds:
       - cd cli && go vet ./...
+      - git diff --check
 
   release:
-    desc: Build a versioned release binary after verification
+    desc: Build versioned dota RC artifacts after verification
     requires:
       vars: [VERSION]
-    deps:
-      - verify
+    deps: [verify]
     cmds:
-      - cd cli && go build -trimpath -ldflags="-s -w -X main.version={{.VERSION}}" -o bin/oda ./cmd/oda
-      - cd cli && test "$(./bin/oda --version)" = "oda {{.VERSION}}"
+      - mkdir -p cli/bin/release
+      - cd cli && go build -trimpath -ldflags="-s -w -X main.version={{.VERSION}}" -o bin/release/dota ./cmd/dota
+      - cd cli && go build -trimpath -ldflags="-s -w -X main.version={{.VERSION}}" -o bin/release/dota-adapter-codex ./cmd/dota-adapter-codex
+      - cd cli && go build -trimpath -ldflags="-s -w -X main.version={{.VERSION}}" -o bin/release/dota-adapter-copilot ./cmd/dota-adapter-copilot
+      - cd cli && go build -trimpath -ldflags="-s -w -X main.version={{.VERSION}}" -o bin/release/dota-adapter-claude ./cmd/dota-adapter-claude
+      - cd cli && test "$(./bin/release/dota --version)" = "dota {{.VERSION}}"
 
   release:check:
-    desc: Validate the GoReleaser configuration
+    desc: Validate GoReleaser configuration
     preconditions:
       - sh: command -v goreleaser >/dev/null 2>&1
-        msg: Install GoReleaser v2.17.1 to validate release packaging
+        msg: Install the pinned GoReleaser version to validate packaging
     cmds:
       - goreleaser check
 
   release:snapshot:
     desc: Build an unpublished cross-platform release snapshot
-    deps:
-      - verify
-      - release:check
+    deps: [verify, release:check]
     cmds:
       - goreleaser release --snapshot --clean
-
-  test:copilot:
-    desc: Run the Copilot CLI compatibility fixture
-    deps:
-      - test
-    cmds:
-      - |
-        set -eu
-        compatibility_root="$(mktemp -d /tmp/oda-copilot-fixture.XXXXXX)"
-        trap 'rm -rf -- "$compatibility_root"' EXIT
-        cp -a testdata/shared/basic "$compatibility_root/basic"
-        cp -a testdata/shared/complex "$compatibility_root/complex"
-        seed_metadata() {
-          local fixture_root="$1"
-          mkdir -p "$fixture_root/.agents/schema/v0.0.1"
-          cp ../.agents/schema/v0.0.1/agents.schema.json "$fixture_root/.agents/schema/v0.0.1/agents.schema.json"
-          cp ../.agents/schema/v0.0.1/mappings.schema.json "$fixture_root/.agents/schema/v0.0.1/mappings.schema.json"
-          cp ../.agents/mappings.yaml "$fixture_root/.agents/mappings.yaml"
-          cp ../.agents/manifest.json "$fixture_root/.agents/manifest.json"
-        }
-        fixture="$compatibility_root/basic"
-        seed_metadata "$fixture"
-        go run ./cmd/oda --root "$fixture" validate
-        go run ./cmd/oda --root "$fixture" generate
-        if command -v copilot >/dev/null 2>&1; then
-          (
-            cd "$fixture"
-            copilot skill list | grep -F "docs - Updates project documentation"
-          )
-        else
-          echo "Skipping native Copilot CLI discovery: copilot is not installed."
-        fi
-        go run ./cmd/oda --root "$fixture" check
-        fixture="$compatibility_root/complex"
-        seed_metadata "$fixture"
-        go run ./cmd/oda --root "$fixture" validate
-        go run ./cmd/oda --root "$fixture" generate
-        go run ./cmd/oda --root "$fixture" check
-        if command -v copilot >/dev/null 2>&1; then
-          (
-            cd "$fixture"
-            copilot skill list | grep -F "release - Prepares a release and verifies all release gates."
-            copilot mcp list --json | grep -F '"local-docs"'
-            copilot mcp list --json | grep -F '"remote-issues"'
-          )
-        fi
-        go run ./cmd/oda --root "$fixture" clean
-    dir: cli
-
-  test:copilot:real:
-    desc: Run isolated authenticated .agents to Copilot CLI acceptance
-    deps:
-      - build
-    cmds:
-      - bash scripts/test-copilot-real.sh
-    dir: cli
-
-  test:roundtrip:
-    desc: Verify bidirectional Codex and Copilot import/export fidelity and ownership
-    cmds:
-      - go test ./internal/adapter -run '^(TestImportRoundTripCopilot|TestImportRoundTripCodex|TestCanonicalRoundTripThroughCopilot|TestCanonicalRoundTripThroughCodex|TestImportCopilot.*MCP.*|TestImportManifest.*)$'
-      - go test ./cmd/oda -run 'Export'
-    dir: cli
-
-  test:codex:
-    desc: Run Codex fixtures and native MCP discovery when available
-    cmds:
-      - cmp ../.agents/manifest.json ../examples/codex-project/.agents/manifest.json
-      - cmp ../.agents/mappings.yaml ../examples/codex-project/.agents/mappings.yaml
-      - cmp ../.agents/schema/v0.0.1/agents.schema.json ../examples/codex-project/.agents/schema/v0.0.1/agents.schema.json
-      - cmp ../.agents/schema/v0.0.1/mappings.schema.json ../examples/codex-project/.agents/schema/v0.0.1/mappings.schema.json
-      - go test ./internal/adapter -run '^(TestCodexGenerateCheckAndClean|TestCodexUsesCanonicalSkillsWithoutProjection|TestCodexComplexFixture)$'
-      - |
-        set -eu
-        repo_root="$(cd .. && pwd)"
-        compatibility_root="$(mktemp -d "$repo_root/.oda-codex-fixture.XXXXXX")"
-        trap 'rm -rf -- "$compatibility_root"' EXIT
-        cp -a testdata/shared/basic "$compatibility_root/basic"
-        cp -a testdata/shared/complex "$compatibility_root/complex"
-        seed_metadata() {
-          local fixture_root="$1"
-          mkdir -p "$fixture_root/.agents/schema/v0.0.1"
-          cp ../.agents/schema/v0.0.1/agents.schema.json "$fixture_root/.agents/schema/v0.0.1/agents.schema.json"
-          cp ../.agents/schema/v0.0.1/mappings.schema.json "$fixture_root/.agents/schema/v0.0.1/mappings.schema.json"
-          cp ../.agents/mappings.yaml "$fixture_root/.agents/mappings.yaml"
-          cp ../.agents/manifest.json "$fixture_root/.agents/manifest.json"
-        }
-        fixture="$compatibility_root/basic"
-        seed_metadata "$fixture"
-        go run ./cmd/oda --root "$fixture" --target codex validate
-        go run ./cmd/oda --root "$fixture" --target codex generate
-        go run ./cmd/oda --root "$fixture" --target codex check
-        go run ./cmd/oda --root "$fixture" --target codex clean
-        fixture="$compatibility_root/complex"
-        seed_metadata "$fixture"
-        if validation_output="$(go run ./cmd/oda --root "$fixture" --target codex validate 2>&1)"; then
-          echo "Expected Codex validation to reject rules." >&2
-          exit 1
-        fi
-        if ! printf '%s\n' "$validation_output" | grep -F "unsupported populated categories: rules" >/dev/null; then
-          printf '%s\n' "$validation_output" >&2
-          exit 1
-        fi
-        echo "Strict Codex validation rejection: rules (expected)"
-        go run ./cmd/oda --root "$fixture" --target codex --allow-unsupported generate
-        go run ./cmd/oda --root "$fixture" --target codex --allow-unsupported check
-        if command -v codex >/dev/null 2>&1; then
-          (
-            cd "$fixture"
-            mcp_json="$(codex mcp list --json)"
-            if printf '%s\n' "$mcp_json" | grep -F '"name": "local-docs"' >/dev/null 2>&1; then
-              printf '%s\n' "$mcp_json" | grep -F '"name": "remote-issues"' >/dev/null
-              echo "Native Codex MCP discovery: local-docs, remote-issues"
-            elif printf '%s\n' "$mcp_json" | grep -F '"name": "remote-issues"' >/dev/null 2>&1; then
-              echo "Native Codex MCP discovery is missing local-docs." >&2
-              exit 1
-            else
-              echo "Skipping native Codex project discovery: Codex does not trust this repository."
-              echo "Trust it by starting Codex here, then rerun this task: codex -C \"$repo_root\""
-            fi
-          )
-        else
-          echo "Skipping native Codex discovery: codex is not installed."
-        fi
-    dir: cli
-
-  test:codex:real:
-    desc: Run isolated authenticated .agents to Codex acceptance
-    deps:
-      - build
-    cmds:
-      - bash scripts/test-codex-real.sh
-    dir: cli
-
-  test:claude:
-    desc: Run Claude Code fixtures and native MCP discovery when available
-    cmds:
-      - go test ./internal/adapter -run '^(TestClaudeGenerateCheckAndClean|TestClaudeComplexFixture)$'
-      - |
-        set -eu
-        compatibility_root="$(mktemp -d /tmp/oda-claude-fixture.XXXXXX)"
-        trap 'rm -rf -- "$compatibility_root"' EXIT
-        cp -a testdata/shared/basic "$compatibility_root/basic"
-        cp -a testdata/shared/complex "$compatibility_root/complex"
-        seed_metadata() {
-          local fixture_root="$1"
-          mkdir -p "$fixture_root/.agents/schema/v0.0.1"
-          cp ../.agents/schema/v0.0.1/agents.schema.json "$fixture_root/.agents/schema/v0.0.1/agents.schema.json"
-          cp ../.agents/schema/v0.0.1/mappings.schema.json "$fixture_root/.agents/schema/v0.0.1/mappings.schema.json"
-          cp ../.agents/mappings.yaml "$fixture_root/.agents/mappings.yaml"
-          cp ../.agents/manifest.json "$fixture_root/.agents/manifest.json"
-        }
-        fixture="$compatibility_root/basic"
-        seed_metadata "$fixture"
-        go run ./cmd/oda --root "$fixture" --target claude validate
-        go run ./cmd/oda --root "$fixture" --target claude generate
-        go run ./cmd/oda --root "$fixture" --target claude check
-        go run ./cmd/oda --root "$fixture" --target claude clean
-        fixture="$compatibility_root/complex"
-        seed_metadata "$fixture"
-        go run ./cmd/oda --root "$fixture" --target claude generate
-        go run ./cmd/oda --root "$fixture" --target claude check
-        if command -v claude >/dev/null 2>&1; then
-          (
-            cd "$fixture"
-            claude mcp list | grep -F "local-docs"
-            claude mcp list | grep -F "remote-issues"
-          )
-        else
-          echo "Skipping native Claude Code discovery: claude is not installed."
-        fi
-    dir: cli
-
-  test:surface:
-    desc: Run CLI help, validation, and completion command smoke checks (allows unsupported categories by default)
-    cmds:
-      - |
-        set -eu
-        oda_bin="$(command -v oda)"
-        if [ -z "$oda_bin" ]; then
-          echo "oda not found in PATH"
-          exit 1
-        fi
-        repo_root="$(cd .. && pwd)"
-        if [ "${ODA_ALLOW_UNSUPPORTED:-1}" = "1" ] || [ "${ODA_ALLOW_UNSUPPORTED:-1}" = "true" ]; then
-          allow_unsupported="--allow-unsupported"
-        else
-          allow_unsupported=""
-        fi
-        echo "==> oda --help"
-        "$oda_bin" --help
-        echo "==> oda --root . validate"
-        "$oda_bin" --root "$repo_root" validate
-        echo "==> oda --root . validate --target all"
-        "$oda_bin" --root "$repo_root" validate --target all $allow_unsupported
-        echo "==> oda --root . validate --target all --format json"
-        "$oda_bin" --root "$repo_root" validate --target all --format json $allow_unsupported
-        echo "==> oda --root . --target all validate"
-        "$oda_bin" --root "$repo_root" --target all validate $allow_unsupported
-        echo "==> oda --root . completion bash"
-        "$oda_bin" completion bash | head -n 5
-        echo "==> oda --root . completion zsh"
-        "$oda_bin" completion zsh | head -n 8
-    dir: cli
-
-  test:surface:strict:
-    desc: Run the same surface checks in strict mode (no --allow-unsupported)
-    cmds:
-      - ODA_ALLOW_UNSUPPORTED=0 task cli:test:surface

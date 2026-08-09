@@ -82,9 +82,6 @@ func (a *Adapter) Target() string {
 }
 
 func (a *Adapter) Validate() error {
-	if err := validateContracts(a.root, a.Target(), true); err != nil {
-		return err
-	}
 	_, err := a.outputs()
 	return err
 }
@@ -369,41 +366,6 @@ func (a *Adapter) outputs() (map[string][]byte, error) {
 }
 
 func (a *Adapter) unsupported(base string) error {
-	statusByCategory, err := targetCategoryStatus(a.root, a.Target(), false)
-	if err != nil {
-		return err
-	}
-	if len(statusByCategory) > 0 {
-		if err := validateCategoryStatusAlignment(a.Target(), statusByCategory, a.renderer.unsupportedCategories()); err != nil {
-			return err
-		}
-		var populated []string
-		for category, status := range statusByCategory {
-			if status != categoryStatusUnsupported {
-				continue
-			}
-			dir := filepath.Join(base, category)
-			entries, err := os.ReadDir(dir)
-			if errors.Is(err, fs.ErrNotExist) {
-				continue
-			}
-			if err != nil {
-				return err
-			}
-			for _, entry := range entries {
-				if entry.Name() != "README.md" {
-					populated = append(populated, category)
-					break
-				}
-			}
-		}
-		sort.Strings(populated)
-		if len(populated) > 0 && !a.allowUnsupported {
-			return fmt.Errorf("unsupported populated categories: %s (pass --allow-unsupported to acknowledge)", strings.Join(populated, ", "))
-		}
-		return nil
-	}
-
 	var populated []string
 	for _, name := range a.renderer.unsupportedCategories() {
 		dir := filepath.Join(base, name)

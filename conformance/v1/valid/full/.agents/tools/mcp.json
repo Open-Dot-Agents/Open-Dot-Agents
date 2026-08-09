@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "local-docs": {
+      "type": "stdio",
+      "command": "docs-server",
+      "args": ["--stdio"],
+      "env": {
+        "DOCS_TOKEN": "${DOCS_TOKEN}"
+      }
+    }
+  }
+}

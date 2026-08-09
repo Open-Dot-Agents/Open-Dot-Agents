@@ -32,9 +32,7 @@ repository-relative location under `rules/copilot-project/**`; portable rules
 outside that reserved subtree continue to project into the root
 `.github/instructions/` directory.
 
-## Contract
+## V1 contract
 
-Machine metadata is in `../schema/v0.0.1/agents.schema.json`, including filename and
-required front matter.
-
-See `../mappings.yaml` for vendor documentation.
+Rule Markdown requires `id` and an `applyTo` array. Optional `exclude` patterns
+take precedence over includes. Paths and globs are repository-relative.

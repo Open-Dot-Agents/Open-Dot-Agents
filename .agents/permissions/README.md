@@ -18,7 +18,7 @@ If a harness combines these concepts, document the environment controls under
 - OpenAI Codex CLI: `approval_policy` and policy-style command controls
 - Claude Code: `permissions` section in `.claude/settings.json`
 
-## Current oda projection
+## Reference adapter projection
 
 - OpenAI Codex: `mapped` through `.agents/permissions/codex.toml`, including
   approval policy and permission tables, plus recursive command-policy files:
@@ -40,8 +40,8 @@ Codex `.rules` files use Starlark and are loaded only when the project-local
 `.codex` layer is trusted. Validate an exported file with `codex execpolicy
 check --rules <file> -- <command>`.
 
-## Contract
+## V1 contract
 
-Machine metadata is in `../schema/v0.0.1/agents.schema.json`.
-
-See `../mappings.yaml` for canonical vendor documentation.
+Portable policies use strict JSON. Decisions are `allow`, `ask`, or `deny`, with
+deny taking precedence over ask and allow. See
+`../../spec/v1/schema/policy.schema.json`.

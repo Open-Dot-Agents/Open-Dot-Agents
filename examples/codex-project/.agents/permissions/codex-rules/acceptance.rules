@@ -1,7 +1,0 @@
-# Allow the read-only command used by the native acceptance probe.
-prefix_rule(
-    pattern = ["git", "status"],
-    decision = "allow",
-    justification = "The acceptance probe only inspects repository status",
-    match = ["git status --short"],
-)

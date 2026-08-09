@@ -4,15 +4,17 @@ set -euo pipefail
 script_dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 repo_root=$(CDPATH= cd -- "$script_dir/../.." && pwd)
 example_root="$repo_root/examples/codex-project"
-oda_bin="$repo_root/cli/bin/oda"
-probe_root=$(mktemp -d "$repo_root/.oda-codex-real.XXXXXX")
+dota_bin="$repo_root/cli/bin/dota"
+adapter_bin="$repo_root/cli/bin/dota-adapter-codex"
+adapter_id="org.open-dot-agents.codex"
+probe_root=$(mktemp -d "$repo_root/.dota-codex-real.XXXXXX")
 log_dir="$probe_root/.acceptance-logs"
 acceptance_passed=0
 
 cleanup() {
   if [ "$acceptance_passed" -eq 1 ]; then
     case "$probe_root" in
-      "$repo_root"/.oda-codex-real.*) rm -rf -- "$probe_root" ;;
+      "$repo_root"/.dota-codex-real.*) rm -rf -- "$probe_root" ;;
       *) echo "Refusing to clean unexpected probe path: $probe_root" >&2 ;;
     esac
   else
@@ -31,39 +33,29 @@ require_command() {
 require_command codex
 require_command jq
 
-if [ ! -x "$oda_bin" ]; then
-  echo "oda binary not found at $oda_bin; run task cli:build" >&2
+if [ ! -x "$dota_bin" ] || [ ! -x "$adapter_bin" ]; then
+  echo "dota binaries not found; run task cli:build" >&2
   exit 1
 fi
-
-# Keep the checked-in example self-contained and synchronized with the
-# canonical v0.0.1 contract used by the CLI.
-cmp "$repo_root/.agents/manifest.json" "$example_root/.agents/manifest.json"
-cmp "$repo_root/.agents/mappings.yaml" "$example_root/.agents/mappings.yaml"
-cmp "$repo_root/.agents/schema/v0.0.1/agents.schema.json" "$example_root/.agents/schema/v0.0.1/agents.schema.json"
-cmp "$repo_root/.agents/schema/v0.0.1/mappings.schema.json" "$example_root/.agents/schema/v0.0.1/mappings.schema.json"
 
 cp -a "$example_root/." "$probe_root/"
 mkdir -p "$log_dir"
 
-"$oda_bin" --root "$probe_root" --target codex validate
-"$oda_bin" --root "$probe_root" --target codex generate --dry-run --diff --format=json >"$log_dir/generate-plan.json"
-jq -e '
-  .targets == [{
-    command: "generate",
-    target: "codex",
-    status: "ok",
-    plan: {
-      create: [".codex/agents/oda-reviewer.toml", ".codex/config.toml", ".codex/rules/acceptance.rules", "AGENTS.md", "services/payments/AGENTS.override.md", "services/search/TEAM_GUIDE.md"],
-      update: [],
-      delete: []
-    },
-    diff: ["A .codex/agents/oda-reviewer.toml", "A .codex/config.toml", "A .codex/rules/acceptance.rules", "A AGENTS.md", "A services/payments/AGENTS.override.md", "A services/search/TEAM_GUIDE.md"]
-  }]
-' "$log_dir/generate-plan.json" >/dev/null
+"$dota_bin" adapter add --root "$probe_root" --id "$adapter_id" --version dev --path "$adapter_bin"
+"$dota_bin" adapter doctor --root "$probe_root" --adapter "$adapter_id"
 
-"$oda_bin" --root "$probe_root" --target codex generate
-"$oda_bin" --root "$probe_root" --target codex check --ci
+"$dota_bin" validate --root "$probe_root" --adapter "$adapter_id"
+"$dota_bin" export --root "$probe_root" --adapter "$adapter_id" --dry-run --json >"$log_dir/export-plan.json"
+jq -e '
+  .command == "export" and .status == "ok"
+  and .adapter.id == "org.open-dot-agents.codex"
+  and .changes.create == [".codex/agents/oda-reviewer.toml", ".codex/config.toml", ".codex/rules/acceptance.rules", "AGENTS.md", "services/payments/AGENTS.override.md", "services/search/TEAM_GUIDE.md"]
+  and (.changes.update == null) and (.changes.delete == null)
+  and (.data.losses == []) and (.data.diagnostics == [])
+' "$log_dir/export-plan.json" >/dev/null
+
+"$dota_bin" export --root "$probe_root" --adapter "$adapter_id"
+"$dota_bin" check --root "$probe_root" --adapter "$adapter_id"
 
 test -f "$probe_root/AGENTS.md"
 test -f "$probe_root/.codex/agents/oda-reviewer.toml"
@@ -71,7 +63,7 @@ test -f "$probe_root/.codex/config.toml"
 test -f "$probe_root/.codex/rules/acceptance.rules"
 test -f "$probe_root/services/payments/AGENTS.override.md"
 test -f "$probe_root/services/search/TEAM_GUIDE.md"
-test -f "$probe_root/.codex/.open-dot-agents.json"
+test -f "$probe_root/.agents/.dota/export/$adapter_id.json"
 test ! -e "$probe_root/.codex/skills"
 test -f "$probe_root/.agents/skills/oda-acceptance/SKILL.md"
 grep -Fx '#:schema https://developers.openai.com/codex/config-schema.json' "$probe_root/.codex/config.toml" >/dev/null
@@ -136,16 +128,19 @@ fi
 
 roundtrip_root="$probe_root/.codex-roundtrip"
 mkdir -p "$roundtrip_root/.agents"
+cp "$probe_root/.agents/manifest.json" "$roundtrip_root/.agents/manifest.json"
 cp -a "$probe_root/.codex" "$roundtrip_root/.codex"
 cp "$probe_root/AGENTS.md" "$roundtrip_root/AGENTS.md"
 cp -a "$probe_root/.agents/skills" "$roundtrip_root/.agents/skills"
 cp -a "$probe_root/services" "$roundtrip_root/services"
-"$oda_bin" --root "$roundtrip_root" --target codex import
-"$oda_bin" --root "$roundtrip_root" --target codex export --force
+"$dota_bin" adapter add --root "$roundtrip_root" --id "$adapter_id" --version dev --path "$adapter_bin"
+"$dota_bin" import --root "$roundtrip_root" --adapter "$adapter_id"
+"$dota_bin" validate --root "$roundtrip_root"
+"$dota_bin" export --root "$roundtrip_root" --adapter "$adapter_id" --force
 diff -ru "$probe_root/.codex" "$roundtrip_root/.codex" >"$log_dir/codex-roundtrip.diff"
 cmp "$probe_root/AGENTS.md" "$roundtrip_root/AGENTS.md"
 diff -ru "$probe_root/services" "$roundtrip_root/services" >"$log_dir/codex-instructions-roundtrip.diff"
-test -f "$roundtrip_root/.agents/.open-dot-agents-import-codex.json"
+test -f "$roundtrip_root/.agents/.dota/import/$adapter_id.json"
 rm -rf -- "$roundtrip_root"
 
 if ! jq -s -e 'any(.[]; .type == "item.completed" and .item.type == "collab_tool_call" and .item.status == "completed" and (.item.receiver_thread_ids | length) > 0)' "$log_dir/codex-live.jsonl" >/dev/null; then
@@ -155,16 +150,18 @@ if ! jq -s -e 'any(.[]; .type == "item.completed" and .item.type == "collab_tool
 fi
 
 printf '\nDrift marker.\n' >>"$probe_root/.agents/instructions/acceptance.md"
-if "$oda_bin" --root "$probe_root" --target codex check --ci >"$log_dir/drift-check.txt" 2>&1; then
+if "$dota_bin" check --root "$probe_root" --adapter "$adapter_id" >"$log_dir/drift-check.txt" 2>&1; then
   echo "Expected canonical instruction drift to fail check --ci" >&2
   exit 1
 fi
-"$oda_bin" --root "$probe_root" --target codex generate
-"$oda_bin" --root "$probe_root" --target codex check --ci
-"$oda_bin" --root "$probe_root" --target codex clean
+"$dota_bin" export --root "$probe_root" --adapter "$adapter_id"
+"$dota_bin" check --root "$probe_root" --adapter "$adapter_id"
+"$dota_bin" clean --root "$probe_root" --adapter "$adapter_id"
 
 test ! -e "$probe_root/AGENTS.md"
-test ! -e "$probe_root/.codex"
+if [ -d "$probe_root/.codex" ]; then
+  test -z "$(find "$probe_root/.codex" -type f -print -quit)"
+fi
 test -f "$probe_root/.agents/skills/oda-acceptance/SKILL.md"
 
 acceptance_passed=1

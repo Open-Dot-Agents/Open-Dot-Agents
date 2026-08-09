@@ -5,6 +5,13 @@ import (
 	"strings"
 )
 
+const (
+	categoryStatusSupported   = "supported"
+	categoryStatusUnsupported = "unsupported"
+	categoryStatusMapped      = "mapped"
+	categoryStatusPartial     = "partial"
+)
+
 type renderer interface {
 	target() string
 	manifestDirectory() string

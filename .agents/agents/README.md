@@ -27,6 +27,8 @@ Copilot agent Markdown is copied without rewriting its front matter. Codex TOML
 is mapped to Markdown; imported TOML is retained under
 `../settings/codex-agents/` so unknown fields and comments survive a round trip.
 
-## Contract
+## V1 contract
 
-See `../schema/v0.0.1/agents.schema.json` for filename and front-matter requirements.
+Files use Markdown with YAML front matter. `name` and `description` are required;
+portable optional fields are `tools`, `skills`, `permissionProfile`, `execution`,
+and `maxTurns`. Vendor-only metadata belongs under `../extensions/`.

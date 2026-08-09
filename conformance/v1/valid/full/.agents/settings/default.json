@@ -1,0 +1,5 @@
+{
+  "defaultAgent": "reviewer",
+  "defaultProfile": "review",
+  "maxParallelAgents": 4
+}

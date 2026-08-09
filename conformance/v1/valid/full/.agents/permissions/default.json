@@ -1,0 +1,10 @@
+{
+  "rules": [
+    {
+      "id": "ask-shell",
+      "decision": "ask",
+      "match": { "tool": "shell" },
+      "reason": "Shell commands require review"
+    }
+  ]
+}

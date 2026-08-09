@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "review": {
+      "patch": {
+        "defaultAgent": "reviewer"
+      }
+    }
+  }
+}

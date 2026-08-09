@@ -1,0 +1,14 @@
+{
+  "hooks": [
+    {
+      "id": "check-after-tool",
+      "event": "after-tool",
+      "priority": 0,
+      "onFailure": "warn",
+      "action": {
+        "type": "command",
+        "command": ["task", "test"]
+      }
+    }
+  ]
+}

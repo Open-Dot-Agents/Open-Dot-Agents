@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://open-dot-agents.github.io/Open-Dot-Agents/spec/v1/schema/guardrails.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "filesystem": { "type": "object", "properties": { "read": { "type": "array", "items": { "type": "string" } }, "write": { "type": "array", "items": { "type": "string" } } }, "additionalProperties": false },
+    "network": { "type": "object", "properties": { "mode": { "enum": ["deny", "allow-list", "allow"] }, "hosts": { "type": "array", "items": { "type": "string" } } }, "additionalProperties": false },
+    "process": { "type": "object", "properties": { "maxSeconds": { "type": "integer", "minimum": 1 }, "maxChildren": { "type": "integer", "minimum": 0 } }, "additionalProperties": false }
+  }
+}

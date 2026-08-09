@@ -1,5 +1,7 @@
 ---
-applyTo: "**/*"
+id: nested-acceptance
+applyTo:
+  - "**/*"
 ---
 
 For matching API files, the nested scoped-rule phrase is
