@@ -4,3 +4,6 @@
 [submodule "CLI"]
 	path = CLI
 	url = https://github.com/Open-Dot-Agents/Agents-CLI.git
+[submodule "WORKBENCH"]
+	path = WORKBENCH
+	url = https://github.com/Open-Dot-Agents/Agents-Workbench.git
