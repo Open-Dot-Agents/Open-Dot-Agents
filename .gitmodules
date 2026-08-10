@@ -1,3 +1,6 @@
 [submodule "SPEC"]
 	path = SPEC
 	url = https://github.com/Open-Dot-Agents/Agents-Spec.git
+[submodule "CLI"]
+	path = CLI
+	url = https://github.com/Open-Dot-Agents/Agents-CLI.git
