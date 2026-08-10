@@ -16,7 +16,7 @@
     },
     "extensions": {
       "type": "object",
-      "propertyNames": { "$ref": "common.schema.json#/$defs/reverseDnsId" },
+      "propertyNames": { "$ref": "common.schema.json#/$defs/reverseDnsId"},
       "additionalProperties": true
     }
   }

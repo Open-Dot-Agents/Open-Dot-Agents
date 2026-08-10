@@ -5,10 +5,10 @@
   "required": ["id", "version", "description", "contents"],
   "additionalProperties": false,
   "properties": {
-    "id": { "$ref": "common.schema.json#/$defs/reverseDnsId" },
+    "id": { "$ref": "common.schema.json#/$defs/reverseDnsId"},
     "version": { "type": "string", "minLength": 1 },
     "description": { "type": "string", "minLength": 1 },
-    "contents": { "type": "array", "items": { "$ref": "common.schema.json#/$defs/relativePath" } },
-    "dependencies": { "type": "array", "items": { "$ref": "common.schema.json#/$defs/reverseDnsId" } }
+    "contents": { "type": "array", "items": { "$ref": "common.schema.json#/$defs/relativePath"} },
+    "dependencies": { "type": "array", "items": { "$ref": "common.schema.json#/$defs/reverseDnsId"} }
   }
 }

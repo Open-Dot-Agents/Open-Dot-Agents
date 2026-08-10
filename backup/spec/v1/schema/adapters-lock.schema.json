@@ -16,13 +16,13 @@
       "required": ["id", "version", "protocolVersion", "source", "capabilities"],
       "additionalProperties": false,
       "properties": {
-        "id": { "$ref": "common.schema.json#/$defs/reverseDnsId" },
+        "id": { "$ref": "common.schema.json#/$defs/reverseDnsId"},
         "version": { "type": "string", "minLength": 1 },
         "protocolVersion": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+$" },
         "source": {
           "oneOf": [
             { "type": "object", "required": ["type", "path", "sha256"], "additionalProperties": false, "properties": { "type": { "const": "path" }, "path": { "type": "string" }, "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" } } },
-            { "type": "object", "required": ["type", "manifest", "artifacts"], "additionalProperties": false, "properties": { "type": { "const": "release" }, "manifest": { "type": "string", "format": "uri" }, "artifacts": { "type": "array", "minItems": 1, "items": { "$ref": "common.schema.json#/$defs/artifact" } } } }
+            { "type": "object", "required": ["type", "manifest", "artifacts"], "additionalProperties": false, "properties": { "type": { "const": "release" }, "manifest": { "type": "string", "format": "uri" }, "artifacts": { "type": "array", "minItems": 1, "items": { "$ref": "common.schema.json#/$defs/artifact"} } } }
           ]
         },
         "capabilities": { "type": "array", "uniqueItems": true, "items": { "enum": ["validate", "import", "export"] } }

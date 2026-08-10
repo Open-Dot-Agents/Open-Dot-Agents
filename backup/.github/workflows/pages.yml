@@ -5,8 +5,8 @@ on:
     branches:
       - main
     paths:
-      - "spec/v1/**"
-      - ".github/workflows/pages.yml"
+      - "../../backup/spec/v1/**"
+      - "pages.yml"
   workflow_dispatch:
 
 permissions:
