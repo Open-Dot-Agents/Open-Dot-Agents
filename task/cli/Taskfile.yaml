@@ -32,6 +32,11 @@ tasks:
     sources:
       - spec/v1/schema/*.json
 
+  test:repository:
+    desc: Validate repository documentation links and version metadata
+    cmds:
+      - cd cli && go test ./internal/dotacore -run '^TestRepository'
+
   test:architecture:
     desc: Enforce the out-of-process adapter boundary
     cmds:
@@ -144,7 +149,7 @@ tasks:
 
   verify:
     desc: Run the production v1 verification gate
-    deps: [test, test:schemas, test:architecture, test:conformance, test:reference-adapters, test:surface]
+    deps: [test, test:schemas, test:repository, test:architecture, test:conformance, test:reference-adapters, test:surface]
     cmds:
       - cd cli && go vet ./...
       - git diff --check
@@ -157,9 +162,13 @@ tasks:
     cmds:
       - mkdir -p cli/bin/release
       - cd cli && go build -trimpath -ldflags="-s -w -X main.version={{.VERSION}}" -o bin/release/dota ./cmd/dota
-      - cd cli && go build -trimpath -ldflags="-s -w -X main.version={{.VERSION}}" -o bin/release/dota-adapter-codex ./cmd/dota-adapter-codex
-      - cd cli && go build -trimpath -ldflags="-s -w -X main.version={{.VERSION}}" -o bin/release/dota-adapter-copilot ./cmd/dota-adapter-copilot
-      - cd cli && go build -trimpath -ldflags="-s -w -X main.version={{.VERSION}}" -o bin/release/dota-adapter-claude ./cmd/dota-adapter-claude
+      - |
+        release_version={{.VERSION}}
+        release_version="${release_version#v}"
+        cd cli
+        go build -trimpath -ldflags="-s -w -X main.version=$release_version" -o bin/release/dota-adapter-codex ./cmd/dota-adapter-codex
+        go build -trimpath -ldflags="-s -w -X main.version=$release_version" -o bin/release/dota-adapter-copilot ./cmd/dota-adapter-copilot
+        go build -trimpath -ldflags="-s -w -X main.version=$release_version" -o bin/release/dota-adapter-claude ./cmd/dota-adapter-claude
       - cd cli && test "$(./bin/release/dota --version)" = "dota {{.VERSION}}"
 
   release:check:
@@ -172,6 +181,10 @@ tasks:
 
   release:snapshot:
     desc: Build an unpublished cross-platform release snapshot
+    requires:
+      vars: [VERSION]
     deps: [verify, release:check]
     cmds:
-      - goreleaser release --snapshot --clean
+      - GORELEASER_CURRENT_TAG={{.VERSION}} goreleaser release --snapshot --clean
+      - bash scripts/generate-publisher-manifests.sh {{.VERSION}}
+      - bash scripts/inspect-release.sh

@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-script_dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
-repo_root=$(CDPATH= cd -- "$script_dir/../.." && pwd)
+script_dir=$(CDPATH='' cd -- "$(dirname -- "$0")" && pwd)
+repo_root=$(CDPATH='' cd -- "$script_dir/../.." && pwd)
 example_root="$repo_root/examples/copilot-project"
 dota_bin="$repo_root/cli/bin/dota"
 adapter_bin="$repo_root/cli/bin/dota-adapter-copilot"

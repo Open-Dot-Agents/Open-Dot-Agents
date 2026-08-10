@@ -20,7 +20,9 @@ All notable changes to Open-Dot-Agents are documented in this file.
   ownership manifests, collision and traversal defenses, modified-file
   protection, backups, and deterministic cleanup.
 - Cross-platform release archives containing the host and all reference
-  adapters, SHA-256 checksums, and SBOMs.
+  adapters, directly installable adapter binaries, generated publisher
+  manifests, SHA-256 checksums, SPDX SBOMs, provenance, and canonical schema
+  publication through GitHub Pages.
 
 ### Breaking changes
 

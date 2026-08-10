@@ -413,6 +413,10 @@ func importCodex(root string) (map[string][]byte, error) {
 			return nil, fmt.Errorf("%s: %w", filepath.ToSlash(filepath.Clean(path)), err)
 		}
 		name := strings.TrimSuffix(filepath.Base(path), ".toml")
+		canonicalName := name
+		if configured, ok := config["name"].(string); ok && strings.TrimSpace(configured) != "" {
+			canonicalName = configured
+		}
 		description, _ := config["description"].(string)
 		if strings.TrimSpace(description) == "" {
 			description = "Imported Codex agent"
@@ -421,11 +425,7 @@ func importCodex(root string) (map[string][]byte, error) {
 		if strings.TrimSpace(instructions) == "" {
 			return nil, fmt.Errorf("%s: codex agent file missing developer_instructions", filepath.ToSlash(filepath.Clean(path)))
 		}
-		nameLine := ""
-		if configured, ok := config["name"].(string); ok && strings.TrimSpace(configured) != "" && configured != name {
-			nameLine = "name: " + strconv.Quote(configured) + "\n"
-		}
-		content := []byte(fmt.Sprintf("---\ndescription: %s\n%s---\n%s", strconv.Quote(description), nameLine, normalizeBody(instructions)))
+		content := []byte(fmt.Sprintf("---\nname: %s\ndescription: %s\n---\n%s", strconv.Quote(canonicalName), strconv.Quote(description), normalizeBody(instructions)))
 		if err := addImportOutput(out, filepath.ToSlash(filepath.Join(".agents", "agents", name+".md")), content); err != nil {
 			return nil, err
 		}

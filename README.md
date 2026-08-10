@@ -93,6 +93,11 @@ dota adapter add --root /path/to/project --manifest https://example.org/adapter.
 dota adapter install --root /path/to/project
 ```
 
+Reference adapter publisher manifests are attached to each v1 GitHub release as
+`org.open-dot-agents.<target>.json`. They resolve directly installable binaries
+for Linux, macOS, and Windows; release bundles remain available for manual
+installation of `dota` and all three adapters together.
+
 ## Trust model
 
 Adapters are JSON-RPC 2.0 executables using LSP `Content-Length` framing. They

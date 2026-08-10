@@ -2,8 +2,11 @@ version: 2
 
 project_name: dota
 
+snapshot:
+  version_template: "{{ .Version }}"
+
 builds:
-  - id: dota
+  - id: dota-bundle
     dir: cli
     main: ./cmd/dota
     binary: dota
@@ -12,6 +15,33 @@ builds:
     goarch: [amd64, arm64]
     ldflags: ["-s -w -X main.version={{ .Tag }}"]
     mod_timestamp: "{{ .CommitTimestamp }}"
+  - id: dota-adapter-codex-bundle
+    dir: cli
+    main: ./cmd/dota-adapter-codex
+    binary: dota-adapter-codex
+    env: [CGO_ENABLED=0]
+    goos: [darwin, linux, windows]
+    goarch: [amd64, arm64]
+    ldflags: ["-s -w -X main.version={{ .Version }}"]
+    mod_timestamp: "{{ .CommitTimestamp }}"
+  - id: dota-adapter-copilot-bundle
+    dir: cli
+    main: ./cmd/dota-adapter-copilot
+    binary: dota-adapter-copilot
+    env: [CGO_ENABLED=0]
+    goos: [darwin, linux, windows]
+    goarch: [amd64, arm64]
+    ldflags: ["-s -w -X main.version={{ .Version }}"]
+    mod_timestamp: "{{ .CommitTimestamp }}"
+  - id: dota-adapter-claude-bundle
+    dir: cli
+    main: ./cmd/dota-adapter-claude
+    binary: dota-adapter-claude
+    env: [CGO_ENABLED=0]
+    goos: [darwin, linux, windows]
+    goarch: [amd64, arm64]
+    ldflags: ["-s -w -X main.version={{ .Version }}"]
+    mod_timestamp: "{{ .CommitTimestamp }}"
   - id: dota-adapter-codex
     dir: cli
     main: ./cmd/dota-adapter-codex
@@ -19,7 +49,7 @@ builds:
     env: [CGO_ENABLED=0]
     goos: [darwin, linux, windows]
     goarch: [amd64, arm64]
-    ldflags: ["-s -w -X main.version={{ .Tag }}"]
+    ldflags: ["-s -w -X main.version={{ .Version }}"]
     mod_timestamp: "{{ .CommitTimestamp }}"
   - id: dota-adapter-copilot
     dir: cli
@@ -28,7 +58,7 @@ builds:
     env: [CGO_ENABLED=0]
     goos: [darwin, linux, windows]
     goarch: [amd64, arm64]
-    ldflags: ["-s -w -X main.version={{ .Tag }}"]
+    ldflags: ["-s -w -X main.version={{ .Version }}"]
     mod_timestamp: "{{ .CommitTimestamp }}"
   - id: dota-adapter-claude
     dir: cli
@@ -37,20 +67,33 @@ builds:
     env: [CGO_ENABLED=0]
     goos: [darwin, linux, windows]
     goarch: [amd64, arm64]
-    ldflags: ["-s -w -X main.version={{ .Tag }}"]
+    ldflags: ["-s -w -X main.version={{ .Version }}"]
     mod_timestamp: "{{ .CommitTimestamp }}"
 
 archives:
-  - ids:
-      - dota
-      - dota-adapter-codex
-      - dota-adapter-copilot
-      - dota-adapter-claude
+  - id: bundle
+    ids:
+      - dota-bundle
+      - dota-adapter-codex-bundle
+      - dota-adapter-copilot-bundle
+      - dota-adapter-claude-bundle
     formats: [tar.gz]
     format_overrides:
       - goos: windows
         formats: [zip]
     name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+  - id: adapter-codex
+    ids: [dota-adapter-codex]
+    formats: [binary]
+    name_template: "{{ .Binary }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+  - id: adapter-copilot
+    ids: [dota-adapter-copilot]
+    formats: [binary]
+    name_template: "{{ .Binary }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+  - id: adapter-claude
+    ids: [dota-adapter-claude]
+    formats: [binary]
+    name_template: "{{ .Binary }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
 
 checksum:
   name_template: checksums.txt

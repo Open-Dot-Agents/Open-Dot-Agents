@@ -227,6 +227,7 @@ startup_timeout_sec = 15
 	}
 
 	assertFileEquals(t, filepath.Join(root, ".agents/instructions/AGENTS.md"), "Project conventions.\n")
+	assertFileContains(t, filepath.Join(root, ".agents/agents/reviewer.md"), `name: "reviewer"`)
 	assertFileContains(t, filepath.Join(root, ".agents/agents/reviewer.md"), `description: "review agent"`)
 	assertFileContains(t, filepath.Join(root, ".agents/tools/mcp.json"), `"default": {`)
 	assertFileContains(t, filepath.Join(root, ".agents/tools/mcp.json"), `"startup_timeout_sec": 15`)
