@@ -1,3 +1,0 @@
-name = "api-reviewer"
-description = "Reviews API changes for compatibility and error handling."
-developer_instructions = "Review public API changes. Report compatibility risks and missing error paths."

@@ -1,6 +1,0 @@
-{
-  "profiles": {
-    "one": { "extends": "two", "patch": {} },
-    "two": { "extends": "one", "patch": {} }
-  }
-}

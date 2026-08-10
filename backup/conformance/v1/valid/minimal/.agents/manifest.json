@@ -1,5 +1,0 @@
-{
-  "$schema": "https://open-dot-agents.github.io/Open-Dot-Agents/spec/v1/schema/manifest.schema.json",
-  "specVersion": "1.0.0-rc.1",
-  "conformance": ["core"]
-}

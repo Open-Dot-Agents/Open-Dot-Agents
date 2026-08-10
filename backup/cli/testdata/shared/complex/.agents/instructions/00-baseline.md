@@ -1,3 +1,0 @@
-# Baseline
-
-Use conventional commits.

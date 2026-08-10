@@ -1,6 +1,0 @@
-{
-  "id": "org.example.review",
-  "version": "1.0.0",
-  "description": "Example review bundle",
-  "contents": ["skills/review/SKILL.md"]
-}

@@ -1,1 +1,0 @@
-Legacy per-rule guidance.
