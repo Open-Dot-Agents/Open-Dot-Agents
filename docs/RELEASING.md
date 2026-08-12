@@ -21,8 +21,8 @@ release, maintainers must review the changelog, compatibility matrix, security
 issues, and migration impact. A release may not claim support for a harness or
 profile without current conformance evidence.
 
-Run `python3 scripts/check_compatibility.py` before any release. That check
-keeps `compatibility.json`, the generated Markdown matrix, Reference CLI
+Run `python3 CLI/scripts/check_compatibility.py` before any release. That check
+keeps `CLI/compatibility.json`, the generated Markdown matrix, Reference CLI
 capability summaries, and support-evidence rules aligned.
 
 ## Specification release checklist
@@ -30,7 +30,7 @@ capability summaries, and support-evidence rules aligned.
 1. Confirm normative text, schemas, examples, and fixtures agree.
 2. Run schema and conformance validation.
 3. Classify compatibility according to [VERSIONING.md](VERSIONING.md).
-4. Run `python3 scripts/check_compatibility.py`.
+4. Run `python3 CLI/scripts/check_compatibility.py`.
 5. Publish release notes describing additions, clarifications, migrations, and
    deprecations.
 6. Update the compatibility matrix with the exact specification version.
@@ -41,7 +41,7 @@ capability summaries, and support-evidence rules aligned.
 2. Verify every adapter's declared capabilities against the pinned native
    harness version. If there is no native black-box evidence, leave the
    adapter marked not conformance-supported.
-3. Run `python3 scripts/check_compatibility.py`.
+3. Run `python3 CLI/scripts/check_compatibility.py`.
 4. Verify `agents version` reports the intended release version in an
    extracted artifact.
 5. Create final release assets and publish their checksums with installation,

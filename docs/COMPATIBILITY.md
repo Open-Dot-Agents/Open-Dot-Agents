@@ -7,7 +7,7 @@ version, harness version, profiles, and known limitations.
 Verified upstream mapping research is recorded separately in
 [vendor mapping evidence](VENDOR_EVIDENCE.md).
 The same current claims are also available as machine-readable data in
-[`compatibility.json`](../compatibility.json).
+[`CLI/compatibility.json`](../CLI/compatibility.json).
 
 ## Current state
 
@@ -34,7 +34,7 @@ discovery, MCP discovery and server startup, or skill discovery. Claude Code
 has no native adapter evidence at all. Accordingly, no adapter can be
 ratified as conformance-supported and the project remains a release candidate.
 The Reference CLI's `capabilities` command reports the same conservative
-compatibility status and evidence recorded in `compatibility.json`, alongside
+compatibility status and evidence recorded in `CLI/compatibility.json`, alongside
 the managed projection paths.
 
 ## Native probe — 2026-08-12
@@ -59,7 +59,7 @@ An entry can be marked **Supported** only when it:
 4. lists all known limitations and required user actions; and
 5. is regenerated or revalidated when either the adapter or harness changes.
 
-The current-state table is generated from `compatibility.json` with
-`python3 scripts/check_compatibility.py --write`. Release checks must run
-`python3 scripts/check_compatibility.py` so the Markdown matrix, CLI capability
+The current-state table is generated from `CLI/compatibility.json` with
+`python3 CLI/scripts/check_compatibility.py --write`. Release checks must run
+`python3 CLI/scripts/check_compatibility.py` so the Markdown matrix, CLI capability
 summaries, and support-evidence rules cannot drift.

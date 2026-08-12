@@ -26,14 +26,14 @@ jobs:
           python-version: '3.12'
       - name: Validate JSON files
         run: |
-          python3 -m json.tool compatibility.json >/dev/null
+          python3 -m json.tool CLI/compatibility.json >/dev/null
           python3 -m json.tool .agents/tools/mcp.json >/dev/null
           python3 -m json.tool .agents/tools/llms-sources.json >/dev/null
       - name: Validate dogfood .agents tree
         working-directory: CLI
         run: go run ./cmd/agents validate --source ../.agents
       - name: Check compatibility data
-        run: python3 scripts/check_compatibility.py
+        run: python3 CLI/scripts/check_compatibility.py
 
   specification:
     name: Specification conformance

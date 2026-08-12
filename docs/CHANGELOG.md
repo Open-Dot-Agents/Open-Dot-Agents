@@ -12,7 +12,7 @@ release histories live in their respective repositories.
   and experimental workbench projections.
 - Added installable, platform-specific reference CLI release-candidate
   archives with SHA-256 checksums.
-- Added compatibility drift checks that keep `compatibility.json`,
+- Added compatibility drift checks that keep `CLI/compatibility.json`,
   `COMPATIBILITY.md`, and Reference CLI capability summaries aligned.
 - Added official `llms.txt` source catalog and `$agent-docs` skill for vendor
   documentation research.
