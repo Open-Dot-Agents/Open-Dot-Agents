@@ -8,7 +8,3 @@ updates:
     directory: /CLI
     schedule:
       interval: weekly
-  - package-ecosystem: npm
-    directory: /.agents
-    schedule:
-      interval: weekly

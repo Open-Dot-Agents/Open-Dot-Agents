@@ -13,25 +13,14 @@ catalogue secret-free: configurable values must use
 `urn:open-dot-agents:env:*` references, and no GitHub MCP server should be
 added until the repository documents the selected OAuth or PAT model.
 
-The Firecrawl server uses the locked local `firecrawl-mcp` executable rather
-than `npx`, so an agent cannot resolve or fetch a package at runtime.
-
-To install the exact locked dependency after cloning, or after an intentional
-dependency update, run:
-
-```sh
-cd .agents
-npm ci --ignore-scripts
-```
+The Firecrawl entry invokes `firecrawl-mcp` from `PATH`. The portable tree
+declares the server and its environment contract; it does not own package
+installation or package-manager state. Pinned installation, audit, and startup
+testing live in the Workbench MCP-server conformance harness.
 
 Set `FIRECRAWL_API_URL` in the environment before using the Firecrawl MCP
 server. The portable catalogue stores only
 `urn:open-dot-agents:env:FIRECRAWL_API_URL`, not the URL value.
-
-To intentionally update Firecrawl, change its exact version in `package.json`,
-regenerate `package-lock.json` with
-`npm install --package-lock-only --ignore-scripts`, review both files, then run
-the install command above. Do not commit `.agents/node_modules/`.
 
 Other catalogued servers are intentionally not lockfile-backed here:
 
@@ -51,13 +40,14 @@ Other catalogued servers are intentionally not lockfile-backed here:
 
 ## Validation workflow
 
-Run these checks after changing `.agents/tools/mcp.json` or the package lock:
+Run this check after changing `.agents/tools/mcp.json`:
 
 ```sh
 python3 -m json.tool .agents/tools/mcp.json >/dev/null
-python3 -m json.tool .agents/package-lock.json >/dev/null
-cd .agents && npm ci --ignore-scripts
 ```
+
+Run the pinned server installation and startup checks from `WORKBENCH` with
+`task mcp-servers`.
 
 For live startup validation, use isolated writable caches and record the exact
 package or binary versions in `docs/VENDOR_EVIDENCE.md` or Workbench evidence before

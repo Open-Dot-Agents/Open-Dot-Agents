@@ -17,7 +17,7 @@
     },
     "firecrawl": {
       "type": "stdio",
-      "command": "./.agents/node_modules/.bin/firecrawl-mcp",
+      "command": "firecrawl-mcp",
       "args": [],
       "env": {
         "FIRECRAWL_API_URL": "urn:open-dot-agents:env:FIRECRAWL_API_URL"
