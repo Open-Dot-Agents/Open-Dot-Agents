@@ -1,32 +1,31 @@
-# Roadmap to Open-Dot-Agents 1.0
+# Roadmap
 
-## Foundation
+## 1.0 ratification
 
-Publish the normative portable model, JSON Schemas, versioning rules, security
-guidance, governance, and valid/invalid examples.
+- Freeze root/scoped instructions, manifest, MCP, skills, capability loss, and
+  machine-readable conformance contracts.
+- Publish independently tagged Spec and CLI components with immutable schemas,
+  cross-platform binaries, checksums, SPDX SBOMs, and provenance.
+- Pass public credentialed black-box evidence for exact Copilot CLI, Codex, and
+  Claude Code versions. OpenCode remains a Workbench experiment.
+- Publish the root program release only after all three registry rows satisfy
+  the support-evidence gate.
 
-## Conformance
+## Native integration
 
-Create implementation-neutral fixtures for instructions, MCP, and skills.
-Publish a compatibility matrix with evidence for every adapter and harness
-version.
+- Submit native-consumption proposals to the supported harness projects.
+- Add a second independent conforming implementation and keep fixture/result
+  contracts language-neutral.
+- Revalidate supported rows on each harness update and immediately downgrade a
+  row when evidence expires or regresses.
 
-## Reference implementation
+## Adoption
 
-Evolve the Go CLI to validate canonical trees, expose adapter capabilities,
-project instructions/MCP/skills safely, and retain explicit diff, backup, and
-loss diagnostics.
+- Record verified production adopters without inventing or inflating entries.
+- Improve package-manager distribution only after final assets and provenance
+  are stable.
+- Use “de-facto standard” only when the governance adoption threshold is met.
 
-## Adapter releases
-
-Deliver verified repository-scoped adapters for GitHub Copilot CLI, OpenAI
-Codex, Claude Code, and OpenCode. Native formats, paths, and precedence will
-be pinned per harness release and tested rather than assumed.
-
-## Ratification and adoption
-
-Publish final release artifacts, migration guides, examples, and adapter author
-documentation. Add signing, SBOMs, or provenance only with the corresponding
-published verification material. Ratify 1.0 after all guaranteed adapters pass
-the declared profile conformance suite and their limitations are visible in the
-compatibility matrix.
+New portable profiles for hooks, permissions, models, subagents, or prompts
+require evidence of shared semantics, a public proposal, security analysis,
+fixtures, and migration rules. They do not block the small 1.0 core.

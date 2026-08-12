@@ -2,9 +2,9 @@
 
 ## Candidate artifacts
 
-The release-candidate workflow creates unsigned, platform-specific archives
-and SHA-256 checksum files, verifies them, and attaches them to a draft GitHub
-Release. It does not publish packages, signatures, SBOMs, or provenance.
+The release-candidate workflow creates platform-specific archives, SHA-256
+checksum files, SPDX JSON SBOMs, and GitHub provenance attestations, verifies
+them, and attaches the files to a draft GitHub Release.
 Candidates are suitable for evaluation only and must not be described as final
 releases or as evidence of harness support until a maintainer publishes the
 draft. Installation and checksum instructions are in [INSTALL.md](INSTALL.md).
@@ -46,28 +46,31 @@ capability summaries, and support-evidence rules aligned.
    extracted artifact.
 5. Create final release assets and publish their checksums with installation,
    upgrade, and rollback guidance.
-6. If artifact signing, SBOMs, or provenance are introduced, publish the
-   corresponding verification instructions with those assets; do not claim
-   them before then.
+6. Verify every SBOM and GitHub artifact attestation with the published
+   installation commands.
 7. Update the compatibility matrix and CLI changelog before release.
 
 ## Publishing v1.0.0
 
-1. Confirm root, `SPEC`, `CLI`, and `WORKBENCH` commits are pushed and the
+1. Confirm the credentialed native adapter workflow passed for all three pinned
+   harnesses and the compatibility registry links its attested results.
+2. Tag and push `v1.0.0` in `Agents-Spec` and `Agents-CLI`; verify immutable
+   schema URLs and versioned `go install` from clean environments.
+3. Confirm root, `SPEC`, `CLI`, and `WORKBENCH` commits are pushed and the
    root submodule pointers reference those pushed commits.
-2. Confirm the `Verify` workflow is green on the intended root commit.
-3. Create and push the root release tag:
+4. Confirm the `Verify` and `Security` workflows are green on the intended root commit.
+5. Create and push the root release tag:
 
    ```sh
    git tag -a v1.0.0 -m "Open-Dot-Agents v1.0.0"
    git push origin v1.0.0
    ```
 
-4. Confirm the `Release candidate` workflow for `v1.0.0` is green and created
+6. Confirm the `Release candidate` workflow for `v1.0.0` is green and created
    or updated the draft release.
-5. Review the draft release against `releases/v1.0.0.md`, asset list,
+7. Review the draft release against `releases/v1.0.0.md`, asset list,
    checksum files, compatibility matrix, and security policy.
-6. Publish the draft from GitHub only after the review is complete.
+8. Publish the draft from GitHub only after the review is complete.
 
 ## Incident releases
 

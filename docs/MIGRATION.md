@@ -1,8 +1,7 @@
 # Migrating to Open-Dot-Agents
 
-The portable `.agents/` tree is the source of truth. Native harness files are
-generated projections and should not be edited as an alternative canonical
-configuration.
+Root and nested `AGENTS.md` plus the portable `.agents/` tree are the source of
+truth. Native MCP files and Claude bridge/skill files are owned projections.
 
 ## Start a new repository
 
@@ -10,12 +9,12 @@ Build or install the reference CLI using the [installation guide](INSTALL.md),
 then initialize and validate a starter tree:
 
 ```sh
-agents init
-agents validate
+agents init --root .
+agents validate --root .
 ```
 
 Edit `.agents/manifest.json` to select the required profiles, place shared
-instructions in `.agents/AGENTS.md`, define MCP servers in
+instructions in root or nested `AGENTS.md`, define MCP servers in
 `.agents/tools/mcp.json`, and add skills below `.agents/skills/`.
 
 ## Import an existing configuration
@@ -24,13 +23,12 @@ The current reference CLI imports the supported native MCP, skill, and shared
 `AGENTS.md` configuration for Copilot or Codex:
 
 ```sh
-agents import --vendor copilot --source . --target .agents
-agents validate --source .agents
+agents import --vendor copilot --root .
+agents validate --root .
 ```
 
-Import refuses to overwrite an existing canonical target unless `--force` is
-provided. Use `--force --backup --diff` when intentionally replacing a
-configuration; inspect the backup and diff before committing the result.
+Import refuses to overwrite an existing portable target unless `--force` is
+provided. Use `--force --backup` only when intentionally replacing it.
 
 ## Export a projection
 
@@ -39,17 +37,20 @@ first:
 
 ```sh
 agents capabilities --vendor copilot
-agents export --vendor copilot --source .agents --target . --diff
+agents plan --vendor copilot --root . --format json
+agents apply --vendor copilot --root .
 ```
 
-If native configuration already exists, require both an explicit overwrite and
-a backup:
+Existing native configuration is merged structurally. Equivalent entries can
+be adopted; conflicts require an explicit forced backup:
 
 ```sh
-agents export --vendor copilot --force --backup --diff
+agents apply --vendor copilot --adopt
+agents apply --vendor copilot --force --backup
 ```
 
-Do not commit credentials, token values, or generated local overrides.
+Commit the ownership state when committing generated projections. Do not
+commit credentials, token values, or generated local overrides.
 Consult [vendor mapping evidence](VENDOR_EVIDENCE.md) for documented native
 differences, particularly Claude Code's `CLAUDE.md` instruction bridge and
 the distinct MCP target files. An adapter should be used only when its exact

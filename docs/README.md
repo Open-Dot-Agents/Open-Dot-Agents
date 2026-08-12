@@ -17,6 +17,9 @@ repository root keeps only the primary landing page and non-Markdown metadata.
 - [Compatibility matrix](COMPATIBILITY.md)
 - [Vendor mapping evidence](VENDOR_EVIDENCE.md)
 - [Roadmap](ROADMAP.md)
+- [Harness author guide](HARNESS_AUTHORS.md)
+- [Implementations](IMPLEMENTATIONS.md)
+- [Adopters](ADOPTERS.md)
 
 ## Project Governance
 
@@ -24,3 +27,4 @@ repository root keeps only the primary landing page and non-Markdown metadata.
 - [Governance](GOVERNANCE.md)
 - [Security policy](SECURITY.md)
 - [Code of Conduct](CODE_OF_CONDUCT.md)
+- [Decision records](decisions/README.md)

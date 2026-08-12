@@ -1,0 +1,78 @@
+name: Native adapter conformance
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'evidence-v*'
+
+permissions:
+  contents: read
+  id-token: write
+  attestations: write
+
+jobs:
+  native:
+    name: ${{ matrix.vendor }} ${{ matrix.version }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - vendor: copilot
+            package: '@github/copilot'
+            version: 1.0.79
+            integrity: 'sha512-uHBm2BYbKJgyfiKp1WokX7QUNHGvzEX0zaGeb3qM3CybP06rsJrX3JgQe95qwwma6vQz0ah9gV68ERW2JqaKRA=='
+          - vendor: codex
+            package: '@openai/codex'
+            version: 0.147.0
+            integrity: 'sha512-EQLEXecAG2ptxI7UpBMo2TR/ga5596/c/OsYF/0LoUDh5JANZ7IoGqlzBEWbuEVQ76JePIbtTW/ihCkp1a7Z3w=='
+          - vendor: claude
+            package: '@anthropic-ai/claude-code'
+            version: 2.1.229
+            integrity: 'sha512-6HNg2iBe5DFvOxxdWTxdVaxg7buVvZMEpa+etJp3acBNatXXGdMBbqd3xjgPvqAoCz2ifQ/n5HSBd+xY8RBKfw=='
+    env:
+      GH_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN }}
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+      - name: Checkout CLI and Workbench
+        run: git submodule update --init --depth=1 CLI SPEC WORKBENCH
+      - uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6
+        with:
+          go-version-file: CLI/go.mod
+          cache-dependency-path: CLI/go.sum
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+        with:
+          node-version: '24'
+      - name: Verify and install pinned harness package
+        shell: bash
+        env:
+          PACKAGE: ${{ matrix.package }}
+          VERSION: ${{ matrix.version }}
+          INTEGRITY: ${{ matrix.integrity }}
+        run: |
+          npm pack "$PACKAGE@$VERSION" --json > package.json
+          test "$(jq -r '.[0].integrity' package.json)" = "$INTEGRITY"
+          npm install --global "$(jq -r '.[0].filename' package.json)"
+      - name: Build reference CLI
+        working-directory: CLI
+        run: go build -trimpath -ldflags '-X main.version=1.0.0' -o ../agents ./cmd/agents
+      - name: Run native acceptance
+        env:
+          AGENTS_BIN: ${{ github.workspace }}/agents
+          ODA_VERSION: 1.0.0
+        run: python3 WORKBENCH/conformance/run_adapter.py ${{ matrix.vendor }} --output evidence/${{ matrix.vendor }}.json
+      - name: Validate evidence contract
+        run: |
+          python3 -m pip install -r SPEC/conformance/requirements.txt
+          python3 WORKBENCH/conformance/validate_result.py evidence/${{ matrix.vendor }}.json SPEC/spec/1.0/schemas/conformance-result.schema.json
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: adapter-evidence-${{ matrix.vendor }}-${{ matrix.version }}
+          path: evidence/${{ matrix.vendor }}.json
+          if-no-files-found: error
+      - uses: actions/attest-build-provenance@977bb373ede98d70efdf65b84cb5f73e068dcc2a # v3
+        with:
+          subject-path: evidence/${{ matrix.vendor }}.json

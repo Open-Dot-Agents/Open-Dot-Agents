@@ -15,6 +15,18 @@ permissions:
   contents: read
 
 jobs:
+  adapter-evidence:
+    name: Require ratified adapters
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+      - name: Checkout CLI
+        run: git submodule update --init --depth=1 CLI
+      - name: Require three supported evidence records
+        run: |
+          test "$(jq -r '[.adapters[] | select(.status == "conformance-supported")] | length' CLI/compatibility.json)" = 3
+          jq -e 'all(.adapters[]; (.harness_version | type == "string") and (.evidence_url | type == "string"))' CLI/compatibility.json
+
   build:
     name: ${{ matrix.name }}
     runs-on: ${{ matrix.runner }}
@@ -59,10 +71,10 @@ jobs:
             binary: agents.exe
             archive_extension: zip
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
       - name: Checkout CLI submodule
         run: git submodule update --init --depth=1 CLI
-      - uses: actions/setup-go@v6
+      - uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6
         with:
           go-version-file: CLI/go.mod
           cache-dependency-path: CLI/go.sum
@@ -107,6 +119,13 @@ jobs:
         if: runner.os != 'Windows' && ((runner.arch == 'X64' && matrix.goarch == 'amd64') || (runner.arch == 'ARM64' && matrix.goarch == 'arm64'))
         working-directory: CLI
         run: ./dist/${{ matrix.binary }} version
+      - uses: anchore/sbom-action@e22c389904149dbc22b58101806040fa8d37a610 # v0.24.0
+        with:
+          file: CLI/dist/${{ matrix.binary }}
+          format: spdx-json
+          output-file: CLI/dist/agents-${{ matrix.goos }}-${{ matrix.goarch }}.spdx.json
+          syft-version: v1.51.0
+          upload-artifact: false
       - name: Verify embedded version
         if: runner.os == 'Windows' && ((runner.arch == 'X64' && matrix.goarch == 'amd64') || (runner.arch == 'ARM64' && matrix.goarch == 'arm64'))
         working-directory: CLI
@@ -141,22 +160,27 @@ jobs:
           Compress-Archive -LiteralPath "dist/${{ matrix.binary }}" -DestinationPath "dist/$archive" -Force
           $hash = (Get-FileHash -LiteralPath "dist/$archive" -Algorithm SHA256).Hash.ToLowerInvariant()
           "$hash  $archive" | Set-Content -NoNewline -Encoding ascii "dist/$archive.sha256"
-      - uses: actions/upload-artifact@v6
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
           name: agents-${{ matrix.name }}
           path: |
             CLI/dist/agents-${{ matrix.goos }}-${{ matrix.goarch }}.${{ matrix.archive_extension }}
             CLI/dist/agents-${{ matrix.goos }}-${{ matrix.goarch }}.${{ matrix.archive_extension }}.sha256
+            CLI/dist/agents-${{ matrix.goos }}-${{ matrix.goarch }}.spdx.json
           if-no-files-found: error
 
   release:
     name: Draft release
     runs-on: ubuntu-latest
-    needs: build
+    needs:
+      - adapter-evidence
+      - build
     permissions:
       contents: write
+      id-token: write
+      attestations: write
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
       - name: Resolve version
         id: version
         shell: bash
@@ -180,7 +204,7 @@ jobs:
             exit 1
           fi
           test -s "docs/releases/${TAG}.md"
-      - uses: actions/download-artifact@v6
+      - uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6
         with:
           pattern: agents-*
           path: dist
@@ -200,7 +224,18 @@ jobs:
             test -s "$asset"
             test -s "$asset.sha256"
             sha256sum -c "$asset.sha256"
+            platform="${asset#agents-}"
+            platform="${platform%.tar.gz}"
+            platform="${platform%.zip}"
+            test -s "agents-${platform}.spdx.json"
           done
+          test "$(find . -name '*.spdx.json' -type f | wc -l)" = 6
+          for sbom in *.spdx.json; do jq -e '.spdxVersion and .packages' "$sbom" >/dev/null; done
+      - uses: actions/attest-build-provenance@977bb373ede98d70efdf65b84cb5f73e068dcc2a # v3
+        with:
+          subject-path: |
+            dist/*.tar.gz
+            dist/*.zip
       - name: Write release notes
         run: cp "docs/releases/v${{ steps.version.outputs.value }}.md" release-notes.md
       - name: Create or update draft release

@@ -1,6 +1,6 @@
 ---
 name: agents-cli
-description: Modify the Open-Dot-Agents Go reference CLI, import/export/convert behavior, adapter projections, validation logic, capabilities output, overwrite/diff/backup handling, or CLI documentation. Use for tasks under CLI or for code changes that project canonical .agents content into native harness files.
+description: Modify the Open-Dot-Agents Go reference CLI, import/plan/apply behavior, adapter projections, validation logic, capabilities output, ownership/conflict/backup handling, or CLI documentation. Use for tasks under CLI or for code changes that project canonical .agents content into native harness files.
 ---
 
 # Agents CLI

@@ -27,6 +27,10 @@ observable behavior, and update documentation and changelogs when needed.
 Generated harness files must not replace the portable `.agents/` source of
 truth.
 
+Normative proposals remain open for at least 14 calendar days and produce a
+decision record. Commits must include a `Signed-off-by` trailer to certify the
+[Developer Certificate of Origin 1.1](https://developercertificate.org/).
+
 ## Adapter requirements
 
 An adapter proposal must identify the verified native harness version, all

@@ -10,16 +10,17 @@ The program is composed of three independently versioned components:
 | Component | Purpose |
 | --- | --- |
 | [Specification](SPEC) | The normative portable format, profiles, schemas, and conformance fixtures. |
-| [Reference CLI](CLI) | The `agents` command for creating, validating, importing, exporting, and converting configurations. |
+| [Reference CLI](CLI) | The `agents` command for creating, validating, importing, planning, and applying configurations. |
 | [Workbench](WORKBENCH) | Experimental mappings and harness research that must graduate through conformance before becoming standard. |
 
 ## Status
 
 The project is preparing the Open-Dot-Agents 1.0 release. No native adapter is
 currently marked supported in the [compatibility matrix](docs/COMPATIBILITY.md).
-Release-candidate CLI archives are unsigned evaluation artifacts, not final
-release assets; see [installation guidance](docs/INSTALL.md). Treat mappings
-outside the published compatibility matrix as experimental.
+Release-candidate CLI archives are evaluation artifacts, not final release
+assets; see [installation guidance](docs/INSTALL.md). The release workflow
+publishes checksums, SPDX SBOMs, and GitHub provenance attestations only after
+the three native adapter gates pass. Treat other mappings as experimental.
 
 ## Start here
 
@@ -34,6 +35,8 @@ outside the published compatibility matrix as experimental.
 5. Use the [migration guide](docs/MIGRATION.md) to adopt the portable source of
    truth safely.
 6. Follow the [installation guide](docs/INSTALL.md) for the reference CLI.
+7. Use the [harness author guide](docs/HARNESS_AUTHORS.md) to implement native
+   consumption and publish comparable conformance results.
 
 All project-level documentation is indexed in [docs](docs/README.md).
 

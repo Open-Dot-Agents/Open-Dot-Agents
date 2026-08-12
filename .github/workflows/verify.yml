@@ -14,14 +14,14 @@ jobs:
     name: Release data and dogfood tree
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
       - name: Checkout CLI submodule
         run: git submodule update --init --depth=1 CLI
-      - uses: actions/setup-go@v6
+      - uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6
         with:
           go-version-file: CLI/go.mod
           cache-dependency-path: CLI/go.sum
-      - uses: actions/setup-python@v6
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
         with:
           python-version: '3.12'
       - name: Validate JSON files
@@ -31,7 +31,7 @@ jobs:
           python3 -m json.tool .agents/tools/llms-sources.json >/dev/null
       - name: Validate dogfood .agents tree
         working-directory: CLI
-        run: go run ./cmd/agents validate --source ../.agents
+        run: go run ./cmd/agents validate --root .. --format json
       - name: Check compatibility data
         run: python3 CLI/scripts/check_compatibility.py
 
@@ -39,12 +39,14 @@ jobs:
     name: Specification conformance
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
       - name: Checkout SPEC submodule
         run: git submodule update --init --depth=1 SPEC
-      - uses: actions/setup-python@v6
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
         with:
           python-version: '3.12'
+      - name: Install conformance validator
+        run: python3 -m pip install -r SPEC/conformance/requirements.txt
       - name: Run conformance suite
         working-directory: SPEC
         run: python3 conformance/run.py
@@ -53,10 +55,10 @@ jobs:
     name: Reference CLI
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
       - name: Checkout CLI submodule
         run: git submodule update --init --depth=1 CLI
-      - uses: actions/setup-go@v6
+      - uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6
         with:
           go-version-file: CLI/go.mod
           cache-dependency-path: CLI/go.sum
@@ -71,7 +73,7 @@ jobs:
     name: Workbench projections
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
       - name: Checkout WORKBENCH submodule
         id: workbench
         env:
@@ -88,7 +90,7 @@ jobs:
             exit 0
           fi
           echo "available=true" >> "$GITHUB_OUTPUT"
-      - uses: actions/setup-python@v6
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
         if: steps.workbench.outputs.available == 'true'
         with:
           python-version: '3.12'

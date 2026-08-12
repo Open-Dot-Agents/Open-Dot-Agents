@@ -1,7 +1,12 @@
 .idea
 /.codex/
 /.claude/
-/.github/
+/.github/*
+!/.github/CODEOWNERS
+!/.github/dependabot.yml
+!/.github/ISSUE_TEMPLATE/
+!/.github/workflows/
+/.github/mcp.json
 /.opencode/
 /.codegraph/
 *.backup*

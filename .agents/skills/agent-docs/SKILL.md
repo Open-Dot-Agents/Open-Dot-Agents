@@ -40,5 +40,5 @@ For catalog changes, validate JSON and repository conformance:
 
 ```sh
 python3 -m json.tool .agents/tools/llms-sources.json >/dev/null
-GOCACHE=/tmp/agents-gocache GOPATH=/tmp/agents-gopath go run ./cmd/agents validate --source ../.agents
+GOCACHE=/tmp/agents-gocache GOPATH=/tmp/agents-gopath go run ./cmd/agents validate --root .. --format json
 ```

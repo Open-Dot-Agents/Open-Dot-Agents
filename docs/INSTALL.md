@@ -20,8 +20,9 @@ go build -o bin/agents ./cmd/agents
 
 ## GitHub release assets
 
-Published GitHub releases provide unsigned, SHA-256-checksummed archives for
-the reference CLI. Draft releases are for maintainer review and are not final
+Published GitHub releases provide SHA-256-checksummed archives, per-platform
+SPDX JSON SBOMs, and GitHub artifact attestations for the reference CLI. Draft
+releases are for maintainer review and are not final
 release assets until published. Release assets do not imply a supported native
 adapter or harness claim. Download the artifact for your platform from the
 published release. It contains one of:
@@ -59,7 +60,13 @@ Expand-Archive -LiteralPath $archive -DestinationPath .
 
 Run `./agents version` and `./agents help` on Linux or macOS, or
 `.\agents.exe version` and `.\agents.exe help` on Windows, then move the
-binary to a directory on your `PATH` if desired. The project does not publish
-package-manager installations. Do not assume a release asset has a signature,
-SBOM, or provenance unless its release documentation explicitly provides it;
-see the [release process](RELEASING.md).
+binary to a directory on your `PATH` if desired. Verify provenance with GitHub
+CLI after authenticating:
+
+```sh
+gh attestation verify agents-linux-amd64.tar.gz \
+  --repo Open-Dot-Agents/Open-Dot-Agents
+```
+
+The project does not publish package-manager installations yet. Inspect the
+matching `.spdx.json` file before deployment; see the [release process](RELEASING.md).

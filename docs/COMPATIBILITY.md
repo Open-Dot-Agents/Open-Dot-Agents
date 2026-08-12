@@ -8,6 +8,8 @@ Verified upstream mapping research is recorded separately in
 [vendor mapping evidence](VENDOR_EVIDENCE.md).
 The same current claims are also available as machine-readable data in
 [`CLI/compatibility.json`](../CLI/compatibility.json).
+That registry declares every 1.0 capability separately. A profile summary does
+not override an `unsupported` or unverified capability.
 
 ## Current state
 
@@ -16,8 +18,7 @@ The same current claims are also available as machine-readable data in
 | --- | --- | --- | --- | --- | --- | --- |
 | Reference CLI: Copilot | Not pinned | CLI Projection Only | CLI Projection Only | CLI Projection Only | Not conformance supported | CLI unit tests only; no version-pinned native-harness black-box run |
 | Reference CLI: Codex | Not pinned | CLI Projection Only | CLI Projection Only | CLI Projection Only | Not conformance supported | CLI unit tests only; no version-pinned native-harness black-box run |
-| Reference CLI: Claude Code | Not pinned | Planned | Planned | Planned | Not conformance supported | No native adapter evidence or black-box run |
-| Reference CLI: OpenCode | Not pinned | Planned | Workbench Projection Only | Planned | Not conformance supported | Workbench projection tests only; no version-pinned native-harness black-box run |
+| Reference CLI: Claude Code | Not pinned | CLI Projection Only | CLI Projection Only | CLI Projection Only | Not conformance supported | CLI unit tests only; no version-pinned native-harness black-box run |
 <!-- compatibility-table:end -->
 
 ## Ratification review — 2026-08-12
@@ -31,8 +32,9 @@ temporary filesystem fixtures.
 No adapter has a completed evidence record naming an immutable native harness
 version, platform, test date, and repeatable black-box results for instruction
 discovery, MCP discovery and server startup, or skill discovery. Claude Code
-has no native adapter evidence at all. Accordingly, no adapter can be
-ratified as conformance-supported and the project remains a release candidate.
+is implemented at the projection layer but has no native evidence. Accordingly,
+no adapter can be ratified as conformance-supported and the project remains a
+release candidate.
 The Reference CLI's `capabilities` command reports the same conservative
 compatibility status and evidence recorded in `CLI/compatibility.json`, alongside
 the managed projection paths.
@@ -44,9 +46,9 @@ CLI 0.147.0 listing project-visible MCP configuration. Those observations do
 not exercise instruction discovery, skill discovery, or MCP startup, so they
 are insufficient for a support claim. OpenCode 1.18.16 was available, but its
 MCP status command was intentionally not run because it could start enabled
-stdio servers. Claude Code was not installed. A repeatable, isolated native
-harness suite remains required before any row can move beyond release-candidate
-status.
+stdio servers. Claude Code was not installed. OpenCode remains outside the
+stable adapter set. The credentialed, isolated native harness suite must pass
+before any stable row can move beyond release-candidate status.
 
 ## Publication rules
 
