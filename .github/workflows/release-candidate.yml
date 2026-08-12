@@ -208,8 +208,9 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           TAG: v${{ steps.version.outputs.value }}
         run: |
+          tag_target="$(git rev-list -n 1 "$TAG")"
           if gh release view "$TAG" >/dev/null 2>&1; then
-            gh release edit "$TAG" --draft --latest=false --title "$TAG" --notes-file release-notes.md
+            gh release edit "$TAG" --draft --latest=false --target "$tag_target" --title "$TAG" --notes-file release-notes.md
             gh release upload "$TAG" dist/* --clobber
           else
             gh release create "$TAG" dist/* --draft --latest=false --verify-tag --title "$TAG" --notes-file release-notes.md
