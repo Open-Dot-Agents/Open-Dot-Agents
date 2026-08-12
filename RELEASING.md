@@ -3,11 +3,11 @@
 ## Candidate artifacts
 
 The release-candidate workflow creates unsigned, platform-specific archives
-and SHA-256 checksum files as GitHub Actions workflow artifacts. It does not
-create GitHub Release assets or publish packages, signatures, SBOMs, or
-provenance. Candidates are suitable for evaluation only and must not be
-described as final releases or as evidence of harness support. Installation
-and checksum instructions are in [INSTALL.md](INSTALL.md).
+and SHA-256 checksum files, verifies them, and attaches them to a draft GitHub
+Release. It does not publish packages, signatures, SBOMs, or provenance.
+Candidates are suitable for evaluation only and must not be described as final
+releases or as evidence of harness support until a maintainer publishes the
+draft. Installation and checksum instructions are in [INSTALL.md](INSTALL.md).
 
 ## Release inputs
 

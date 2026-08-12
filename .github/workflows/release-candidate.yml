@@ -147,3 +147,66 @@ jobs:
             CLI/dist/agents-${{ matrix.goos }}-${{ matrix.goarch }}.${{ matrix.archive_extension }}
             CLI/dist/agents-${{ matrix.goos }}-${{ matrix.goarch }}.${{ matrix.archive_extension }}.sha256
           if-no-files-found: error
+
+  release:
+    name: Draft release
+    runs-on: ubuntu-latest
+    needs: build
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v5
+      - name: Resolve version
+        id: version
+        shell: bash
+        run: |
+          if [ -n "${{ inputs.version }}" ]; then
+            echo "value=${{ inputs.version }}" >> "$GITHUB_OUTPUT"
+          elif [ -n "${GITHUB_REF_NAME}" ]; then
+            echo "value=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+          else
+            echo "value=0.0.0-candidate" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/download-artifact@v6
+        with:
+          pattern: agents-*
+          path: dist
+          merge-multiple: true
+      - name: Verify release assets
+        working-directory: dist
+        run: |
+          expected_assets=(
+            agents-linux-amd64.tar.gz
+            agents-linux-arm64.tar.gz
+            agents-darwin-amd64.tar.gz
+            agents-darwin-arm64.tar.gz
+            agents-windows-amd64.zip
+            agents-windows-arm64.zip
+          )
+          for asset in "${expected_assets[@]}"; do
+            test -s "$asset"
+            test -s "$asset.sha256"
+            sha256sum -c "$asset.sha256"
+          done
+      - name: Write release notes
+        run: |
+          cat > release-notes.md <<'EOF'
+          # Open-Dot-Agents ${{ steps.version.outputs.value }}
+
+          This draft release contains unsigned reference CLI archives and SHA-256 checksum files for evaluation.
+
+          Adapter support remains conservative: no native harness is marked conformance-supported without version-pinned black-box evidence. See `COMPATIBILITY.md` for the current support claims.
+
+          Verify each downloaded archive with its matching `.sha256` file before use. The project does not claim signatures, SBOMs, provenance, or package-manager publication for this release unless separate release documentation provides those artifacts.
+          EOF
+      - name: Create or update draft release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: v${{ steps.version.outputs.value }}
+        run: |
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release edit "$TAG" --draft --latest=false --title "$TAG" --notes-file release-notes.md
+            gh release upload "$TAG" dist/* --clobber
+          else
+            gh release create "$TAG" dist/* --draft --latest=false --target "$GITHUB_SHA" --title "$TAG" --notes-file release-notes.md
+          fi

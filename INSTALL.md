@@ -21,10 +21,11 @@ go build -o bin/agents ./cmd/agents
 ## Release candidates
 
 The release-candidate workflow publishes unsigned, SHA-256-checksummed
-archives for evaluation. They are workflow artifacts, not final release
-assets, and do not imply a supported adapter or harness claim. Download the
-artifact for your platform from the matching workflow run and unpack GitHub's
-artifact-download wrapper. It contains one of:
+archives for evaluation. They are attached to a draft GitHub Release for
+maintainer review and may also be available as workflow artifacts. They are
+not final release assets until the draft is published, and do not imply a
+supported adapter or harness claim. Download the artifact for your platform
+from the draft release or matching workflow run. It contains one of:
 
 | Platform | Archive |
 | --- | --- |
