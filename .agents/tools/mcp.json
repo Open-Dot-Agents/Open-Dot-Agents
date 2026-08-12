@@ -1,0 +1,49 @@
+{
+  "mcpServers": {
+    "codegraph": {
+      "type": "stdio",
+      "command": "codegraph",
+      "args": [
+        "serve",
+        "--mcp"
+      ]
+    },
+    "engram": {
+      "type": "stdio",
+      "command": "engram",
+      "args": [
+        "mcp"
+      ]
+    },
+    "firecrawl": {
+      "type": "stdio",
+      "command": "./.agents/node_modules/.bin/firecrawl-mcp",
+      "args": [],
+      "env": {
+        "FIRECRAWL_API_URL": "urn:open-dot-agents:env:FIRECRAWL_API_URL"
+      }
+    },
+    "context7": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@upstash/context7-mcp"
+      ]
+    },
+    "openai-developer-docs": {
+      "type": "remote",
+      "url": "https://developers.openai.com/mcp"
+    },
+    "semgrep": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": [
+        "--from",
+        "semgrep==1.172.0",
+        "semgrep",
+        "mcp"
+      ]
+    }
+  }
+}

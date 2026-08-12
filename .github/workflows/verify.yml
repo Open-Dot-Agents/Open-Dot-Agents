@@ -1,0 +1,96 @@
+name: Verify
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  release-data:
+    name: Release data and dogfood tree
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Checkout CLI submodule
+        run: git submodule update --init --depth=1 CLI
+      - uses: actions/setup-go@v6
+        with:
+          go-version-file: CLI/go.mod
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Validate JSON files
+        run: |
+          python3 -m json.tool compatibility.json >/dev/null
+          python3 -m json.tool .agents/tools/mcp.json >/dev/null
+          python3 -m json.tool .agents/tools/llms-sources.json >/dev/null
+      - name: Validate dogfood .agents tree
+        working-directory: CLI
+        run: go run ./cmd/agents validate --source ../.agents
+      - name: Check compatibility data
+        run: python3 scripts/check_compatibility.py
+
+  specification:
+    name: Specification conformance
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Checkout SPEC submodule
+        run: git submodule update --init --depth=1 SPEC
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Run conformance suite
+        working-directory: SPEC
+        run: python3 conformance/run.py
+
+  cli:
+    name: Reference CLI
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Checkout CLI submodule
+        run: git submodule update --init --depth=1 CLI
+      - uses: actions/setup-go@v6
+        with:
+          go-version-file: CLI/go.mod
+      - name: Test
+        working-directory: CLI
+        run: go test ./...
+      - name: Version command
+        working-directory: CLI
+        run: go run ./cmd/agents version
+
+  workbench:
+    name: Workbench projections
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Checkout WORKBENCH submodule
+        id: workbench
+        env:
+          SUBMODULE_TOKEN: ${{ secrets.OPEN_DOT_AGENTS_SUBMODULES_TOKEN }}
+        run: |
+          if [ -n "$SUBMODULE_TOKEN" ]; then
+            encoded="$(printf 'x-access-token:%s' "$SUBMODULE_TOKEN" | base64 -w0)"
+            git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic ${encoded}" submodule update --init --depth=1 WORKBENCH
+          elif git submodule update --init --depth=1 WORKBENCH; then
+            :
+          else
+            echo "::notice::Skipping Workbench projection tests because the WORKBENCH submodule is not visible to this workflow token. Make the submodule public or set OPEN_DOT_AGENTS_SUBMODULES_TOKEN with read access to enable this experimental gate."
+            echo "available=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          echo "available=true" >> "$GITHUB_OUTPUT"
+      - uses: actions/setup-python@v6
+        if: steps.workbench.outputs.available == 'true'
+        with:
+          python-version: '3.12'
+      - name: Test canonical projections
+        if: steps.workbench.outputs.available == 'true'
+        working-directory: WORKBENCH
+        run: python3 task/test/mcp_projections_test.py

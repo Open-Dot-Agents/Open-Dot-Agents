@@ -1,0 +1,4 @@
+interface:
+  display_name: "Agents Release"
+  short_description: "Prepare releases without overclaiming"
+  default_prompt: "Use $agents-release to prepare an Open-Dot-Agents release with accurate evidence and compatibility claims."

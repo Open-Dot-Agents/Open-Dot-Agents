@@ -1,0 +1,4 @@
+interface:
+  display_name: "Agents Conformance"
+  short_description: "Run spec, CLI, and projection gates"
+  default_prompt: "Use $agents-conformance to audit Open-Dot-Agents changes against the conformance and compatibility gates."

@@ -1,0 +1,149 @@
+name: Release candidate
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Release candidate version, such as 1.0.0
+        required: true
+        type: string
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: linux-amd64
+            runner: ubuntu-latest
+            goos: linux
+            goarch: amd64
+            binary: agents
+            archive_extension: tar.gz
+          - name: linux-arm64
+            runner: ubuntu-latest
+            goos: linux
+            goarch: arm64
+            binary: agents
+            archive_extension: tar.gz
+          - name: macos-amd64
+            runner: macos-latest
+            goos: darwin
+            goarch: amd64
+            binary: agents
+            archive_extension: tar.gz
+          - name: macos-arm64
+            runner: macos-latest
+            goos: darwin
+            goarch: arm64
+            binary: agents
+            archive_extension: tar.gz
+          - name: windows-amd64
+            runner: windows-latest
+            goos: windows
+            goarch: amd64
+            binary: agents.exe
+            archive_extension: zip
+          - name: windows-arm64
+            runner: windows-latest
+            goos: windows
+            goarch: arm64
+            binary: agents.exe
+            archive_extension: zip
+    steps:
+      - uses: actions/checkout@v5
+      - name: Checkout CLI submodule
+        run: git submodule update --init --depth=1 CLI
+      - uses: actions/setup-go@v6
+        with:
+          go-version-file: CLI/go.mod
+      - name: Test
+        working-directory: CLI
+        run: go test ./...
+      - name: Resolve version
+        id: version
+        shell: bash
+        run: |
+          if [ -n "${{ inputs.version }}" ]; then
+            echo "value=${{ inputs.version }}" >> "$GITHUB_OUTPUT"
+          elif [ -n "${GITHUB_REF_NAME}" ]; then
+            echo "value=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+          else
+            echo "value=0.0.0-candidate" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Validate version
+        shell: bash
+        run: |
+          case "${{ steps.version.outputs.value }}" in
+            [0-9]*.[0-9]*.[0-9]*) ;;
+            *) echo "invalid version: ${{ steps.version.outputs.value }}" >&2; exit 1 ;;
+          esac
+      - name: Create distribution directory
+        if: runner.os != 'Windows'
+        working-directory: CLI
+        run: mkdir -p dist
+      - name: Create distribution directory
+        if: runner.os == 'Windows'
+        working-directory: CLI
+        shell: pwsh
+        run: New-Item -ItemType Directory -Force dist
+      - name: Build
+        working-directory: CLI
+        env:
+          GOOS: ${{ matrix.goos }}
+          GOARCH: ${{ matrix.goarch }}
+          CGO_ENABLED: '0'
+        run: go build -trimpath -buildvcs=true -ldflags "-X main.version=${{ steps.version.outputs.value }}" -o dist/${{ matrix.binary }} ./cmd/agents
+      - name: Verify embedded version
+        if: runner.os != 'Windows' && ((runner.arch == 'X64' && matrix.goarch == 'amd64') || (runner.arch == 'ARM64' && matrix.goarch == 'arm64'))
+        working-directory: CLI
+        run: ./dist/${{ matrix.binary }} version
+      - name: Verify embedded version
+        if: runner.os == 'Windows' && ((runner.arch == 'X64' && matrix.goarch == 'amd64') || (runner.arch == 'ARM64' && matrix.goarch == 'arm64'))
+        working-directory: CLI
+        shell: pwsh
+        run: ./dist/${{ matrix.binary }} version
+      - name: Package archive and create checksum
+        if: runner.os == 'Linux'
+        working-directory: CLI
+        run: |
+          archive="agents-${{ matrix.goos }}-${{ matrix.goarch }}.tar.gz"
+          (
+            cd dist
+            tar -czf "${archive}" "${{ matrix.binary }}"
+            sha256sum "${archive}" > "${archive}.sha256"
+          )
+      - name: Package archive and create checksum
+        if: runner.os == 'macOS'
+        working-directory: CLI
+        run: |
+          archive="agents-${{ matrix.goos }}-${{ matrix.goarch }}.tar.gz"
+          (
+            cd dist
+            tar -czf "${archive}" "${{ matrix.binary }}"
+            shasum -a 256 "${archive}" > "${archive}.sha256"
+          )
+      - name: Package archive and create checksum
+        if: runner.os == 'Windows'
+        working-directory: CLI
+        shell: pwsh
+        run: |
+          $archive = "agents-${{ matrix.goos }}-${{ matrix.goarch }}.zip"
+          Compress-Archive -LiteralPath "dist/${{ matrix.binary }}" -DestinationPath "dist/$archive" -Force
+          $hash = (Get-FileHash -LiteralPath "dist/$archive" -Algorithm SHA256).Hash.ToLowerInvariant()
+          "$hash  $archive" | Set-Content -NoNewline -Encoding ascii "dist/$archive.sha256"
+      - uses: actions/upload-artifact@v6
+        with:
+          name: agents-${{ matrix.name }}
+          path: |
+            CLI/dist/agents-${{ matrix.goos }}-${{ matrix.goarch }}.${{ matrix.archive_extension }}
+            CLI/dist/agents-${{ matrix.goos }}-${{ matrix.goarch }}.${{ matrix.archive_extension }}.sha256
+          if-no-files-found: error

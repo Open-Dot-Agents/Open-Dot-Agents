@@ -1,0 +1,4 @@
+interface:
+  display_name: "Agents Spec"
+  short_description: "Update the portable .agents standard"
+  default_prompt: "Use $agents-spec to plan and apply a compatible Open-Dot-Agents specification change."

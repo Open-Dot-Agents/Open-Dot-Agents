@@ -1,0 +1,4 @@
+interface:
+  display_name: "Agents CLI"
+  short_description: "Modify the reference CLI and adapters"
+  default_prompt: "Use $agents-cli to implement and verify a focused Open-Dot-Agents CLI or adapter change."

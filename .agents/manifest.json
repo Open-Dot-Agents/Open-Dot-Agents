@@ -1,0 +1,14 @@
+{
+  "version": "1.0.0",
+  "profiles": [
+    "instructions",
+    "mcp",
+    "skills"
+  ],
+  "requires": [
+    "instructions",
+    "skills",
+    "mcp.stdio",
+    "mcp.envRef"
+  ]
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Agent Docs"
+  short_description: "Use official llms.txt documentation indexes"
+  default_prompt: "Use $agent-docs to select and verify official vendor documentation from the project llms.txt catalog."

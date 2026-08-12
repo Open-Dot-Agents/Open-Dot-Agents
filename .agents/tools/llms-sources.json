@@ -1,0 +1,113 @@
+{
+  "schema_version": "1.0.0",
+  "updated": "2026-08-12",
+  "description": "Official llms.txt sources used by Open-Dot-Agents skills and tool guidance. Full-text sources are referenced by URL and verified by metadata; their large contents are not vendored.",
+  "sources": [
+    {
+      "id": "chatgpt-codex-docs",
+      "provider": "OpenAI",
+      "scope": "ChatGPT and Codex docs",
+      "kind": "index",
+      "requested_url": "https://learn.chatgpt.com/docs/llms.txt",
+      "effective_url": "https://learn.chatgpt.com/docs/llms.txt",
+      "sha256": "eb23ffddc9480cd69104e13e8af4af7b0254e739380cedc1b5ce46306540411e",
+      "bytes": 23065,
+      "lines": 304
+    },
+    {
+      "id": "github-docs",
+      "provider": "GitHub",
+      "scope": "GitHub Docs, Copilot, GitHub APIs, and GitHub Actions",
+      "kind": "index",
+      "requested_url": "https://docs.github.com/llms.txt",
+      "effective_url": "https://docs.github.com/llms.txt",
+      "sha256": "8808227efc71ec33434ee9fbee06cf0f0eab833d933e2694e2814f05c80ecb24",
+      "bytes": 28674,
+      "lines": 188
+    },
+    {
+      "id": "claude-code-docs",
+      "provider": "Anthropic",
+      "scope": "Claude Code docs",
+      "kind": "index",
+      "requested_url": "https://code.claude.com/llms.txt",
+      "effective_url": "https://code.claude.com/llms.txt",
+      "sha256": "6874fcdd38e20ccebcf35e0b813c0f50a62b56eb16a9f212961df66bc6cdc25d",
+      "bytes": 42009,
+      "lines": 193
+    },
+    {
+      "id": "openai-api-docs",
+      "provider": "OpenAI",
+      "scope": "OpenAI API docs",
+      "kind": "index",
+      "requested_url": "https://platform.openai.com/docs/llms.txt",
+      "effective_url": "https://developers.openai.com/api/docs/llms.txt",
+      "sha256": "ed04dcc5814c7c9b3b43d6acb0b9afa1d4cd1b2025aba5777b500f63106e5779",
+      "bytes": 33574,
+      "lines": 218
+    },
+    {
+      "id": "openai-api-docs-full",
+      "provider": "OpenAI",
+      "scope": "OpenAI API docs",
+      "kind": "full",
+      "requested_url": "https://platform.openai.com/docs/llms-full.txt",
+      "effective_url": "https://developers.openai.com/api/docs/llms-full.txt",
+      "sha256": "8ff3dad090edd05916ab74190a4abc366a83760c2739dc991033f3442c6e561e",
+      "bytes": 3321927,
+      "lines": 80660
+    },
+    {
+      "id": "anthropic-api-docs",
+      "provider": "Anthropic",
+      "scope": "Anthropic API docs",
+      "kind": "index",
+      "requested_url": "https://platform.claude.com/llms.txt",
+      "effective_url": "https://platform.claude.com/llms.txt",
+      "sha256": "7f9c986b4c531bcd3c42e0a32c6eb337f2448f64c085e33d10303afd0d792b99",
+      "bytes": 57481,
+      "lines": 624
+    },
+    {
+      "id": "anthropic-api-docs-full",
+      "provider": "Anthropic",
+      "scope": "Anthropic API docs",
+      "kind": "full",
+      "requested_url": "https://platform.claude.com/llms-full.txt",
+      "effective_url": "https://platform.claude.com/llms-full.txt",
+      "sha256": "05bcf22041af8d009695debe216dbd64aae0a040f43b9cc7c975fa0dbe8b63dd",
+      "bytes": 26074712,
+      "lines": 845608
+    },
+    {
+      "id": "modelcontextprotocol-docs",
+      "provider": "Model Context Protocol",
+      "scope": "MCP docs and specification",
+      "kind": "index",
+      "requested_url": "https://modelcontextprotocol.io/llms.txt",
+      "effective_url": "https://modelcontextprotocol.io/llms.txt",
+      "sha256": "04c85b0d86a93df395919a43c0086cbbdcb3061ce52490416e5b3cf75a36e4a4",
+      "bytes": 22146,
+      "lines": 148
+    },
+    {
+      "id": "modelcontextprotocol-docs-full",
+      "provider": "Model Context Protocol",
+      "scope": "MCP docs and specification",
+      "kind": "full",
+      "requested_url": "https://modelcontextprotocol.io/llms-full.txt",
+      "effective_url": "https://modelcontextprotocol.io/llms-full.txt",
+      "sha256": "20372e342c15139ef37f3b1cfadb8d72cdda6983fa1135e8dafd72906a41b2d0",
+      "bytes": 2362278,
+      "lines": 41983
+    }
+  ],
+  "duplicates_removed": [
+    {
+      "requested_url": "https://platform.claude.com/llms-full.txt",
+      "duplicate_of": "anthropic-api-docs-full",
+      "reason": "The URL was supplied twice in the request."
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Agents Adapter"
+  short_description: "Graduate adapter evidence to support"
+  default_prompt: "Use $agents-adapter to gather evidence and update compatibility for an Open-Dot-Agents adapter."

@@ -1,5 +1,50 @@
 # Open-Dot-Agents
 
-Open-Dot-Agents is the vendor-neutral standard for repository-scoped AI agents
-configuration. A project owns one portable `.agents/` tree; explicitly locked,
-out-of-process adapters translate that tree to and from individual harnesses.
+Open-Dot-Agents is an Apache-2.0, vendor-neutral standard for
+repository-scoped AI agent configuration. A project owns one portable
+`.agents/` tree; explicitly versioned adapters project it to individual
+harnesses without making the canonical model vendor dependent.
+
+The program is composed of three independently versioned components:
+
+| Component | Purpose |
+| --- | --- |
+| [Specification](SPEC) | The normative portable format, profiles, schemas, and conformance fixtures. |
+| [Reference CLI](CLI) | The `agents` command for creating, validating, importing, exporting, and converting configurations. |
+| [Workbench](WORKBENCH) | Experimental mappings and harness research that must graduate through conformance before becoming standard. |
+
+## Status
+
+The project is preparing the Open-Dot-Agents 1.0 release. No native adapter is
+currently marked supported in the [compatibility matrix](COMPATIBILITY.md).
+Release-candidate CLI archives are unsigned evaluation artifacts, not final
+release assets; see [installation guidance](INSTALL.md). Treat mappings
+outside the published compatibility matrix as experimental.
+
+## Start here
+
+1. Read the [specification](SPEC) to understand the canonical `.agents/`
+   format and profile guarantees.
+2. Install or build the [reference CLI](CLI) to manage a repository
+   configuration.
+3. Check the [compatibility matrix](COMPATIBILITY.md) before relying on a
+   native harness projection.
+4. Consult [vendor mapping evidence](VENDOR_EVIDENCE.md) before implementing
+   or extending an adapter.
+5. Use the [migration guide](MIGRATION.md) to adopt the portable source of
+   truth safely.
+6. Follow the [installation guide](INSTALL.md) for the reference CLI.
+
+## Project governance
+
+The standard is developed in public. The rules for participating, reporting
+security issues, releasing compatible versions, and making decisions are in:
+
+- [Contributing](CONTRIBUTING.md)
+- [Code of Conduct](CODE_OF_CONDUCT.md)
+- [Security policy](SECURITY.md)
+- [Governance](GOVERNANCE.md)
+- [Versioning policy](VERSIONING.md)
+- [Release process](RELEASING.md)
+- [Roadmap](ROADMAP.md)
+- [Changelog](CHANGELOG.md)
