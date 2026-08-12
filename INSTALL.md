@@ -18,14 +18,13 @@ go build -o bin/agents ./cmd/agents
 ./bin/agents help
 ```
 
-## Release candidates
+## GitHub release assets
 
-The release-candidate workflow publishes unsigned, SHA-256-checksummed
-archives for evaluation. They are attached to a draft GitHub Release for
-maintainer review and may also be available as workflow artifacts. They are
-not final release assets until the draft is published, and do not imply a
-supported adapter or harness claim. Download the artifact for your platform
-from the draft release or matching workflow run. It contains one of:
+Published GitHub releases provide unsigned, SHA-256-checksummed archives for
+the reference CLI. Draft releases are for maintainer review and are not final
+release assets until published. Release assets do not imply a supported native
+adapter or harness claim. Download the artifact for your platform from the
+published release. It contains one of:
 
 | Platform | Archive |
 | --- | --- |
@@ -58,10 +57,9 @@ if ($actual -ne $expected) { throw 'SHA-256 checksum mismatch' }
 Expand-Archive -LiteralPath $archive -DestinationPath .
 ```
 
-Run `./agents help` on Linux or macOS, or `.\agents.exe help` on Windows,
-then move the binary to a directory on your `PATH` if desired. The project
-does not publish package-manager installations. For non-candidate use, select
-an applicable published release asset or build a reviewed tagged source
-checkout. Do not assume a release asset has a signature, SBOM, or provenance
-unless its release documentation explicitly provides it; see the
-[release process](RELEASING.md).
+Run `./agents version` and `./agents help` on Linux or macOS, or
+`.\agents.exe version` and `.\agents.exe help` on Windows, then move the
+binary to a directory on your `PATH` if desired. The project does not publish
+package-manager installations. Do not assume a release asset has a signature,
+SBOM, or provenance unless its release documentation explicitly provides it;
+see the [release process](RELEASING.md).

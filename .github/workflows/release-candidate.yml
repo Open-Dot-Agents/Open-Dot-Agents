@@ -168,6 +168,18 @@ jobs:
           else
             echo "value=0.0.0-candidate" >> "$GITHUB_OUTPUT"
           fi
+      - name: Verify release tag and notes
+        env:
+          TAG: v${{ steps.version.outputs.value }}
+        run: |
+          git fetch --force --tags origin "refs/tags/${TAG}:refs/tags/${TAG}"
+          tag_target="$(git rev-list -n 1 "$TAG")"
+          checkout_target="$(git rev-parse HEAD)"
+          if [ "$tag_target" != "$checkout_target" ]; then
+            echo "release tag $TAG points at $tag_target, but this workflow checked out $checkout_target" >&2
+            exit 1
+          fi
+          test -s "docs/releases/${TAG}.md"
       - uses: actions/download-artifact@v6
         with:
           pattern: agents-*
@@ -190,16 +202,7 @@ jobs:
             sha256sum -c "$asset.sha256"
           done
       - name: Write release notes
-        run: |
-          cat > release-notes.md <<'EOF'
-          # Open-Dot-Agents ${{ steps.version.outputs.value }}
-
-          This draft release contains unsigned reference CLI archives and SHA-256 checksum files for evaluation.
-
-          Adapter support remains conservative: no native harness is marked conformance-supported without version-pinned black-box evidence. See `COMPATIBILITY.md` for the current support claims.
-
-          Verify each downloaded archive with its matching `.sha256` file before use. The project does not claim signatures, SBOMs, provenance, or package-manager publication for this release unless separate release documentation provides those artifacts.
-          EOF
+        run: cp "docs/releases/v${{ steps.version.outputs.value }}.md" release-notes.md
       - name: Create or update draft release
         env:
           GH_TOKEN: ${{ github.token }}
@@ -209,5 +212,5 @@ jobs:
             gh release edit "$TAG" --draft --latest=false --title "$TAG" --notes-file release-notes.md
             gh release upload "$TAG" dist/* --clobber
           else
-            gh release create "$TAG" dist/* --draft --latest=false --target "$GITHUB_SHA" --title "$TAG" --notes-file release-notes.md
+            gh release create "$TAG" dist/* --draft --latest=false --verify-tag --title "$TAG" --notes-file release-notes.md
           fi
