@@ -19,7 +19,7 @@ jobs:
     name: Require ratified adapters
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Checkout CLI
         run: git submodule update --init --depth=1 CLI
       - name: Require three supported evidence records
@@ -71,7 +71,7 @@ jobs:
             binary: agents.exe
             archive_extension: zip
     steps:
-      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Checkout CLI submodule
         run: git submodule update --init --depth=1 CLI
       - uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6
@@ -180,7 +180,7 @@ jobs:
       id-token: write
       attestations: write
     steps:
-      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Resolve version
         id: version
         shell: bash
