@@ -1,1 +1,7 @@
 .idea
+/.codex/
+/.claude/
+/.github/
+/.opencode/
+/.codegraph/
+*.backup*
