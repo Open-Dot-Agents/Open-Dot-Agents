@@ -16,9 +16,9 @@ The program is composed of three independently versioned components:
 ## Status
 
 The project is preparing the Open-Dot-Agents 1.0 release. No native adapter is
-currently marked supported in the [compatibility matrix](COMPATIBILITY.md).
+currently marked supported in the [compatibility matrix](docs/COMPATIBILITY.md).
 Release-candidate CLI archives are unsigned evaluation artifacts, not final
-release assets; see [installation guidance](INSTALL.md). Treat mappings
+release assets; see [installation guidance](docs/INSTALL.md). Treat mappings
 outside the published compatibility matrix as experimental.
 
 ## Start here
@@ -27,24 +27,26 @@ outside the published compatibility matrix as experimental.
    format and profile guarantees.
 2. Install or build the [reference CLI](CLI) to manage a repository
    configuration.
-3. Check the [compatibility matrix](COMPATIBILITY.md) before relying on a
+3. Check the [compatibility matrix](docs/COMPATIBILITY.md) before relying on a
    native harness projection.
-4. Consult [vendor mapping evidence](VENDOR_EVIDENCE.md) before implementing
+4. Consult [vendor mapping evidence](docs/VENDOR_EVIDENCE.md) before implementing
    or extending an adapter.
-5. Use the [migration guide](MIGRATION.md) to adopt the portable source of
+5. Use the [migration guide](docs/MIGRATION.md) to adopt the portable source of
    truth safely.
-6. Follow the [installation guide](INSTALL.md) for the reference CLI.
+6. Follow the [installation guide](docs/INSTALL.md) for the reference CLI.
+
+All project-level documentation is indexed in [docs](docs/README.md).
 
 ## Project governance
 
 The standard is developed in public. The rules for participating, reporting
 security issues, releasing compatible versions, and making decisions are in:
 
-- [Contributing](CONTRIBUTING.md)
-- [Code of Conduct](CODE_OF_CONDUCT.md)
-- [Security policy](SECURITY.md)
-- [Governance](GOVERNANCE.md)
-- [Versioning policy](VERSIONING.md)
-- [Release process](RELEASING.md)
-- [Roadmap](ROADMAP.md)
-- [Changelog](CHANGELOG.md)
+- [Contributing](docs/CONTRIBUTING.md)
+- [Code of Conduct](docs/CODE_OF_CONDUCT.md)
+- [Security policy](docs/SECURITY.md)
+- [Governance](docs/GOVERNANCE.md)
+- [Versioning policy](docs/VERSIONING.md)
+- [Release process](docs/RELEASING.md)
+- [Roadmap](docs/ROADMAP.md)
+- [Changelog](docs/CHANGELOG.md)

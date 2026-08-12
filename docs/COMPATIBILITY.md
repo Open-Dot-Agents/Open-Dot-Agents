@@ -7,7 +7,7 @@ version, harness version, profiles, and known limitations.
 Verified upstream mapping research is recorded separately in
 [vendor mapping evidence](VENDOR_EVIDENCE.md).
 The same current claims are also available as machine-readable data in
-[`compatibility.json`](compatibility.json).
+[`compatibility.json`](../compatibility.json).
 
 ## Current state
 

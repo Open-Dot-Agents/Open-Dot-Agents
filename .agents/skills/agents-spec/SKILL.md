@@ -11,8 +11,8 @@ Use the specification as the source of truth. Keep implementation, examples,
 schemas, docs, and compatibility claims aligned without silently widening the
 standard.
 
-1. Inspect the current normative surface before editing: `SPEC/spec/1.0/SPECIFICATION.md`, `SPEC/spec/1.0/schemas/`, `SPEC/examples/`, `SPEC/conformance/`, `VERSIONING.md`, and `GOVERNANCE.md`.
-2. Classify the change as clarification, compatible addition, or breaking change. Follow `VERSIONING.md`; do not change `version: "1.0.0"` semantics casually.
+1. Inspect the current normative surface before editing: `SPEC/spec/1.0/SPECIFICATION.md`, `SPEC/spec/1.0/schemas/`, `SPEC/examples/`, `SPEC/conformance/`, `docs/VERSIONING.md`, and `docs/GOVERNANCE.md`.
+2. Classify the change as clarification, compatible addition, or breaking change. Follow `docs/VERSIONING.md`; do not change `version: "1.0.0"` semantics casually.
 3. Update normative prose and schemas together. JSON Schema alone is not enough when cross-file profile behavior or capability-loss rules change.
 4. Add or update valid and invalid fixtures for every observable semantic change. Prefer small fixtures that isolate one rule.
 5. Update migration, compatibility, and changelog docs when a user or adapter author must act differently.

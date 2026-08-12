@@ -14,7 +14,7 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 COMPATIBILITY_JSON = ROOT / "compatibility.json"
-COMPATIBILITY_MD = ROOT / "COMPATIBILITY.md"
+COMPATIBILITY_MD = ROOT / "docs" / "COMPATIBILITY.md"
 
 START = "<!-- compatibility-table:start -->"
 END = "<!-- compatibility-table:end -->"

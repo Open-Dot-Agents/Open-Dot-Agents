@@ -60,7 +60,7 @@ cd .agents && npm ci --ignore-scripts
 ```
 
 For live startup validation, use isolated writable caches and record the exact
-package or binary versions in `VENDOR_EVIDENCE.md` or Workbench evidence before
+package or binary versions in `docs/VENDOR_EVIDENCE.md` or Workbench evidence before
 pinning a server:
 
 ```sh

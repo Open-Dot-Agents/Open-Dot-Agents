@@ -10,7 +10,7 @@ releases or as evidence of harness support until a maintainer publishes the
 draft. Installation and checksum instructions are in [INSTALL.md](INSTALL.md).
 
 The workflow requires a real pushed `v<version>` tag and a checked-in
-`docs/releases/v<version>.md` release-notes file. The tag must point at the
+`releases/v<version>.md` release-notes file. The tag must point at the
 same root commit checked out by the workflow. Manual dispatch is allowed only
 to rebuild a draft for an existing tag.
 
@@ -65,7 +65,7 @@ capability summaries, and support-evidence rules aligned.
 
 4. Confirm the `Release candidate` workflow for `v1.0.0` is green and created
    or updated the draft release.
-5. Review the draft release against `docs/releases/v1.0.0.md`, asset list,
+5. Review the draft release against `releases/v1.0.0.md`, asset list,
    checksum files, compatibility matrix, and security policy.
 6. Publish the draft from GitHub only after the review is complete.
 

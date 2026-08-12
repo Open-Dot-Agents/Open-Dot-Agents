@@ -31,7 +31,7 @@ tools, skills, MCP, adapters, APIs, or compatibility evidence.
    research, CLI unit tests, projection tests, or successful package startup
    into native harness support claims.
 5. When documentation changes affect Open-Dot-Agents support status, update
-   `VENDOR_EVIDENCE.md`, `compatibility.json`, `COMPATIBILITY.md`, and related
+   `docs/VENDOR_EVIDENCE.md`, `compatibility.json`, `docs/COMPATIBILITY.md`, and related
    skills or tests together.
 
 ## Validation

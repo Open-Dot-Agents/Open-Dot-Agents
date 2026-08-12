@@ -10,7 +10,7 @@ description: Prepare Open-Dot-Agents specification or reference CLI releases, re
 Keep release claims exactly bounded by verified artifacts and compatibility
 evidence.
 
-1. Read `RELEASING.md`, `VERSIONING.md`, `CHANGELOG.md`, component changelogs, `INSTALL.md`, `COMPATIBILITY.md`, and `compatibility.json` before changing release wording.
+1. Read `docs/RELEASING.md`, `docs/VERSIONING.md`, `docs/CHANGELOG.md`, component changelogs, `docs/INSTALL.md`, `docs/COMPATIBILITY.md`, and `compatibility.json` before changing release wording.
 2. Classify the release as specification, reference CLI, or release candidate. Do not describe candidate artifacts as final releases.
 3. Confirm all normative changes have matching schemas, fixtures, docs, and migration notes.
 4. Confirm all adapter support claims have current version-pinned native evidence. Otherwise keep statuses as implementation-only, experimental, planned, or not conformance-supported.
