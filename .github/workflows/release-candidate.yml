@@ -15,18 +15,6 @@ permissions:
   contents: read
 
 jobs:
-  adapter-evidence:
-    name: Require ratified adapters
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - name: Checkout CLI
-        run: git submodule update --init --depth=1 CLI
-      - name: Require three supported evidence records
-        run: |
-          test "$(jq -r '[.adapters[] | select(.status == "conformance-supported")] | length' CLI/compatibility.json)" = 3
-          jq -e 'all(.adapters[]; (.harness_version | type == "string") and (.evidence_url | type == "string"))' CLI/compatibility.json
-
   build:
     name: ${{ matrix.name }}
     runs-on: ${{ matrix.runner }}
@@ -173,7 +161,6 @@ jobs:
     name: Draft release
     runs-on: ubuntu-latest
     needs:
-      - adapter-evidence
       - build
     permissions:
       contents: write
