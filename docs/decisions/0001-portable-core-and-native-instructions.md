@@ -6,26 +6,29 @@
 
 ## Context
 
-The release candidate duplicated instructions under `.agents/AGENTS.md` and
-root `AGENTS.md`. This created drift and destructive projection risk while the
-target harnesses already converged on root or scoped instruction files.
+The portable tree needs one canonical location for instructions while target
+harnesses commonly discover root or scoped instruction files. Independent
+regular files at `.agents/AGENTS.md` and root `AGENTS.md` would create drift.
 
 ## Options
 
-- Keep the duplicate canonical copy.
-- Accept both locations with precedence rules.
-- Standardize root and nested `AGENTS.md` and keep `.agents` for structured
-  portable configuration.
+- Keep independent copies at both locations.
+- Keep root instructions outside the otherwise canonical `.agents` tree.
+- Canonicalize `.agents/AGENTS.md` and use a root compatibility link or native
+  projection.
 
 ## Decision
 
-Open-Dot-Agents 1.0 uses root and nested `AGENTS.md` directly. The portable
-structured core remains manifest, MCP, and skills. Copilot CLI, Codex, and
-Claude Code are the first adapter targets; OpenCode remains experimental.
+Open-Dot-Agents 1.0 uses `.agents/AGENTS.md` as mandatory repository-wide
+instructions. A root `AGENTS.md` should link to the canonical file for native
+discovery, while nested `AGENTS.md` files retain scoped precedence. Optional
+manifest profiles match the `.agents` directories: `tools` and `skills`.
+Copilot CLI, Codex, and Claude Code are the first adapter targets; OpenCode
+remains experimental.
 
 ## Effects
 
-Repositories remove `.agents/AGENTS.md`. Claude adapters may create an owned
-import bridge. Adapters report native discovery that cannot be suppressed as a
-limitation. No profiles for hooks, permissions, models, or subagents enter 1.0
-without a separate proposal and evidence.
+Repositories keep one canonical instruction file below `.agents` and avoid
+copy drift through compatibility links or owned projections. Claude adapters
+may create an owned import bridge. No profiles for hooks, permissions, models,
+or subagents enter 1.0 without a separate proposal and evidence.

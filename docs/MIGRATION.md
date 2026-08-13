@@ -1,7 +1,8 @@
 # Migrating to Open-Dot-Agents
 
-Root and nested `AGENTS.md` plus the portable `.agents/` tree are the source of
-truth. Native MCP files and Claude bridge/skill files are owned projections.
+The portable `.agents/` tree is the source of truth. Root `AGENTS.md`, native
+MCP files, and Claude bridge/skill files are compatibility or owned
+projections; nested `AGENTS.md` files remain scoped portable instructions.
 
 ## Start a new repository
 
@@ -13,9 +14,11 @@ agents init --root .
 agents validate --root .
 ```
 
-Edit `.agents/manifest.json` to select the required profiles, place shared
-instructions in root or nested `AGENTS.md`, define MCP servers in
-`.agents/tools/mcp.json`, and add skills below `.agents/skills/`.
+Edit `.agents/manifest.json` to select the optional `tools` and `skills`
+profiles, place shared instructions in `.agents/AGENTS.md`, define MCP servers
+in `.agents/tools/mcp.json`, and add skills below `.agents/skills/`. Keep the
+generated root `AGENTS.md` compatibility link and add nested `AGENTS.md` files
+where narrower instructions are needed.
 
 ## Import an existing configuration
 

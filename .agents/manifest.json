@@ -2,8 +2,7 @@
   "$schema": "https://raw.githubusercontent.com/Open-Dot-Agents/Agents-Spec/v1.0.0/spec/1.0/schemas/manifest.schema.json",
   "version": "1.0.0",
   "profiles": [
-    "instructions",
-    "mcp",
+    "tools",
     "skills"
   ],
   "requires": [

@@ -14,11 +14,11 @@ not override an `unsupported` or unverified capability.
 ## Current state
 
 <!-- compatibility-table:start -->
-| Adapter | Harness version | Instructions | MCP | Skills | Status | Evidence |
+| Adapter | Harness version | Instructions | Tools | Skills | Status | Evidence |
 | --- | --- | --- | --- | --- | --- | --- |
-| Reference CLI: Copilot | Not pinned | CLI Projection Only | CLI Projection Only | CLI Projection Only | Not conformance supported | CLI unit tests only; no version-pinned native-harness black-box run |
-| Reference CLI: Codex | Not pinned | CLI Projection Only | CLI Projection Only | CLI Projection Only | Not conformance supported | CLI unit tests only; no version-pinned native-harness black-box run |
-| Reference CLI: Claude Code | Not pinned | CLI Projection Only | CLI Projection Only | CLI Projection Only | Not conformance supported | CLI unit tests only; no version-pinned native-harness black-box run |
+| Reference CLI: Copilot | Not pinned | Projection Only | CLI Projection Only | CLI Projection Only | Not conformance supported | CLI unit tests only; no version-pinned native-harness black-box run |
+| Reference CLI: Codex | Not pinned | Projection Only | CLI Projection Only | CLI Projection Only | Not conformance supported | CLI unit tests only; no version-pinned native-harness black-box run |
+| Reference CLI: Claude Code | Not pinned | Transformed | CLI Projection Only | CLI Projection Only | Not conformance supported | CLI unit tests only; no version-pinned native-harness black-box run |
 <!-- compatibility-table:end -->
 
 ## Ratification review — 2026-08-12
