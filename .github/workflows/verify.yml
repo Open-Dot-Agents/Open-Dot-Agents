@@ -33,7 +33,7 @@ jobs:
         working-directory: CLI
         run: go run ./cmd/agents validate --root .. --format json
       - name: Check compatibility data
-        run: python3 CLI/scripts/check_compatibility.py
+        run: python3 CLI/scripts/check_compatibility.py --skip-workbench-pins
 
   specification:
     name: Specification conformance
@@ -70,7 +70,7 @@ jobs:
         run: go run ./cmd/agents version
 
   workbench:
-    name: Workbench projections
+    name: Workbench deterministic tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -85,8 +85,9 @@ jobs:
           elif git submodule update --init --depth=1 WORKBENCH; then
             :
           else
-            echo "::notice::Skipping Workbench projection tests because the WORKBENCH submodule is not visible to this workflow token. Make the submodule public or set OPEN_DOT_AGENTS_SUBMODULES_TOKEN with read access to enable this experimental gate."
+            echo "::notice::Skipping Workbench deterministic tests because the WORKBENCH submodule is not visible to this workflow token. Make the submodule public or set OPEN_DOT_AGENTS_SUBMODULES_TOKEN with read access to enable this experimental gate."
             echo "available=false" >> "$GITHUB_OUTPUT"
+            echo "Workbench deterministic coverage: SKIPPED (submodule is unavailable)." >> "$GITHUB_STEP_SUMMARY"
             exit 0
           fi
           echo "available=true" >> "$GITHUB_OUTPUT"
@@ -94,7 +95,21 @@ jobs:
         if: steps.workbench.outputs.available == 'true'
         with:
           python-version: '3.12'
-      - name: Test canonical projections
+      - name: Checkout test dependencies
+        if: steps.workbench.outputs.available == 'true'
+        run: git submodule update --init --depth=1 CLI SPEC
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        if: steps.workbench.outputs.available == 'true'
+        with:
+          go-version-file: CLI/go.mod
+          cache-dependency-path: CLI/go.sum
+      - name: Install evidence validator
+        if: steps.workbench.outputs.available == 'true'
+        run: python3 -m pip install -r SPEC/conformance/requirements.txt
+      - name: Check compatibility including Workbench pins
+        if: steps.workbench.outputs.available == 'true'
+        run: python3 CLI/scripts/check_compatibility.py
+      - name: Test all deterministic Workbench checks
         if: steps.workbench.outputs.available == 'true'
         working-directory: WORKBENCH
-        run: python3 task/test/mcp_projections_test.py
+        run: python3 -m unittest discover -s task/test -p '*_test.py'
