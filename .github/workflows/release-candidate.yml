@@ -112,7 +112,7 @@ jobs:
           file: CLI/dist/${{ matrix.binary }}
           format: spdx-json
           output-file: CLI/dist/agents-${{ matrix.goos }}-${{ matrix.goarch }}.spdx.json
-          syft-version: v1.51.0
+          syft-version: v1.51.1
           upload-artifact: false
       - name: Verify embedded version
         if: runner.os == 'Windows' && ((runner.arch == 'X64' && matrix.goarch == 'amd64') || (runner.arch == 'ARM64' && matrix.goarch == 'arm64'))
