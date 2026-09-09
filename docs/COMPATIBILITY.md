@@ -16,8 +16,8 @@ not override an `unsupported` or unverified capability.
 <!-- compatibility-table:start -->
 | Adapter | Harness version | Instructions | Tools | Hooks | Skills | Status | Evidence |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| Reference CLI: Copilot | 1.0.83 | Projection Only | CLI Projection Only | CLI Projection Only | CLI Projection Only | Not conformance supported | Local native feature tests recorded with latest pinned copilot; tools-profile removal and unselected skill exposure fail; environment-reference mappings remain refused |
-| Reference CLI: Codex | 0.153.4 | Projection Only | CLI Projection Only | CLI Projection Only | CLI Projection Only | Not conformance supported | Local native feature tests recorded with latest pinned codex; tools-profile removal and unselected skill exposure fail; missing stdio environment references also fail |
+| Reference CLI: Copilot | 1.0.83 | Projection Only | CLI Projection Only | CLI Projection Only | CLI Projection Only | Not conformance supported | Local native feature tests recorded with latest pinned copilot; tools-profile removal and re-enabling pass; unselected skill exposure remains a known failure; environment-reference mappings remain refused |
+| Reference CLI: Codex | 0.154.0 | Projection Only | CLI Projection Only | CLI Projection Only | CLI Projection Only | Not conformance supported | Local native feature tests recorded with latest pinned codex; tools-profile removal and re-enabling pass; unselected skill exposure remains a known failure; missing stdio environment references also fail |
 | Reference CLI: Claude Code | 2.1.229 | Transformed | CLI Projection Only | CLI Projection Only | CLI Projection Only | Not conformance supported | CLI unit tests and pinned preflight only; no passing native-harness black-box run |
 <!-- compatibility-table:end -->
 
@@ -80,16 +80,20 @@ Copilot matchers are limited to `PreToolUse`, `PostToolUse`, `PermissionRequest`
 and `Stop` are refused. Native timeout defaults and matcher syntax are not
 normalized. These limits appear in the CLI capability output and registry.
 
-The latest stable npm releases checked on 2026-09-09 are Copilot 1.0.83 and
-Codex 0.153.4. The test pins and package integrity values now match them.
+The latest stable npm releases checked on 2026-09-10 (Europe/Rome) are Copilot 1.0.83 and
+Codex 0.154.0. The test pins and package integrity values now match them.
 The baseline suite passes for both targets with existing CLI logins. Extended
 native testing now covers remote HTTPS, environment references, all canonical
 hook events, filtering, timeouts, instruction precedence, skill resources,
 profile selection, trust, permission decisions, and restart/resume refresh.
 See the [extended Workbench report](../WORKBENCH/evidence/EXTENDED_NATIVE_TESTS.md).
 
-The extended tests found conformance failures: removing the tools profile
-leaves its MCP server active; both harnesses discover canonical skills even
+Tools-profile removal and re-enabling now pass on both targets. The CLI removes
+only owned MCP entries and preserves unowned servers and unrelated settings.
+For lost ownership from earlier CLI builds, use the reviewed reapplication
+procedure in the [CLI guide](../CLI/README.md).
+
+The extended tests found conformance failures: both harnesses discover canonical skills even
 when the skills profile is unselected; Codex also activates a stdio server
 when a referenced environment variable is missing. Support remains
 `not-conformance-supported`. Claude is outside this extended test cycle.

@@ -60,10 +60,10 @@ local disabled value in the canonical catalogue, so a later projection cannot
 silently enable those commands. These current documentation checks do not
 prove behavior in the pinned native versions.
 
-## Latest native test targets — 2026-09-09
+## Latest native test targets — 2026-09-10 (Europe/Rome)
 
 The official npm registry `latest` metadata resolves `@openai/codex` to
-0.153.4 and `@github/copilot` to 1.0.83. The Workbench pins now contain these
+0.154.0 and `@github/copilot` to 1.0.83. The Workbench pins now contain these
 exact versions and their registry `dist.integrity` values. CI reads this file
 for installation and package-integrity verification. This updates test targets;
 it does not establish native feature support.
@@ -86,3 +86,18 @@ fixture folders to the temporary `trustedFolders` setting resolved this.
 Codex 0.153.4 and Copilot 1.0.83 passed the local native suite with saved logins.
 The [Workbench report](../WORKBENCH/evidence/LATEST_NATIVE_TESTS.md) records the
 scope and remaining gaps. These results do not promote full profile support.
+
+## MCP cleanup cycle — 2026-09-10 (Europe/Rome)
+
+The official Codex and GitHub documentation indexes and MCP pages were fetched
+again for this cycle. The native target paths remain `.codex/config.toml` and
+`.github/mcp.json`. The shared CLI cleanup also applies to Claude `.mcp.json`;
+Claude native execution is deferred.
+
+Sources: [Codex MCP](https://learn.chatgpt.com/docs/extend/mcp.md) and
+[Copilot MCP](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/add-mcp-servers).
+
+Codex 0.154.0 passed the baseline again with the final cleanup build and an
+existing login. The earlier 0.153.4 results above are historical observations.
+See the [baseline report](../WORKBENCH/evidence/LATEST_NATIVE_TESTS.md) and
+[extended report](../WORKBENCH/evidence/EXTENDED_NATIVE_TESTS.md) for current evidence.

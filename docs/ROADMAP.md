@@ -6,15 +6,18 @@ Command-hook completion is implemented locally: disabled-state refusal,
 matcher checks, hook-only import, field-level Claude ownership, lifecycle
 regressions, and deterministic CI coverage. Full native support remains unverified.
 
-1. Fix tools-profile removal so it removes the owned MCP entries from native
-   configuration and a later native run cannot load them.
-2. Resolve native discovery of canonical skills when the skills profile is
+Tools-profile cleanup is implemented for all three CLI adapters. Native
+removal and re-enabling pass on Codex 0.154.0 and Copilot 1.0.83. Claude has
+deterministic regression coverage; its native test remains deferred. See the
+[extended report](../WORKBENCH/evidence/EXTENDED_NATIVE_TESTS.md).
+
+1. Resolve native discovery of canonical skills when the skills profile is
    unselected. Refuse the mapping if the adapter cannot preserve selection.
-3. Make Codex stdio environment references fail when their runtime source is
+2. Make Codex stdio environment references fail when their runtime source is
    missing. Apply-time validation alone cannot establish that runtime guarantee.
-4. Rerun the failing extended cases after each fix, then rerun the full gate.
+3. Rerun the failing extended cases after each fix, then rerun the full gate.
    Keep unsupported mappings and native hook-output differences explicit.
-5. Run Claude separately before any three-adapter support claim.
+4. Run Claude separately before any three-adapter support claim.
 
 ## 1.0 ratification
 
