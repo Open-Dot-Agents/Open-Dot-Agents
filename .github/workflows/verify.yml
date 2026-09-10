@@ -50,6 +50,9 @@ jobs:
       - name: Run conformance suite
         working-directory: SPEC
         run: python3 conformance/run.py
+      - name: Check experimental security schemas
+        working-directory: SPEC
+        run: python3 conformance/security_draft.py
 
   cli:
     name: Reference CLI

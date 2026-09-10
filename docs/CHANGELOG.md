@@ -5,6 +5,12 @@ release histories live in their respective repositories.
 
 ## Unreleased
 
+- Add the sourced Codex/Copilot feature inventory and experimental security
+  draft. Validate and normalize permissions and sandbox requirements; refuse
+  unsupported activation. Add a pinned Codex Linux direct-shell mapping with
+  authority checks, owned security segments, and native enforcement evidence.
+  Keep Copilot projection refused after a local-network mismatch.
+
 - Fix repository validation without a manifest and projection of explicitly
   required unsupported capabilities. These checks implement existing rules.
 

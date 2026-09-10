@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0.0",
+  "updated": "2026-09-10",
+  "contract": "1.1.0-draft.1",
+  "ratified": false,
+  "inventory": {
+    "path": ".agents/features/codex-copilot.json",
+    "entries": 1679,
+    "scope": "Bounded official reference corpus and pinned native help; CLI first"
+  },
+  "implemented": [
+    "Separate draft schemas and semantics",
+    "Explicit experimental opt-in",
+    "Strict policy validation and normalization",
+    "Plan, apply, sync, import, and legacy export refusals",
+    "Preservation of canonical policy, native settings, and ownership on refusal",
+    "Named extensions with required and optional diagnostics",
+    "Shared schema and CLI fixtures",
+    "Pinned Codex Linux direct-shell security projection",
+    "Native authority and prerequisite checks with an exact invocation contract",
+    "Owned security segments, removal, backup, and rollback",
+    "Explicit process runtime grant and workspace alias checks",
+    "Native enforcement, refusal, and lifecycle scenario classification"
+  ],
+  "not_implemented": [
+    "Security projection outside the Codex direct-shell subset",
+    "Portable model-tool approval rules and exact-command permissions",
+    "Credential isolation and default-deny filesystem mapping",
+    "Security coverage for hooks, MCP, LSP, or delegation",
+    "Lossless native security import",
+    "IDE, cloud, or non-Linux security adapters"
+  ],
+  "native_observations": {
+    "codex": "27 direct sandbox observations after apply, 23 refusal checks, and 9 lifecycle checks passed; no model-tool or approval-flow coverage",
+    "copilot": "Four native settings attempts retained; the final attempt reached a host Unix socket with local network access disabled. Portable security projection remains refused.",
+    "claude": "Skipped at user request"
+  },
+  "later_phases": [
+    "Broader native authority, model-tool and approval scopes, and Copilot local-network mapping",
+    "Agents and model intent",
+    "Planning, context, and session semantics",
+    "Plugins, LSP, automation, and remote extensions",
+    "Public proposal, comment period, and governance decision"
+  ],
+  "evidence": "WORKBENCH/evidence/CODEX_SECURITY_SUBSET.md",
+  "scenario_matrix": "WORKBENCH/evidence/SECURITY_SCENARIOS.json"
+}

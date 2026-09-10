@@ -76,3 +76,17 @@ records are upgraded only when the file matches the recorded hash. If it has
 changed, inspect the plan and use `--force --backup` only for an intended
 replacement. Unrelated settings remain in place. Keep the updated CLI when
 using the new ownership records; older binaries do not know the field hash.
+
+## Experimental security migration
+
+Keep existing 1.0 manifests unchanged unless you explicitly adopt the
+`1.1.0-draft.1` proposal. The draft requires `--experimental`; stable consumers
+reject its version. Native security import remains refused. A forced import
+cannot replace a draft manifest. The Codex Linux shell subset requires
+`--codex-home`, existing native trust, explicit process runtime grants, and
+credential inheritance. Old draft files do not gain those grants automatically.
+
+Use a current CLI to remove owned native security segments before changing to
+1.0. The current CLI records a security ownership hash that older binaries do
+not handle. Removing security requirements is an explicit loss of policy.
+See [security profiles](SECURITY_PROFILES.md) for use and removal.

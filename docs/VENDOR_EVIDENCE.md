@@ -121,3 +121,36 @@ claim from those pages.
 
 Direct native invocation is outside the CLI refusal boundary. No skill files
 are moved or deleted, and no new runtime launcher is introduced.
+
+## Security research, 2026-09-10
+
+The [feature inventory](FEATURE_INVENTORY.md) records live official references
+and native help from Codex 0.154.0 and Copilot 1.0.83. Source hashes and versions
+are separate. Codex legacy sandbox keys can supersede newer permission profiles;
+domain policy needs an active native proxy. Copilot tool path checks and OS
+process isolation have separate scope. Its cooperative proxy requires tools
+to honor proxy environment variables. Neither vendor preset proves the draft
+contract. No native security adapter is promoted. See the
+[draft and limits](SECURITY_PROFILES.md).
+
+## Security mapping review, 2026-09-10
+
+The official indexes and native security pages were fetched for this phase.
+The source files and hashes are retained with the local security evidence.
+
+- [Codex permissions](https://learn.chatgpt.com/docs/permissions.md) and
+  [managed configuration](https://learn.chatgpt.com/docs/enterprise/managed-configuration.md)
+  define the named permissions and authority surfaces used by the shell subset.
+  Unknown authority and legacy security keys cause refusal.
+- [Copilot local sandbox configuration](https://docs.github.com/en/copilot/how-tos/cloud-and-local-sandboxes/configuring-local-sandbox-settings)
+  and [local sandboxing](https://docs.github.com/en/copilot/concepts/agents/copilot-cli/understanding-local-sandboxing)
+  distinguish tool checks, process isolation, automatic grants, authentication,
+  and MCP/LSP scope. The Linux test used locally extracted slirp4netns 1.3.3.
+
+Codex evidence now follows canonical policy through apply to direct native
+sandbox commands. It does not cover model tools or approvals. Copilot reached
+a live host Unix socket with local network access disabled. Its projection
+remains refused. An inside-sandbox temporary write with explicit `/tmp` denial
+did not create the host marker; that result does not prove a shared-temp bypass.
+See [Codex evidence](../WORKBENCH/evidence/CODEX_SECURITY_SUBSET.md) and the
+[Copilot assessment](../WORKBENCH/evidence/COPILOT_SECURITY_ASSESSMENT.md).

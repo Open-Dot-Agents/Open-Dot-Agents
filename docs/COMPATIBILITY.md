@@ -101,3 +101,16 @@ when a referenced environment variable is missing. Support remains
 Use only the latest stable Codex and Copilot releases for new test cycles.
 Resolve `latest` before the cycle, then pin the exact versions and integrity
 values for reproducible execution and evidence.
+
+## Experimental security draft
+
+The 1.1.0-draft.1 profiles have a narrow Codex 0.154.0 Linux amd64 mapping
+for direct sandbox shell commands. It requires explicit runtime grants,
+credential inheritance, an isolated trusted native home, and the exact tested
+binary. Other security requests remain refused. Stable rows above are unchanged.
+See [Codex subset evidence](../WORKBENCH/evidence/CODEX_SECURITY_SUBSET.md).
+
+Copilot 1.0.83 reached a host Unix socket with local network access disabled.
+Its portable security mapping remains refused. Native observations are separate
+from projected enforcement; see the
+[Copilot assessment](../WORKBENCH/evidence/COPILOT_SECURITY_ASSESSMENT.md).
