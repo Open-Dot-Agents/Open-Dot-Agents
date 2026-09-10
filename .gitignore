@@ -11,6 +11,10 @@
 /.codegraph/
 *.backup*
 
+# Python test and coverage caches
+__pycache__/
+*.py[cod]
+
 # Native conformance workflow artifacts
 /agents
 /evidence/
