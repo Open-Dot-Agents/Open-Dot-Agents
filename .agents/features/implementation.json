@@ -20,7 +20,8 @@
     "Native authority and prerequisite checks with an exact invocation contract",
     "Owned security segments, removal, backup, and rollback",
     "Explicit process runtime grant and workspace alias checks",
-    "Native enforcement, refusal, and lifecycle scenario classification"
+    "Native enforcement, refusal, and lifecycle scenario classification",
+    "Native model-tool allow/deny and unattended approval assessment with correlated tool evidence"
   ],
   "not_implemented": [
     "Security projection outside the Codex direct-shell subset",
@@ -31,8 +32,8 @@
     "IDE, cloud, or non-Linux security adapters"
   ],
   "native_observations": {
-    "codex": "27 direct sandbox observations after apply, 23 refusal checks, and 9 lifecycle checks passed; no model-tool or approval-flow coverage",
-    "copilot": "Four native settings attempts retained; the final attempt reached a host Unix socket with local network access disabled. Portable security projection remains refused.",
+    "codex": "Direct-shell subset: 27 sandbox observations, 23 refusal checks, and 9 lifecycle checks passed. Separate native model-tool allow and explicit denial tests passed; on-request does not preserve portable unattended ask.",
+    "copilot": "Native path denial blocks the named host Unix socket, but TCP/UDP/IPv6 loopback remains allowed. Native model-tool allow, explicit denial, and unattended denial were observed; portable security remains refused.",
     "claude": "Skipped at user request"
   },
   "later_phases": [
@@ -43,5 +44,22 @@
     "Public proposal, comment period, and governance decision"
   ],
   "evidence": "WORKBENCH/evidence/CODEX_SECURITY_SUBSET.md",
-  "scenario_matrix": "WORKBENCH/evidence/SECURITY_SCENARIOS.json"
+  "scenario_matrix": "WORKBENCH/evidence/SECURITY_SCENARIOS.json",
+  "followup_evidence": "WORKBENCH/evidence/ISOLATION_APPROVALS.md",
+  "native_draft_2": {
+    "contract": "1.1.0-draft.2",
+    "complete": false,
+    "coverage": "coverage.json",
+    "implementation": "docs/NATIVE_CONFIGURATION.md",
+    "native_evidence": "WORKBENCH/evidence/NATIVE_DRAFT2.md",
+    "status": "Scoped ownership and configuration foundation; full milestone remains incomplete",
+    "debug_review": "docs/NATIVE_DEBUG_RESEARCH.md",
+    "debug_verification": "WORKBENCH/evidence/native-draft2-debug/verification.json",
+    "agent_evidence": [
+      "WORKBENCH/evidence/native-draft2-debug/codex-projected-agent-execution-v2.json",
+      "WORKBENCH/evidence/native-draft2-debug/codex-projected-project-agent-execution.json"
+    ],
+    "debug_followup_verification": "WORKBENCH/evidence/native-draft2-debug/verification-followup.json",
+    "filesystem_verification": "WORKBENCH/evidence/native-draft2-debug/verification-filesystem.json"
+  }
 }

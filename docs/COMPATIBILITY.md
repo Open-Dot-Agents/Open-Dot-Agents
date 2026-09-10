@@ -114,3 +114,33 @@ Copilot 1.0.83 reached a host Unix socket with local network access disabled.
 Its portable security mapping remains refused. Native observations are separate
 from projected enforcement; see the
 [Copilot assessment](../WORKBENCH/evidence/COPILOT_SECURITY_ASSESSMENT.md).
+
+The [isolation and approval follow-up](../WORKBENCH/evidence/ISOLATION_APPROVALS.md)
+records native model-tool allow/deny tests and unattended behavior. Copilot
+path denial blocked one named host socket, but loopback remained allowed.
+Codex `on-request` did not preserve portable mandatory `ask`. Experimental
+projection scope and stable adapter status remain unchanged.
+
+### Draft.2 native configuration
+
+The experimental native profile has project and user scope, per-setting
+ownership, and transactional writes. It remains incomplete and does not change
+any adapter support status. The source-linked coverage map is
+`.agents/features/coverage.json`; the implementation boundaries are in
+`docs/NATIVE_CONFIGURATION.md`. Additional native observations are in
+`WORKBENCH/evidence/NATIVE_DRAFT2.md`.
+
+Bounded Codex 0.154.0 fixtures now cover projected standalone agents in project
+and user scope: discovery, configured instructions, model and reasoning selection,
+delegation, and a child command. They use a local deterministic model provider.
+This is not full adapter support. The separate trust-derived approval probe
+confirms a built-in image read without an approval request, so mandatory portable
+`ask` remains refused. See the [debug review](NATIVE_DEBUG_RESEARCH.md).
+
+Codex `0.154.0` also has bounded user-scope OTLP HTTP JSON telemetry evidence.
+The same client ignores project telemetry, so the adapter refuses required
+project settings and leaves optional settings inactive. CA-only TLS preserves
+reference targets across import and apply. HTTP client identities fail in the
+pin; the complete exporter stays inactive to preserve authentication. These
+findings do not change adapter support status. See the
+[TLS review](NATIVE_DEBUG_RESEARCH.md#codex-telemetry-tls-references-and-client-identities).

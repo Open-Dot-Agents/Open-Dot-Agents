@@ -108,3 +108,70 @@ fetch or execute vendor commands itself.
 
 Current mapping limits and observed results are in [security profiles](SECURITY_PROFILES.md).
 The source inventory retains the original bounded corpus.
+
+## Semantic coverage map
+
+`.agents/features/coverage.json` groups the original 1,679 source entries by
+semantic feature. It separates portable configuration, native configuration,
+invocation options, runtime operations, and external authority/state. Repeated
+reference rows do not count as separate completed features. The source inventory
+hash and per-row links are retained. Generate it with
+`python3 scripts/native_coverage.py`.
+
+The map uses compiled CLI declarations. It does not search Go source text for
+setting names. `validator-declared` identifies a value validator; it does not
+mean that a feature passed native tests. Native status is recorded separately.
+The counts are not completion counts.
+The `native_artifacts` section records artifact import/projection status and
+bounded native evidence separately from the immutable source-row count.
+
+Coverage format version 3 separates records, features, and the Linux CLI milestone:
+
+| Field | Meaning |
+| --- | --- |
+| `coverage_records`, `record_counts` | Every retained record, including syntax references and aliases. |
+| `semantic_features`, `counts` | Records whose `counted_feature` value is true. |
+| `milestone_features`, `milestone_counts` | Counted features within the Linux CLI milestone. |
+| `record_kind`, `describes` | Identify a configuration value, path selector, or alias and link it to its setting. |
+| `setting_path` | A lookup path when a source uses TOML table notation around part of the field. |
+| `milestone_scope`, `milestone_reason` | State an evidenced platform or client boundary. |
+
+For example, `read`, `write`, and `deny` are values of the filesystem permission
+setting. `:root` and `:tmpdir` are path selectors. An empty key binding is a value
+of the keymap setting. These records keep their IDs and source evidence, but do
+not count as separate settings or completed mappings. Their linked settings
+remain responsible for value semantics and native tests.
+
+The reviewed map has 1,397 retained records, 1,385 counted features, and 1,361
+features within the Linux CLI milestone. Twelve syntax/alias records do not add
+features. Twenty-four records concern Windows or the desktop app. Desktop file
+handlers use user scope, as their source specifies. Managed policy remains
+external even when it is also outside the platform scope.
+
+For undeclared children of a security setting, the map consults the compiled
+parent gate. `security-evidence-required` with `gate_scopes` records a refusal
+already implemented by the adapter. An empty `implemented_scopes` list makes
+clear that this is not a field mapping or a native enforcement result.
+
+Semantic IDs use vendor, configuration context, and canonical name. A change in
+disposition does not change the ID. Settings, frontmatter fields, MCP fields,
+and managed policy have separate contexts. Aliases grouped in the original map
+share one ID. Newly identified syntax aliases retain their existing IDs and link
+to the counted record through `describes`. The
+[classification baseline](../WORKBENCH/evidence/native-draft2-debug/coverage-classification-baseline.json)
+checks that this correction preserves every ID and source-row assignment. This
+identity rule replaced the initial draft.2 IDs, which included classification.
+
+Run `python3 scripts/native_coverage.py --check` to check reproducibility, or
+`python3 scripts/native_coverage_test.py` to check context, alias grouping, and
+all source-row links. Missing mappings and native evidence remain outstanding
+work; they are not automatically native limitations.
+
+Telemetry reference paths use `<id>` for the finite `otlp-http` and `otlp-grpc`
+exporter choices. The map records these concrete schema paths in
+`validation_paths`. The `protocol` field exists only for `otlp-http`. These
+relationships retain the original IDs and source entries. CA references have
+bounded native HTTP TLS evidence. Client identity fields record HTTP-specific
+failures in `native_variant_limitations`; gRPC validation does not establish
+runtime behavior. The measured HTTP JSON subset has separate evidence and user
+scope; project telemetry is ignored by the pin.

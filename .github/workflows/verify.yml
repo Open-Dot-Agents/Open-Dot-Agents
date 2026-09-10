@@ -34,6 +34,8 @@ jobs:
         run: go run ./cmd/agents validate --root .. --format json
       - name: Check compatibility data
         run: python3 CLI/scripts/check_compatibility.py --skip-workbench-pins
+      - name: Check native coverage classification and reproducibility
+        run: python3 scripts/native_coverage_test.py
 
   specification:
     name: Specification conformance
@@ -53,6 +55,9 @@ jobs:
       - name: Check experimental security schemas
         working-directory: SPEC
         run: python3 conformance/security_draft.py
+      - name: Check experimental native schemas
+        working-directory: SPEC
+        run: python3 conformance/native_draft.py
 
   cli:
     name: Reference CLI

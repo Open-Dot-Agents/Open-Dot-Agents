@@ -5,6 +5,29 @@ release histories live in their respective repositories.
 
 ## Unreleased
 
+- Add transactional initial instruction links to stable file projections,
+  with shared-link sync and protection for existing root instruction files.
+
+- Add the missing `SPEC/.agents/plugins/.gitkeep` placeholder. Correct CLI
+  validation of nested canonical instruction links and add the SPEC starter
+  to the repository verification command matrix.
+
+- Correct Codex TLS reference relocation. Record CA-only TLS delivery and
+  separate HTTP identity failures for logs, traces, and metrics. Keep the
+  complete failing exporter inactive to preserve authentication.
+
+- Correct draft.2 Codex telemetry scope and exclude credentials in collector
+  URLs and headers. Record local HTTP JSON log and trace evidence. Resolve
+  exporter aliases in coverage without adding semantic features.
+
+- Add draft.2 native configuration, scoped ownership, and a semantic coverage
+  map. Correct numeric preservation, ownership and import defects, and coverage
+  classification. Record the pinned Codex alias probe and debug review. The full
+  configuration milestone and native adapter promotion remain incomplete.
+
+- Record native isolation and model-tool approval tests. Preserve the Copilot
+  local-network and Codex mandatory-ask refusals; do not extend coverage.
+
 - Add the sourced Codex/Copilot feature inventory and experimental security
   draft. Validate and normalize permissions and sandbox requirements; refuse
   unsupported activation. Add a pinned Codex Linux direct-shell mapping with

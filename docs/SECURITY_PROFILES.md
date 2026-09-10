@@ -114,6 +114,22 @@ attempts, prerequisite setup, and temporary-directory limits.
 
 The [60-scenario record](../WORKBENCH/evidence/SECURITY_SCENARIOS.json) separates
 enforcement, refusal, lifecycle checks, deterministic-only tests, and pending
-work. Model tools, approval flows, additional execution scopes, native import,
-and other platforms remain later work. Claude native verification is skipped
+work. Portable mappings for model tools, approval flows, additional execution
+scopes, native import, and other platforms remain later work. Claude native verification is skipped
 at the user's request.
+
+The [native isolation and approval follow-up](../WORKBENCH/evidence/ISOLATION_APPROVALS.md)
+found that Copilot path denial blocks the named Unix socket, but not sandbox
+loopback. Native model-tool allow and deny tests pass on both harnesses.
+Copilot denies unattended tool requests. Codex `on-request` can execute a
+sandboxed command without approval, so it cannot represent portable mandatory
+`ask`. These observations do not extend the projected security subset.
+
+A later isolated Codex 0.154.0 probe omitted the approval-policy key and used an
+untrusted workspace. The native thread reported `untrusted`, and project
+configuration remained disabled. A safe `cat` command requested approval;
+explicit-rule acceptance and denial also behaved as requested. However,
+`view_image` read the fixture image and returned it to the model without an
+approval request. Trust-derived approval therefore does not represent mandatory
+portable `ask` across the tested action classes. See the
+[local-model evidence](../WORKBENCH/evidence/native-draft2-debug/codex-local-trust-image.json).

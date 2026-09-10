@@ -9,10 +9,11 @@ were prepared locally, but host Unix-socket access does not preserve local
 network denial. See the [scenario record](../WORKBENCH/evidence/SECURITY_SCENARIOS.json).
 The next phases are:
 
-1. Extend Codex authority and scope checks only with native evidence. Model
-   tool use, approval flows, credential isolation, and other platforms remain
-   unverified. Keep unsupported requests refused.
-2. Resolve the Copilot local-network mismatch before implementing that mapping.
+1. Extend Codex authority and scope checks only with native evidence. Native
+   model-tool allow/deny tests now exist, but `on-request` is not portable
+   mandatory `ask`. Implement a lossless mapping before extending coverage.
+   Credential isolation and other platforms remain unverified.
+2. Resolve the Copilot loopback mismatch before implementing that mapping.
    Test portable policies after apply; native settings alone do not establish
    portable enforcement. Keep pending scenarios explicit.
 3. Propose portable agent roles and model intent with named provider extensions.
