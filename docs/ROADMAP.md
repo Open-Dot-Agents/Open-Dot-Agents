@@ -11,13 +11,25 @@ removal and re-enabling pass on Codex 0.154.0 and Copilot 1.0.83. Claude has
 deterministic regression coverage; its native test remains deferred. See the
 [extended report](../WORKBENCH/evidence/EXTENDED_NATIVE_TESTS.md).
 
-1. Resolve native discovery of canonical skills when the skills profile is
-   unselected. Refuse the mapping if the adapter cannot preserve selection.
-2. Make Codex stdio environment references fail when their runtime source is
-   missing. Apply-time validation alone cannot establish that runtime guarantee.
-3. Rerun the failing extended cases after each fix, then rerun the full gate.
-   Keep unsupported mappings and native hook-output differences explicit.
-4. Run Claude separately before any three-adapter support claim.
+1. CLI refusal guards now cover unselected non-empty canonical skills on
+   Codex and Copilot and Codex stdio environment references. Native discovery
+   itself is unchanged. Refusal is not full profile support.
+2. Assess the reviewed native results and their retained retries. Copilot
+   recovered after network errors; earlier selected-skill failures remain
+   recorded. Passing cases do not remove explicit capability refusals.
+3. Claude native verification is skipped for this development cycle at the
+   maintainer's request. Its baseline and eleven implemented extended cases
+   remain unverified; the existing three-adapter release gate is unchanged.
+4. Publish reviewed, versioned native evidence only after successful gates.
+   The workflow now packages baseline results, extended results, source
+   snapshots, checksums, and reproduction inputs. Local results remain local.
+5. Keep release blocked until all three registry rows meet the existing support
+   policy. Unsupported capabilities and expected refusals do not meet that bar.
+
+The core audit also fixed public CLI validation without a manifest and
+explicit unsupported capability requirements. The portable specification and
+schemas are unchanged. See the [completion review](../WORKBENCH/evidence/CORE_COMPLETION.md)
+for validation results and release blockers.
 
 ## 1.0 ratification
 

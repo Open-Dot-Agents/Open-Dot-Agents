@@ -10,3 +10,10 @@
 /.opencode/
 /.codegraph/
 *.backup*
+
+# Native conformance workflow artifacts
+/agents
+/evidence/
+/adapter-evidence-*.tar.gz*
+/native-evidence/
+/dist/

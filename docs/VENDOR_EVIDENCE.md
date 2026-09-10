@@ -101,3 +101,23 @@ Codex 0.154.0 passed the baseline again with the final cleanup build and an
 existing login. The earlier 0.153.4 results above are historical observations.
 See the [baseline report](../WORKBENCH/evidence/LATEST_NATIVE_TESTS.md) and
 [extended report](../WORKBENCH/evidence/EXTENDED_NATIVE_TESTS.md) for current evidence.
+
+## Core refusal review — 2026-09-10
+
+The official OpenAI and GitHub indexes were fetched again. The Claude index
+and skills page returned HTTP 403; this review makes no new Claude behavior
+claim from those pages.
+
+- [Codex MCP](https://learn.chatgpt.com/docs/extend/mcp.md) describes `env_vars`
+  as variables to allow and forward. It does not establish the required
+  missing-variable failure. The recorded native failure remains the reason
+  to refuse stdio references.
+- [Codex configuration](https://learn.chatgpt.com/docs/config-file/config-reference.md)
+  lists per-skill configuration controls. This change does not claim that
+  those controls preserve complete profile selection in the pinned harness.
+- [Copilot skills](https://docs.github.com/en/copilot/concepts/agents/about-agent-skills)
+  lists `.agents/skills` as a project discovery root. The adapter now refuses
+  an unselected non-empty canonical skills directory.
+
+Direct native invocation is outside the CLI refusal boundary. No skill files
+are moved or deleted, and no new runtime launcher is introduced.

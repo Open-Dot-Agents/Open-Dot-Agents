@@ -5,6 +5,16 @@ release histories live in their respective repositories.
 
 ## Unreleased
 
+- Fix repository validation without a manifest and projection of explicitly
+  required unsupported capabilities. These checks implement existing rules.
+
+- Add refusal checks for unselected canonical skills and Codex stdio
+  environment references. Preserve canonical files and existing ownership.
+- Require Workbench checks and all three native support rows before release.
+- Add baseline/extended evidence agreement checks and versioned evidence
+  bundles to the native and release workflows.
+- Add eleven Claude extended cases; native verification needs credentials.
+
 - Add extended native feature tests for latest Codex and Copilot, with HTTPS
   fixtures, terminal compaction, event filters, failure behavior, profile
   selection, and resumed-session checks. Preserve failures and source snapshots.

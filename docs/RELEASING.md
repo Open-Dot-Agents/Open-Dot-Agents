@@ -78,3 +78,57 @@ Security fixes and adapter regressions receive the smallest compatible release
 practical. If a harness change invalidates a compatibility claim, mark that
 entry unsupported or affected immediately, publish a mitigation, and restore
 support only after a verified conformance run.
+
+## Enforced core release checks
+
+The release workflow now runs specification validation, canonical repository
+validation, every deterministic Workbench test, and
+`python3 CLI/scripts/check_compatibility.py --require-supported` before the
+native jobs and artifact builds. A missing Workbench checkout is a failure.
+All three registry rows must be `conformance-supported`; each needs a public
+HTTPS `evidence_url` and an `evidence_sha256` for its versioned evidence bundle.
+These identifiers supplement the existing capability and exact-version checks.
+They do not replace verification of the linked artifact or its attestation.
+
+The native workflow runs baseline and extended tests and checks their agreement
+with `WORKBENCH/conformance/release_gate.py`. Release verification rejects failed
+or incomplete cases, mixed CLI binaries, changed runner sources, mismatched
+source commits, and evidence from uncommitted source changes. A preflight result
+cannot replace a native result. Expected refusals are recorded separately;
+they do not satisfy the registry's full-support requirement.
+
+Each native workflow artifact contains a tar archive and its SHA-256 file.
+Passing archives receive GitHub provenance attestations. The draft release
+includes the archives so evidence can remain available beyond the workflow
+artifact retention period. Publishing that draft remains a maintainer action.
+Until reviewed archives are public, do not replace local evidence links with
+invented release URLs or mark an adapter supported.
+
+Verify downloaded evidence from a trusted project workflow:
+
+```sh
+sha256sum -c adapter-evidence-codex.tar.gz.sha256
+gh attestation verify adapter-evidence-codex.tar.gz \
+  --repo Open-Dot-Agents/Open-Dot-Agents
+```
+
+Extract the three verified archives in a clean checkout of their recorded
+source commits, install the pinned dependencies, then run:
+
+```sh
+python3 WORKBENCH/conformance/release_gate.py --evidence-dir evidence --release
+```
+
+The current registry intentionally fails `--require-supported`. The refusal
+fixes do not remove that release blocker. No specification semantics changed
+in this implementation cycle; a future policy change still requires the
+public proposal and decision process.
+
+### Existing local tag
+
+The core review found an existing local root `v1.0.0` tag at
+`422c8596cfc684720e5c3214048de1568d4f896b`. Do not move or recreate it.
+Before any future publication, verify remote release state and select an unused
+root release identifier through the existing release process. This review did
+not inspect or change remote tags. The current CLI/Spec version remains 1.0.0;
+root release identifiers and component versions are independent.

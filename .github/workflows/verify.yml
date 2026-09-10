@@ -82,13 +82,8 @@ jobs:
           if [ -n "$SUBMODULE_TOKEN" ]; then
             encoded="$(printf 'x-access-token:%s' "$SUBMODULE_TOKEN" | base64 -w0)"
             git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic ${encoded}" submodule update --init --depth=1 WORKBENCH
-          elif git submodule update --init --depth=1 WORKBENCH; then
-            :
           else
-            echo "::notice::Skipping Workbench deterministic tests because the WORKBENCH submodule is not visible to this workflow token. Make the submodule public or set OPEN_DOT_AGENTS_SUBMODULES_TOKEN with read access to enable this experimental gate."
-            echo "available=false" >> "$GITHUB_OUTPUT"
-            echo "Workbench deterministic coverage: SKIPPED (submodule is unavailable)." >> "$GITHUB_STEP_SUMMARY"
-            exit 0
+            git submodule update --init --depth=1 WORKBENCH
           fi
           echo "available=true" >> "$GITHUB_OUTPUT"
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0

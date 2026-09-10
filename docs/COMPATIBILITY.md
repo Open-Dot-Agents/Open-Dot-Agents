@@ -16,8 +16,8 @@ not override an `unsupported` or unverified capability.
 <!-- compatibility-table:start -->
 | Adapter | Harness version | Instructions | Tools | Hooks | Skills | Status | Evidence |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| Reference CLI: Copilot | 1.0.83 | Projection Only | CLI Projection Only | CLI Projection Only | CLI Projection Only | Not conformance supported | Local native feature tests recorded with latest pinned copilot; tools-profile removal and re-enabling pass; unselected skill exposure remains a known failure; environment-reference mappings remain refused |
-| Reference CLI: Codex | 0.154.0 | Projection Only | CLI Projection Only | CLI Projection Only | CLI Projection Only | Not conformance supported | Local native feature tests recorded with latest pinned codex; tools-profile removal and re-enabling pass; unselected skill exposure remains a known failure; missing stdio environment references also fail |
+| Reference CLI: Copilot | 1.0.83 | Projection Only | CLI Projection Only | CLI Projection Only | CLI Projection Only | Not conformance supported | Refusal guards are implemented; local native runs and retries are recorded separately; full capability support is not established |
+| Reference CLI: Codex | 0.154.0 | Projection Only | CLI Projection Only | CLI Projection Only | CLI Projection Only | Not conformance supported | Refusal guards are implemented; local native runs and retries are recorded separately; full capability support is not established |
 | Reference CLI: Claude Code | 2.1.229 | Transformed | CLI Projection Only | CLI Projection Only | CLI Projection Only | Not conformance supported | CLI unit tests and pinned preflight only; no passing native-harness black-box run |
 <!-- compatibility-table:end -->
 
