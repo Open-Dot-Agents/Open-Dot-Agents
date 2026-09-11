@@ -471,3 +471,219 @@ and metrics with EC and RSA keys. Independent TLS controls verify the generated
 certificates. HTTP identity settings therefore keep the complete exporter
 inactive; the adapter does not remove authentication. gRPC, metrics delivery,
 certificate rotation, and live reload remain unverified.
+
+## Canonical instruction-link lifecycle — 2026-09-11
+
+Current official instruction pages confirm project `AGENTS.md` discovery.
+The [saved source records](../WORKBENCH/evidence/native-draft2-debug/instruction-link-docs.sources.json)
+include URLs and hashes. The [draft.2 instruction-link checks](NATIVE_DEBUG_RESEARCH.md#draft2-instruction-links-and-re-import)
+verify the local canonical symlink with Codex `0.154.0` and Copilot `1.0.83`.
+They cover stable-to-draft projection, ownership migration, re-import, and
+updated instructions in fresh model requests. Each marker appears once.
+They do not establish live reload, all instruction precedence rules, or full
+adapter support. Copilot's first-launch state update is recorded separately
+from adapter writes.
+
+## Project GitHub package and shared diagnostic skill
+
+The [project extension review](PROJECT_EXTENSIONS_READINESS.md) records the
+OpenAI GitHub `0.1.11` package at source revision
+`d416fd5a43426019986b1e489506db3db66dee3d`. Codex `0.154.0` installs the unchanged
+package and reports its project selection enabled. A loopback MCP probe shows
+that it uses `bearer_token_env_var` when the named variable exists and makes no
+MCP request when it is absent. Copilot `1.0.83` installs the same package but
+does not send the named bearer token. Component listing alone does not show
+successful authentication. No external GitHub MCP request or write was tested.
+
+The current session's already connected GitHub app completed a separate
+read-only repository lookup. Both native clients discovered the pinned
+`diagnosing-bugs` skill directly in `.agents/skills`. The review links source
+captures, exact binary pins, frozen test runners, native events, and retained
+failed attempts. These checks do not promote adapter support.
+
+## Codex OTLP transports and authentication preservation
+
+The [OTLP report](CODEX_OTEL_TRANSPORTS.md) adds eight cases and 16 completed
+native sessions for Codex `0.154.0`. User-scope HTTP binary and gRPC signals
+reach local collectors before and after import/apply. CA trust, gRPC client
+certificates, metric counts, and the analytics-disabled control are verified.
+
+A retained failing case shows telemetry sent without authentication after
+credential exclusion. The fixed HTTP binary and gRPC cases verify explicit
+disablement instead. Source credentials remain external, required content
+blocks apply, and no native default exporter is restored. Project telemetry,
+remote collectors, live reload, certificate rotation, and release support remain
+outside these bounded claims.
+
+## Native runtime authentication preservation
+
+The [authentication audit](NATIVE_AUTHENTICATION.md) records a Codex `0.154.0`
+provider-selection regression and its correction. With the earlier CLI, import
+removed `requires_openai_auth=true`, and the relocated client sent an
+unauthenticated model request. The fixed on/off cases preserve the Boolean,
+correlate native completion with local requests, and leave both synthetic
+account files unchanged. The report includes the official reference, pinned
+source, and a retained failing native run. It makes no login, missing-credential,
+remote-service, or full support claim.
+
+CLI tests also verify refusal before writes when credential filtering would
+remove authentication from Codex MCP or provider definitions and Copilot MCP
+or LSP definitions. These tests cover project/user import, optional forced
+apply, malformed controls, and supported references. They are adapter tests,
+not new native MCP or LSP execution evidence.
+
+## Codex provider token commands
+
+The [command-authentication report](CODEX_COMMAND_AUTHENTICATION.md) records
+nine paired native cases for Codex `0.154.0`. The native token command uses
+its configured arguments and working directory. Caching, timed refresh, and
+401-triggered refresh are observed in local model requests. A timeout, empty
+output, nonzero exit, invalid UTF-8 output, or missing executable produces
+a native error but does not prevent an unauthenticated model request. These
+five cases are native limitations, not passed authentication requirements.
+
+The adapter now preserves the complete configuration table and rejects invalid
+fields or conflicting modes before writes. No helper execution or token copy
+occurs during apply. User-scope evidence does not establish project behavior,
+public-provider compatibility, background-descendant handling, or full support.
+
+## Codex project configuration restrictions
+
+The [scope report](CODEX_PROJECT_SCOPE.md) records two paired cases for Codex
+`0.154.0`. Effective configuration and four completed model turns verify 12
+ignored root keys and the ignored system-proxy flag in a trusted project.
+The project model is active, while provider selection and the request endpoint
+stay user-owned. Required-profile refusal, preserved optional source, and
+unchanged user configuration are checked. These results do not cover
+credential-broker-dependent restrictions, agent-role overrides, or all user
+configuration behavior.
+
+## Codex child-role override limits
+
+The [role report](CODEX_ROLE_OVERRIDES.md) records eight cases in project and
+user scope for Codex `0.154.0`. Child model and effort apply while the parent
+provider stays active. Selected shell and skill capabilities can be reduced;
+the tested role enables do not override parent disables. Sixteen native
+processes produce 32 correlated completed parent or child turns. Required
+refusal and optional whole-file preservation are checked through the CLI.
+The captured official documentation describes broader override behavior.
+Other role controls, security enforcement, and full support remain unverified.
+
+## Codex reference relocation
+
+The [reference report](CODEX_ROLE_REFERENCES.md) records ten project/user cases
+for Codex `0.154.0`. Relative role declarations and role skill selectors retain
+their target after import and relocation. Twenty native processes produce 40
+completed parent or child turns. The earlier missing-agent and changed-skill
+failures are retained. External libraries remain external, and this evidence
+does not establish cross-machine availability or security enforcement.
+
+## Copilot skill metadata
+
+The [metadata audit](COPILOT_SKILL_METADATA.md) tests Copilot `1.0.83` in project
+and user scope. Visibility controls affect model and user invocation separately.
+The wildcard `allowed-tools` field is present in native invocation events, but
+the tested shell built-in still requires approval. Terminal allow controls
+produce the file effect; ACP denial and terminal cancellation do not. The
+custom argument hint is absent from the tested ACP and terminal menus.
+
+Malformed metadata could pass structural apply and remain absent from native
+discovery. Draft.2 now refuses these projections before writes and reports
+per-skill invocation controls and metadata losses. Valid user skills retain
+their bytes through import, apply, and reimport. Stable Markdown rules remain
+unchanged. Failed probes and incorrect early test expectations are retained
+with the current evidence. These bounded mappings do not promote full support.
+
+## Copilot project skill import
+
+The [project import report](COPILOT_SKILL_IMPORT.md) records two source and
+relocated pairs with Copilot `1.0.83` on Linux. The supplied-root
+`.github/skills/` and `.claude/skills/` packages retain their definition bytes,
+binary assets, and executable property through canonical import and reimport.
+Each pair includes native skill loading, an exact fixture-command approval,
+script execution, and a file effect. The retained failures show source
+execution followed by missing relocated discovery before the fix.
+
+Both clients use `.agents/skills/` directly. This change adds Copilot import
+paths; it does not require duplicate vendor skill trees. These tests do not
+run Claude Code or establish inherited discovery, duplicate precedence,
+live reload, or full adapter support.
+
+## Copilot recursive instructions
+
+The [recursive instruction audit](COPILOT_RECURSIVE_INSTRUCTIONS.md) records
+Copilot `1.0.83` source and relocated sessions in project and user scope.
+Unconditional flat and nested instructions reach the model after the import
+fix. Path-specific files appear in the native model catalog. The fixture model
+can read these paths to load their bodies; native user-home reads require
+permission in the tested setup. Allow and deny cases have correlated tool and
+permission events. Fourteen source/relocated native turns establish bounded
+discovery and loading, not deterministic glob enforcement, model compliance,
+or full support. Earlier missing-body probes used an incorrect expectation of
+automatic body injection; their native catalogs were present.
+
+## Copilot root instruction import
+
+The earlier [root instruction audit](COPILOT_ROOT_INSTRUCTIONS.md) used Copilot
+`1.0.83` in seven isolated native sessions. Root instruction bodies load before
+import and after relocation. Distinct root and native bodies both load, so the
+adapter refuses selection of only one. The native client resolves `@policy.md`
+relative to the instruction file: a raw copy into `.github` loads a different
+file. Import refuses that conversion. These checks do not establish reference
+rebasing, nested root discovery, live reload, or full adapter support.
+
+## Copilot native agent instruction paths
+
+The [agent instruction audit](COPILOT_AGENT_INSTRUCTIONS.md) replaces the
+root-reference and distinct-body import refusals with fixed native path
+mappings. Copilot `1.0.83` loads the same instruction and reference bodies
+before import and after relocation. Root, Claude, and Copilot references retain
+their file bases; Gemini references remain literal. Referenced files stay
+external and unchanged.
+
+The `.claude/CLAUDE.md` file loads when the tested session starts in `.claude`.
+It does not load from the repository root, including when it is the only
+agent instruction file. Combined `.claude` sessions load both Claude files,
+so root-file precedence did not explain the initial missing body. The three
+failed root-loading expectations remain in the evidence. These results do not
+establish other nested scopes, later file-triggered discovery, or live reload.
+
+## Copilot canonical instruction binding
+
+The [canonical instruction audit](COPILOT_CANONICAL_INSTRUCTIONS.md) uses six
+Copilot `1.0.83` sessions. Root `@` references through a verified canonical
+symlink resolve from the project root. A fixed `canonical-instructions`
+binding preserves that base when relocation creates a regular root file.
+Source, relocated, and updated-core sessions load the expected bodies and
+references. A distinct native Copilot body stays independent. Decoy policies
+do not load, source apply preserves the link inode, and trust stays unchanged.
+These checks do not establish arbitrary symlink discovery or live reload.
+
+## Copilot shared project skill import
+
+The [shared skill import audit](COPILOT_SKILL_IMPORT.md) uses Copilot `1.0.83`
+with `.agents/skills` before and after import and relocation. A retained native
+source run loads and executes the skill, then the old importer fails because
+the native tree has no manifest. Draft.2 now establishes metadata for that
+recognized source and selects existing shared packages in place. Six current
+sessions cover `.agents`, `.github`, and `.claude` skill origins, with model
+requests, native discovery and invocation events, an approved fixture command,
+and an observable asset-derived effect. Source modes and inodes remain intact.
+This does not cover inherited parent or user discovery, duplicate precedence,
+live reload, or portable permission enforcement.
+
+## Copilot user instruction source routing
+
+The [user instruction audit](COPILOT_USER_INSTRUCTIONS.md) covers 12 Copilot
+`1.0.83` sessions. Default and explicit native homes load user and project
+instructions together. User references and their child reference retain their
+native-home base after relocation. Updated sessions load the new user body;
+after owned removal, only the project body remains. No project reference decoy
+loads. The tests correlate native reads and completed turns with model context.
+
+The retained failure shows that reimport added a second artifact when the
+namespace source differed from the native filename. The fixed importer keeps
+the declared source. Adapter calls preserve external configuration bytes;
+Copilot's own first-launch metadata update remains native runtime state. These
+checks do not prove arbitrary reference handling, live reload, model compliance,
+or a native Codex user-instruction result.

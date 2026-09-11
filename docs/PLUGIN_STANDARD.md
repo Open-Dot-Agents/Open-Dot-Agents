@@ -52,10 +52,11 @@ The integration must:
   a self-contained repository. Use the same ownership and compatibility checks
   for these sources.
 
-Native fixtures use a generated local marketplace and package. No published
-package has been installed as part of this verification. Selection import and
-projection are implemented. Git fetching is tested with an isolated HTTP server;
-public marketplace services and authentication remain unverified.
+The selection fixtures use a generated local marketplace and package. A
+separate [project-extension audit](PROJECT_EXTENSIONS_READINESS.md) installed
+the pinned OpenAI GitHub package from its local repository copy. Selection
+import and projection are implemented. Git fetching is tested with an isolated
+HTTP server; public marketplace services and authentication remain unverified.
 
 ## Shared packages and native selections
 

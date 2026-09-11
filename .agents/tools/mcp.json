@@ -28,7 +28,7 @@
       "command": "npx",
       "args": [
         "-y",
-        "@upstash/context7-mcp"
+        "@upstash/context7-mcp@3.2.2"
       ]
     },
     "openai-developer-docs": {

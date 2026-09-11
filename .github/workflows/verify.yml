@@ -35,7 +35,11 @@ jobs:
       - name: Check compatibility data
         run: python3 CLI/scripts/check_compatibility.py --skip-workbench-pins
       - name: Check native coverage classification and reproducibility
-        run: python3 scripts/native_coverage_test.py
+        run: python3 CLI/scripts/native_coverage_test.py
+      - name: Check pinned project skills and plugins
+        run: |
+          python3 CLI/scripts/check_project_extensions.py
+          python3 CLI/scripts/check_project_extensions_test.py
 
   specification:
     name: Specification conformance

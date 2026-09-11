@@ -1,0 +1,12 @@
+{
+  "namespace": "com.openai.codex",
+  "harness_version": "=0.154.0",
+  "scope": "project",
+  "required": false,
+  "artifacts": [
+    {
+      "kind": "config",
+      "source": "config.toml"
+    }
+  ]
+}

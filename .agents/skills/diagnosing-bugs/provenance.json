@@ -1,0 +1,14 @@
+{
+  "repository": "https://github.com/mattpocock/skills",
+  "revision": "3cca18b368ae95cdbdebbff572ccafa662551015",
+  "source_path": "skills/engineering/diagnosing-bugs",
+  "license": "MIT",
+  "license_source": "LICENSE",
+  "upstream_files_unchanged": true,
+  "files": {
+    "LICENSE": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5",
+    "SKILL.md": "77f3cf31bc99b2f49af943222526531fcc9fc41d047626d3640e875e85af3e84",
+    "agents/openai.yaml": "3e430dbe4334a87597488c060cb3dc3786bb00c9182877d6f5ec41f62490e90b",
+    "scripts/hitl-loop.template.sh": "35103539fc36873eea36074769ad454f9379d6fc8b2dc0e26ce987fd3bfe5503"
+  }
+}
