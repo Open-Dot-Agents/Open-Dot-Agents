@@ -379,7 +379,7 @@ available. The implementation state continues to say `complete: false`.
 [^7]: OpenAI. [Configuration types, rust-v0.154.0](https://github.com/openai/codex/blob/rust-v0.154.0/codex-rs/config/src/types.rs). `MemoriesToml` alias definition. Retrieved 2026-09-10.
 [^8]: Open-Dot-Agents Workbench. [Codex skill discovery](../WORKBENCH/evidence/native-draft2-debug/codex-skill-discovery.json). Native Codex 0.154.0, 2026-09-10. Discovery only; no model turn.
 [^9]: OpenAI. [Build skills](https://learn.chatgpt.com/docs/build-skills.md). Retrieved 2026-09-10. Native skill layout and discovery guidance.
-[^10]: Open-Dot-Agents. [Frozen source inventory](../.agents/features/codex-copilot.json), [semantic coverage](../.agents/features/coverage.json), [generator](../scripts/native_coverage.py), and [coverage tests](../scripts/native_coverage_test.py). Current working tree, 2026-09-10.
+[^10]: Open-Dot-Agents. [Frozen source inventory](../.agents/features/codex-copilot.json), [semantic coverage](../.agents/features/coverage.json), [generator](../CLI/scripts/native_coverage.py), and [coverage tests](../CLI/scripts/native_coverage_test.py). Current working tree, 2026-09-10.
 [^11]: GitHub. [Copilot CLI configuration directory reference](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-config-dir-reference). Retrieved 2026-09-10. User settings, native assets, saved permissions, managed policy, and runtime state.
 [^12]: Open-Dot-Agents Workbench. [Draft.2 native observations](../WORKBENCH/evidence/NATIVE_DRAFT2.md), with links to retained raw security runs. Native Codex 0.154.0 and Copilot 1.0.83, 2026-09-10. Earlier runs inspected in this review; not rerun as part of the alias probe.
 [^13]: Open-Dot-Agents Workbench. [Native debug verification](../WORKBENCH/evidence/native-draft2-debug/verification.json). Local deterministic commands and results, 2026-09-10.
@@ -1829,6 +1829,75 @@ Root discovery and projection need a separate cross-adapter lifecycle review.
 Telemetry transports, remaining native settings, and security evidence also
 remain open.
 
+The later [OTLP transport review](CODEX_OTEL_TRANSPORTS.md) adds user-scope gRPC
+and HTTP binary delivery for logs, traces, and metrics, including CA trust and
+gRPC client certificates. It also fixes a native-import defect that removed
+authentication while keeping an exporter active. Exporters with excluded
+credentials and unsupported optional HTTP identities now use explicit `none`;
+required content still blocks apply. That report supersedes the open transport
+and metrics items above. Remote collectors, certificate rotation, live reload,
+and the wider security matrix remain outside this evidence.
+
+## Stable import credentials, policy, and rollback
+
+The continuation of the project extension audit found five stable import
+defects. These are adapter and file-transaction defects; they do not require a
+native session to reproduce.
+
+1. Codex literal environment and header values could reach canonical files
+   before versioned validation returned an error.
+2. A mixture of literal values and native environment references could discard
+   the literals and report success. A literal that looked like the internal
+   portable reference URI could also be interpreted as a reference.
+3. Unknown MCP fields, including activation, authentication, and tool-filter
+   controls, could disappear during decoding into a Go struct.
+4. Forced import could remove required capabilities and selected profiles from
+   an existing stable manifest.
+5. Final validation or a later write error could leave imported files and
+   backups in the repository. An external instruction link could fail only
+   after its contents had been copied into the canonical tree.
+
+The importer now checks native MCP fields before typed decoding and validates
+the canonical representation before writes. It checks instruction discovery
+before reading the instruction source. It preserves manifest requirements,
+metadata, and selected profiles. A private staging tree validates imported and
+retained selected content. Unselected native packages and runtime state are
+not copied into staging.
+
+The import transaction includes each output and backup. It retains existing
+file modes and uses `0600` for new backups. New skill scripts retain their
+executable mode. Target snapshots detect changes during validation and before
+writes. On failure, rollback covers attempted outputs and created directories;
+a concurrent edit to a target that was not written remains intact. This is not
+a claim of the native user-scope locking and authority model for stable import.
+
+Evidence:
+
+- [Regression tests](../CLI/internal/config/import_safety_test.go) cover all
+  three stable clients' unknown-field refusal, Codex literals, retained policy,
+  instruction links, write failure, backups, permissions, and target changes.
+  The Claude cases use configuration fixtures only; native Claude testing
+  remains skipped.
+- [Committed-baseline failures](../WORKBENCH/evidence/project-tools/stable-import-safety-baseline.json)
+  come from a separate checkout of the recorded CLI commit, with a frozen copy
+  of the new public-API tests. Each named defect fails there.
+- [First regression attempt](../WORKBENCH/evidence/project-tools/stable-import-safety-before.json)
+  is retained. Its policy test used an incorrect object shape for `requires`;
+  the baseline record uses the correct array and reproduces policy removal.
+- [Public CLI checks](../WORKBENCH/evidence/project-tools/stable-import-cli.json)
+  record four refusals with unchanged files, successful policy-preserving
+  import, private backups, and the resulting mandatory-capability plan refusal.
+
+Run the current regression tests from `CLI`:
+
+```sh
+go test ./internal/config -run 'TestStable.*Import|TestStableImport' -count=1
+```
+
+The project extension verifier checks the public CLI record against current
+source hashes. These corrections do not clear native environment-reference,
+plugin authentication, telemetry, or wider security-evidence gates.
+
 ## Initial stable instruction projection
 
 Stable plan/apply/sync now creates a missing root compatibility link to
@@ -1849,3 +1918,383 @@ covers the final cumulative source state. This is CLI projection evidence.
 Native discovery was not rerun and Claude native testing remains skipped.
 Draft.2 project interoperability with an existing root compatibility link,
 remaining telemetry transports, and the broader security matrix remain open.
+
+## Draft.2 instruction links and re-import
+
+The stable adapter creates `AGENTS.md -> .agents/AGENTS.md`. Draft.2 Codex
+apply previously refused that link. Copilot apply created a second instruction
+copy. The project projection now verifies and reuses the canonical link.
+Codex releases obsolete ownership of the copied file without changing the
+link. Copilot removes only an unchanged copy owned by this source repository.
+Modified copies and foreign ownership remain protected. Unit tests cover
+migration, repeated apply, backups, rollback, and forced-conflict refusal.
+
+Further round-trip tests found two import defects. Codex refused its verified
+canonical link as a native symlink. Copilot reported no recognized artifact
+when the canonical link was the only native instruction source. Import now
+reads the verified canonical file directly for both clients. It preserves the
+link and canonical bytes. External, broken, cyclic, and indirect canonical
+links remain refused. A conflicting Copilot instruction copy cannot replace
+canonical content, including with `--force`. Existing stable and draft.1
+manifests still require a separate migration decision.
+
+The failing import test is retained in
+[instruction-link-import-regression-first.json](../WORKBENCH/evidence/native-draft2-debug/instruction-link-import-regression-first.json).
+Native Linux runs use Codex `0.154.0` and Copilot `1.0.83`, isolated native
+homes, and a local model endpoint. Four cases cover a stable-created link and
+a link that replaces an old draft.2 instruction copy for each client:
+
+- [Codex, stable link](../WORKBENCH/evidence/native-draft2-debug/codex-instruction-link-stable-final.json)
+- [Codex, migrated copy](../WORKBENCH/evidence/native-draft2-debug/codex-instruction-link-native-final.json)
+- [Copilot, stable link](../WORKBENCH/evidence/native-draft2-debug/copilot-instruction-link-stable-final.json)
+- [Copilot, migrated copy](../WORKBENCH/evidence/native-draft2-debug/copilot-instruction-link-native-final.json)
+
+Each case performs apply, import, and a fresh native turn for the original
+and updated instructions. The captured model request contains the selected
+instruction marker exactly once. The later request contains no stale marker.
+Native events confirm completion. The link inode remains unchanged, no
+Copilot duplicate remains, repeat plans have no writes, and project apply
+leaves native user files unchanged. This is evidence for initial context in
+fresh sessions, not live reload, tool execution, or every precedence case.
+
+The first Copilot attempts are retained. Their instruction checks passed,
+but the fixture incorrectly required native `config.json` bytes to remain
+unchanged after a session. Copilot adds first-launch metadata to this state
+file. The corrected fixture checks unchanged user files across adapter apply
+and unchanged `trustedFolders` across native execution separately. It records
+the native state-file change instead of treating it as an adapter write.
+
+Official instruction sources and hashes are retained in
+[instruction-link-docs.sources.json](../WORKBENCH/evidence/native-draft2-debug/instruction-link-docs.sources.json).
+Run the affected repository and native-evidence checks with:
+
+```sh
+python3 WORKBENCH/conformance/verify_plugin_selections.py \
+  --with-instruction-links --output /absolute/path/to/new-verification.json
+```
+
+This correction does not complete the universal milestone or change release
+support gates. Telemetry transports and the wider native security matrix
+remain open.
+
+## Runtime authentication units
+
+The [authentication report](NATIVE_AUTHENTICATION.md) extends the telemetry
+audit to MCP, model-provider, and LSP definitions. The earlier importer could
+exclude a credential while keeping its runtime definition active. It also
+misclassified Codex `requires_openai_auth` as account material. Both paths are
+corrected: unsafe filtering refuses the operation, while the Boolean remains
+configuration. Required portable policy and external account files stay intact.
+
+A retained native baseline shows the model request lose authentication after
+relocation. Fixed on/off controls complete four native sessions with correlated
+local requests and unchanged account files. The eight telemetry cases were
+also rerun against the current source as `*-auth-current.json`; the earlier
+`*-final.json` files remain historical evidence. The wider milestone stays open.
+
+```sh
+python3 WORKBENCH/conformance/verify_plugin_selections.py \
+  --repository-only --with-project-extensions --with-otel-transports \
+  --with-provider-auth --output /absolute/path/to/new-verification.json
+```
+
+## Provider token-command mapping and native fallback
+
+The [token-command audit](CODEX_COMMAND_AUTHENTICATION.md) corrected a valid
+configuration refusal for Codex `model_providers.<id>.auth`. It also found
+that the native client sends unauthenticated model requests after helper
+failures. Nine paired cases now cover configuration preservation, literal
+arguments and working directory, timeout, cached tokens, timed refresh, 401
+retry, and five native failure modes. The failed enforcement tests remain
+evidence; later observation tests do not claim authentication enforcement.
+
+Current telemetry, account-selection, and stable-import receipts use
+`*-command-current.json`. They were rerun after the Go changes. Use
+`--with-command-auth` with the repository verifier to check the new cases.
+The universal milestone and release support remain incomplete.
+
+## Codex project scope and ownership cleanup
+
+The [project-scope report](CODEX_PROJECT_SCOPE.md) fixes a false activation
+claim: the CLI projected project provider settings that the native client
+ignored. The model control proves that the trusted project was loaded, while
+the request still used the user provider. Required profiles now refuse before
+writes; optional source stays intact and inactive. Unchanged older ownership
+can be removed without changing unowned fields. Modified owned values remain
+conflicts even with force. Thirteen unconditional native restrictions have
+effective-configuration evidence. Broker-dependent restrictions remain separate.
+
+Current telemetry, account-selection, token-command, and stable-import receipts
+use `*-scope-current.json`. The earlier records remain unchanged. Add
+`--with-project-scope` to the verification command to check the new evidence.
+
+## Bounded agent-role overrides
+
+The [role audit](CODEX_ROLE_OVERRIDES.md) confirms a separate child override
+contract. The earlier adapter accepted a role provider that Codex ignored.
+Required agent files now refuse ignored fields before writes. Optional files
+stay intact and inactive as a whole. Project and user role discovery share
+this contract; general project-config stripping does not apply to role files.
+
+Eight native cases cover inherited provider selection, child model and effort,
+shell-tool reduction, skill-instruction reduction, and skill-selector reduction.
+Each case retains completed child and parent events with local model requests.
+The official broad configuration claim conflicts with the pinned result and
+is retained in the report. Other role controls still require separate evidence.
+
+Current telemetry, account-selection, token-command, project-scope, and
+stable-import receipts use `*-role-checked.json`. Add `--with-role-scope` to
+the repository verifier to check this audit. Historical evidence remains
+unchanged. The universal milestone remains incomplete.
+
+## Role-file and skill-selector relocation
+
+The [reference audit](CODEX_ROLE_REFERENCES.md) found two more import defects.
+A relative role declaration stopped loading after native-home relocation.
+A relative selector inside a copied role stopped disabling its skill. Import
+now preserves external references as absolute source paths and keeps references
+to mapped assets relative to their native destination layout. Malformed skill
+selectors are not repaired into active selectors.
+
+Ten project/user cases verify original and relocated child runs, reference
+values after reimport, unchanged source files, and preserved skill disables.
+Current regression receipts use `*-reference-current.json`. Add
+`--with-role-references` to the combined verifier. The frozen source inventory
+still contains exactly 1,679 rows; the semantic map records reference evidence
+without adding duplicate source entries.
+
+The role-scope regression receipts use `*-reference-corrected.json`. Their
+import check now compares resolved skill paths because a mapped user-skill
+reference can become relative to the agent file. The earlier exact-text
+assertion failure is retained. Apply must still leave the imported optional
+artifact unchanged.
+
+## Copilot skill metadata and test corrections
+
+The [metadata audit](COPILOT_SKILL_METADATA.md) adds 28 native cases in project
+and user scope. It separates skill discovery, model visibility, slash-command
+visibility, body loading, tool approval, and file effects. The tested wildcard
+tool allowance and custom argument hint do not have the documented effects.
+The visibility controls do affect the tested invocation methods.
+
+Two fixture assumptions were corrected. An absolute Python command triggered
+directory access, which does not prove shell-tool approval behavior. A skill
+catalog check read only messages, although Copilot can put the catalog in its
+tool description. The corrected runner uses a shell built-in and checks the
+complete model input. Failed records remain in place. The verifier rejects
+missing native events, unrelated approval identifiers, and contradictory
+file effects.
+
+Use `--with-copilot-skill-metadata` with the combined verifier. Draft.2 now
+reports each selected skill, its invocation controls, and metadata losses.
+It refuses malformed discovery metadata before writes while stable Markdown
+rules remain unchanged. User-scope cases check byte preservation through import,
+apply, and reimport. The six metadata records link to these bounded mappings;
+their native limitations remain explicit. The source inventory is unchanged.
+
+The metadata cycle used `-reported-checked.json` receipts. Its earlier native
+regression families and stable import checks used `*-skill-rechecked.json`
+receipts to match the YAML value-validation change.
+Prior evidence stays in place, including three command-authentication cases
+and two provider-authentication cases that timed out during concurrent
+refreshes. Serial reruns pass. Provider-authentication receipts use
+`*-skill-serial.json`; the other refreshed families keep the names above.
+These retries do not establish the cause of the startup timeouts.
+
+The coverage audit also links discovery-table references for
+`COPILOT_SKILLS_DIRS`, `COPILOT_CUSTOM_INSTRUCTIONS_DIRS`, and `--add-dir` to
+their existing invocation records. These are not pending configuration
+adapters or three additional semantic features. Apply does not set these
+options or make their directory-trust decisions. All source rows and record
+identifiers remain intact.
+
+## Copilot project skill import and marker backups
+
+The [project skill import report](COPILOT_SKILL_IMPORT.md) records a native
+loss from omitted `.github/skills/` and `.claude/skills/` packages. Draft.2 now
+imports complete packages, selects `skills`, and records source paths.
+Conflicting packages refuse import, plan, and apply even with `--force`.
+The two fixed origin cases each execute a contained script before and after
+relocation, with matching native approval, tool events, and file effects.
+
+A public CLI check also found that an adjacent backup of an empty canonical
+skill marker made the imported tree invalid. The marker backup now goes under
+`.agents/state/import-backups/`. Removal remains transactional and checks for
+concurrent changes. The original native marker remains unchanged.
+
+Current project-import receipts end in `-final.json`. The Codex regression
+families, Copilot metadata matrix, and stable CLI import check use
+`*-project-skills-final.json`, with source hashes from the marker-backup fix.
+Earlier receipts remain historical, including the command-authentication
+`empty` case that timed out in the preceding `project-skills` refresh. The
+current case passes; this does not establish the cause of that timeout.
+
+Use `--with-copilot-skill-import` in the combined verifier. The coverage map
+now links the two project discovery locations to implemented import mappings.
+The frozen inventory still has 1,679 source rows. Full coverage and adapter
+support remain incomplete.
+
+## Recursive Copilot instruction loss
+
+The [recursive instruction audit](COPILOT_RECURSIVE_INSTRUCTIONS.md) identifies
+another import loss in both scopes. The previous flat-directory scan omitted
+native nested instruction files. Draft.2 now preserves their relative names
+under the registered directory and applies the existing ownership, removal,
+backup, and rollback checks to them. Go and public CLI failures are retained.
+
+Native source/relocated pairs confirm that unconditional nested bodies now
+reach the model. The separate `applyTo: "**/*.go"` read probe did not load
+either matching body, including its flat control. Later review found the native
+catalog in those same requests: Copilot tells the model to read the listed
+instruction files. The probe had skipped those reads. The automatic-injection
+expectation was incorrect; the failed evidence stays intact.
+
+The coverage map links the two recursive discovery locations to this bounded
+mapping and identifies the user directory-overview row as an alias. Original
+source rows and identifiers remain unchanged. The first import fix used
+`copilot-recursive-instructions-*-final.json`; earlier families retain their
+historical source hashes. Use `--with-copilot-recursive-instructions` to check
+this cycle with the combined repository verifier.
+
+## Copilot instruction catalogs and user read permission
+
+Nine native trigger experiments separate catalog discovery from automatic body
+injection. Mentions, ACP resource links, tracked files, later turns, and edits
+do not replace the model's instruction reads for the tested non-global patterns.
+The native prompt lists their paths and asks the model to read them. An approved
+edit can succeed when the fixture model skips that guidance. This is not an
+adapter conversion loss or an enforced instruction policy.
+
+The revised source/relocated cases read instruction paths from the native table.
+Project files load directly through `view`. User files outside trusted
+directories prompt for exact-path read permission. Native allow loads both
+bodies; denial stops the tested read and leaves the bodies absent. Plan now
+reports this native prerequisite in user scope. Apply leaves trust unchanged.
+
+Current recursive-instruction receipts end in `-catalog-checked.json`. The
+verifier checks native table rows, explicit reads, allow/deny events, source
+preservation, and completed native interactions. The retained trigger cases
+and the wrong early test expectations have separate checks. See the
+[updated report](COPILOT_RECURSIVE_INSTRUCTIONS.md).
+
+## Coverage links for existing native declarations
+
+The [coverage audit](FEATURE_INVENTORY.md#native-path-and-declaration-links)
+found missing links between source records and compiled capabilities. Four
+Copilot user artifact paths now link to their existing mappings. Two concrete
+Bedrock fields now resolve to generic provider validators, while their native
+status remains unverified. Two repeated user-path records are aliases. The
+audit also corrects project/user discovery scopes and removes stale prose
+counts from the inventory report.
+
+The retained failed tests distinguish an absent artifact link, an absent
+named-object validator link, and a duplicate counted feature. Tests also check
+ambiguous wildcard matches, component boundaries, missing declarations, finite
+telemetry aliases, and preservation of source IDs. This changes the accuracy
+of the coverage map; it does not change adapter behavior or promote support.
+
+## Copilot regular root instructions
+
+The [root instruction audit](COPILOT_ROOT_INSTRUCTIONS.md) reproduced two
+import defects: root-only sources failed, and sources with a distinct native
+instruction file silently lost the root body. Draft.2 now imports regular root
+instructions without potential file references and refuses distinct bodies.
+Plan and apply also refuse stale regular root instructions after a canonical
+policy edit. Force does not bypass these checks.
+
+Pinned native sessions confirm source and relocated instruction loading,
+combined distinct bodies, and a changed `@policy.md` reference base after a raw
+copy into `.github`. Reference conversion remains refused and incomplete.
+Current root receipts use `-reviewed.json`; recursive instruction regressions
+use `-root-reviewed.json`. Previous receipts remain historical. The combined
+verification record is `verification-copilot-root-instructions-verified.json`.
+This fixes a loss path; it does not complete the wider milestone.
+
+The first combined root-instruction check failed because the stable-import
+receipt recorded earlier Go hashes. The public CLI cases were rerun against
+the final source. The rejected combined receipt remains unchanged.
+
+## Native agent instruction mapping
+
+The [native agent instruction audit](COPILOT_AGENT_INSTRUCTIONS.md) removes the
+remaining root-reference and distinct-body import refusals through a fixed
+path mapping. It also imports `CLAUDE.md`, `.claude/CLAUDE.md`, and `GEMINI.md`.
+Source bytes, file locations, native reference bases, canonical portable policy,
+and custom native source paths remain intact. Native files use individual
+ownership, removal, private backups, and transactional rollback.
+
+Eight native sessions cover combined and isolated files from repository-root
+and `.claude` working directories. They show that `.claude/CLAUDE.md` is not
+loaded by the tested root sessions, even without a root Claude file. It loads
+from `.claude`, including beside root `CLAUDE.md`. Three failed expectations
+remain recorded. The observed behavior is a scope difference, not an inferred
+root-file precedence rule.
+
+Current receipts and remaining limits are listed in the report. The combined
+check uses `verification-copilot-agent-instructions-final.json`. Earlier
+root-reference refusals and evidence receipts remain historical. The broader
+milestone remains incomplete.
+
+## Canonical Copilot instruction binding
+
+The [canonical instruction audit](COPILOT_CANONICAL_INSTRUCTIONS.md) closes the
+distinct-body import refusal beside a verified canonical root link. Native
+evidence first established that root references through the link use the
+project root. The adapter now records a fixed `canonical-instructions`
+binding to portable `.agents/AGENTS.md`. Relocation creates a managed root
+file and retains a separate native Copilot body. Later core edits update only
+the root output. References remain external dependencies.
+
+Six native sessions cover source links, relocation, and updated core loading.
+Go regressions cover ownership release, foreign ownership refusal, identical
+source basenames in separate namespaces, duplicate targets, malformed names,
+unsafe removal, and transaction rollback. Earlier failures remain recorded.
+Root, agent-file, and recursive instruction regressions use new `-canonical`
+receipts. The combined check uses
+`verification-copilot-canonical-instructions-final.json`. This result does
+not promote adapter support or complete the wider milestone.
+
+## Shared project skill source import
+
+The [shared skill import audit](COPILOT_SKILL_IMPORT.md) found two remaining
+failures at `.agents/skills`. A bare native skill tree failed the manifest
+guard, although Copilot loaded and executed its skill. In an existing draft.2
+tree, the source list omitted the shared packages and left `skills` unselected.
+Both Go failures and the successful native source session followed by import
+failure remain recorded.
+
+Draft.2 Copilot project import now selects shared packages in place. A bare
+tree can establish metadata only for recognized skill packages and an optional
+regular canonical instruction file. Existing manifests, policy, source modes,
+and inodes remain protected. Malformed manifests, other unversioned content,
+symlinks, identity conflicts, and user-scope attempts refuse before writes.
+
+Six current skill sessions cover `.agents`, `.github`, and `.claude` origins
+before import and after relocation. Native events, model requests, a scoped
+approval, and an asset-derived file effect establish execution. The coverage
+map now records the existing `.agents/skills/` feature as mapped without adding
+a new semantic feature. Thirteen mappings remain pending. Instruction native
+regressions use refreshed `-shared` receipts. The combined record is
+`verification-copilot-shared-skills-final.json`. The milestone remains open.
+
+## User instruction source routing
+
+The [user instruction audit](COPILOT_USER_INSTRUCTIONS.md) found that reimport
+could add a second assignment to `copilot-instructions.md`. It reset a custom
+namespace source to the native filename. A retained native run loaded the
+source and relocated instructions correctly before reimport changed the
+declaration. The importer now reuses the existing user instruction artifact.
+Go tests also cover Codex source routing, duplicate targets, policy conflicts,
+foreign ownership, scope, file modes, removal, and final-write rollback.
+
+Twelve Copilot native sessions cover default and explicit user homes, a custom
+source, relative and child references, updated loading, and removal. Adapter
+calls preserve external configuration bytes and trust. An earlier probe's
+incorrect first-launch metadata check and the Go test's import-lock snapshot
+failure remain recorded. The coverage map now records the existing user
+instruction discovery feature as mapped. Twelve mappings remain pending;
+semantic feature counts and release gates are unchanged.
+
+Current skill and instruction regressions use `-user-instructions` receipts.
+The combined record is `verification-copilot-user-instructions-final.json`.
+The wider milestone remains incomplete.

@@ -67,6 +67,12 @@ known siblings can activate. Each omitted field has a JSON-pointer diagnostic.
 Arrays stay atomic when a member is unmapped. Required unknown content refuses
 activation. Parsing alone does not activate an unmapped field.
 Native imports read recognized configuration files and instructions.
+MCP, model-provider, and LSP definitions refuse import and projection when
+credential exclusion would remove authentication. Optional profiles and forced
+writes do not bypass this check. Codex `requires_openai_auth` remains a Boolean
+setting; native account files stay external. See the
+[authentication evidence and limits](NATIVE_AUTHENTICATION.md).
+
 Excluded authority and credential field names are recorded without values in
 `import-report.json`; their source files stay unchanged. They move
 established MCP fields to the portable core and keep other fields native.
@@ -187,7 +193,7 @@ security and draft.2 native configuration are refused until their behavior is
 verified. This refusal keeps the existing mandatory security requirements intact.
 
 The coverage map is `.agents/features/coverage.json`. Run
-`python3 scripts/native_coverage.py` to rebuild it. The original 1,679-entry
+`python3 CLI/scripts/native_coverage.py` to rebuild it. The original 1,679-entry
 inventory stays unchanged. Counts refer to semantic features, not source rows or
 verified native behavior. `complete: false` is intentional: the implementation
 still has missing mappings, incomplete asset import, and incomplete native
@@ -485,3 +491,65 @@ cleanup.
 Other events, additional native interfaces, spill-write failures, and wider
 process topologies still need tests. See the
 [background and context review](NATIVE_DEBUG_RESEARCH.md#codex-background-hooks-and-context-spill-limits).
+
+## Provider token commands
+
+Codex native user configuration can use `model_providers.<id>.auth`. Draft.2
+preserves this table after complete validation. Apply does not run the helper
+or store its output. Native failures can send unauthenticated model requests.
+The plan, capabilities, and [command-authentication report](CODEX_COMMAND_AUTHENTICATION.md)
+state this limit. No portable authentication guarantee or project behavior is
+claimed by this user-scope evidence.
+
+## Codex project restrictions
+
+The [project-scope audit](CODEX_PROJECT_SCOPE.md) verifies 12 root keys and one
+feature flag that Codex `0.154.0` removes from trusted project configuration.
+Required native profiles refuse these keys before writes. Optional profiles
+keep their source but project only the supported fields. Plans, capabilities,
+and coverage identify this scope limit. Provider token-command evidence remains
+user-scoped; project files cannot select or redefine a provider.
+
+## Codex role files
+
+Agent files use a bounded child override contract. They cannot replace the
+parent provider, MCP definitions, or arbitrary session settings. Required
+ignored content refuses before writes; optional content stays intact and
+inactive as a whole file. Project and user role files can reduce selected
+features and skills. These role controls are separate from project
+`config.toml` restrictions. See the [native role tests and limits](CODEX_ROLE_OVERRIDES.md).
+
+Import also preserves declared role-file paths and skill selectors inside
+agent files across relocation. Mapped assets keep relative references.
+External libraries keep absolute references to their source location and
+remain outside ownership. See the [reference audit](CODEX_ROLE_REFERENCES.md).
+
+## Copilot skill metadata
+
+Draft.2 checks selected skills separately from canonical Markdown validation.
+Plan reports the source, destination, ownership, invocation controls, and known
+losses for each skill. Unverified field types and malformed discovery metadata
+refuse projection before writes. Known native limitations appear in JSON and
+text warnings. Existing project discovery remains outside apply control.
+See the [metadata audit](COPILOT_SKILL_METADATA.md). Stable validation rules
+and shared `.agents/skills` discovery paths remain unchanged.
+
+Draft.2 project import also reads complete packages from the supplied root's
+`.github/skills/` and `.claude/skills/`. It stores them in `.agents/skills/`
+and selects `skills`. Original packages remain unchanged. Import, plan, and
+apply refuse conflicting packages, including different assets or executable
+properties, even with `--force`. An empty canonical skill marker is removed
+transactionally; its backup stays under `.agents/state/import-backups/`.
+See the [project skill import report](COPILOT_SKILL_IMPORT.md) for scope,
+ownership, and native execution evidence.
+
+## Copilot recursive instruction files
+
+Draft.2 preserves nested `*.instructions.md` paths under the registered project
+or user instruction directory. Each file retains its bytes and has separate
+ownership. The native tests confirm recursive loading with `applyTo: "**"`.
+Path-specific files appear in a native catalog that tells the model to read
+them. Reading a matching source file does not automatically load their bodies.
+User instruction reads outside trusted directories can require native approval;
+plan reports this action and apply does not grant trust. See the
+[recursive instruction audit](COPILOT_RECURSIVE_INSTRUCTIONS.md).

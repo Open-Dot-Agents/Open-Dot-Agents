@@ -96,7 +96,7 @@ and [GitHub index](https://docs.github.com/llms.txt). Principal references:
 The inventory tool reads saved public sources only:
 
 ```sh
-python3 .agents/tools/build-feature-inventory.py \
+python3 CLI/scripts/build-feature-inventory.py \
   --source-dir WORKBENCH/evidence/results/security-draft-final/sources \
   --output .agents/features/codex-copilot.json
 ```
@@ -116,7 +116,7 @@ semantic feature. It separates portable configuration, native configuration,
 invocation options, runtime operations, and external authority/state. Repeated
 reference rows do not count as separate completed features. The source inventory
 hash and per-row links are retained. Generate it with
-`python3 scripts/native_coverage.py`.
+`python3 CLI/scripts/native_coverage.py`.
 
 The map uses compiled CLI declarations. It does not search Go source text for
 setting names. `validator-declared` identifies a value validator; it does not
@@ -134,6 +134,8 @@ Coverage format version 3 separates records, features, and the Linux CLI milesto
 | `milestone_features`, `milestone_counts` | Counted features within the Linux CLI milestone. |
 | `record_kind`, `describes` | Identify a configuration value, path selector, or alias and link it to its setting. |
 | `setting_path` | A lookup path when a source uses TOML table notation around part of the field. |
+| `validation_paths` | Compiled schema paths for a finite alias or a concrete named object. |
+| `native_targets` | Registry-defined destinations from the linked artifact capabilities. |
 | `milestone_scope`, `milestone_reason` | State an evidenced platform or client boundary. |
 
 For example, `read`, `write`, and `deny` are values of the filesystem permission
@@ -142,11 +144,11 @@ of the keymap setting. These records keep their IDs and source evidence, but do
 not count as separate settings or completed mappings. Their linked settings
 remain responsible for value semantics and native tests.
 
-The reviewed map has 1,397 retained records, 1,385 counted features, and 1,361
-features within the Linux CLI milestone. Twelve syntax/alias records do not add
-features. Twenty-four records concern Windows or the desktop app. Desktop file
-handlers use user scope, as their source specifies. Managed policy remains
-external even when it is also outside the platform scope.
+The [generated JSON](../.agents/features/coverage.json) is the source for current
+record and feature counts. Syntax and alias records retain source evidence but
+do not add features. Windows and desktop records have separate milestone
+boundaries. Desktop file handlers use user scope, as their source specifies.
+Managed policy remains external even when it is also outside the platform scope.
 
 For undeclared children of a security setting, the map consults the compiled
 parent gate. `security-evidence-required` with `gate_scopes` records a refusal
@@ -162,8 +164,8 @@ to the counted record through `describes`. The
 checks that this correction preserves every ID and source-row assignment. This
 identity rule replaced the initial draft.2 IDs, which included classification.
 
-Run `python3 scripts/native_coverage.py --check` to check reproducibility, or
-`python3 scripts/native_coverage_test.py` to check context, alias grouping, and
+Run `python3 CLI/scripts/native_coverage.py --check` to check reproducibility, or
+`python3 CLI/scripts/native_coverage_test.py` to check context, alias grouping, and
 all source-row links. Missing mappings and native evidence remain outstanding
 work; they are not automatically native limitations.
 
@@ -175,3 +177,35 @@ bounded native HTTP TLS evidence. Client identity fields record HTTP-specific
 failures in `native_variant_limitations`; gRPC validation does not establish
 runtime behavior. The measured HTTP JSON subset has separate evidence and user
 scope; project telemetry is ignored by the pin.
+
+## Native path and declaration links
+
+The coverage audit found eight records that incorrectly appeared as missing
+mappings or separate features. The
+[retained regression](../WORKBENCH/evidence/native-draft2-debug/coverage-native-links-before.json)
+records the old dispositions and three failed test groups.
+
+| Records | Correct disposition | Evidence boundary |
+| --- | --- | --- |
+| Copilot `agents/`, `hooks/`, `mcp-config.json`, `lsp-config.json` | Link to their existing user-scope artifact declarations | Copy the compiled native status, destinations, evidence links, and limits. This adds no new native test or support claim. |
+| Codex `model_providers.amazon-bedrock.aws.profile` and `.region` | Link to the generic provider schema paths | User-scope validators exist. Native behavior remains unverified; project provider settings remain ignored. |
+| Copilot `skills/` and `copilot-instructions.md` directory-overview entries | Alias the corresponding user discovery-location records | The linked discovery records keep their own incomplete status. Aliases do not complete them. |
+
+Named-object lookup checks exact declarations first. A `<name>` component can
+match one concrete path component. It cannot consume extra components or array
+syntax. Equally specific matches cause an error. Existing finite exporter
+aliases retain all their validation paths.
+
+Relative project locations and explicit user-home locations now have separate
+scopes from their source tables. A scope correction does not activate a mapping.
+All 1,679 source rows, semantic IDs, and original evidence links remain intact.
+The [combined verification](../WORKBENCH/evidence/native-draft2-debug/verification-coverage-native-links-final.json)
+checks the corrected map, regression tests, repository gates, and the current
+recursive-instruction evidence. Other native evidence retains its original
+version and source hashes. Full feature coverage remains incomplete.
+
+The [native agent instruction mapping](COPILOT_AGENT_INSTRUCTIONS.md) links
+Copilot agent instruction locations to their fixed project paths. The native
+results distinguish repository-root loading from `.claude` working-directory
+loading and keep referenced project files external. This does not add duplicate
+source features or turn the coverage counts into a completion claim.

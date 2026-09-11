@@ -1,0 +1,16 @@
+{
+  "repository": "https://github.com/openai/plugins",
+  "revision": "d416fd5a43426019986b1e489506db3db66dee3d",
+  "source_path": "plugins/github",
+  "version": "0.1.11",
+  "license_declared": "MIT",
+  "license_notice": "Upstream declares MIT in plugin.json. No license file exists at the pinned repository root or in this package.",
+  "files": {
+    ".app.json": "5a803d452119abe6c5ccec088370ada20dc80b3812ab7402218c47ee6596a7d4",
+    ".codex-plugin/plugin.json": "781a59b09f58f3248ecaa01136811824dc0d63711fc0f783aca4395221e64982",
+    ".mcp.json": "730ebd45944d5f46aeded73c8fa8a2e5765726c626a8605671809d6159d31edd",
+    "assets/github-dark.png": "9352c02c11e4b5c63e8990f6d8b973f551d25284186d3faeb8d7d0186d89c919",
+    "assets/github-small.svg": "ee05e92d373d4d84f4612af3c1090ef67698d421bbe30896a4ed5a00cb86a069",
+    "assets/github.png": "07e4d8c81c906dc6fffa42f2686f446724c86c2079b23aa6c77ab9dab782fdea"
+  }
+}
