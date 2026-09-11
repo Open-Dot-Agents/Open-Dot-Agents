@@ -211,7 +211,7 @@ The first probe's failed expectation is retained with the corrected assessment.
 The new evidence covers configuration load only. It does not establish resource
 limit enforcement, approval behavior, or full adapter support. See the
 [debug review](NATIVE_DEBUG_RESEARCH.md) and
-[raw alias results](../WORKBENCH/evidence/native-draft2-debug/codex-alias-load-v2.json).
+raw alias results (`WORKBENCH/evidence/native-draft2-debug/codex-alias-load-v2.json`).
 
 The follow-up uses a loopback Responses fixture based on the pinned upstream
 test protocol. Codex accepts the CLI-projected agent in user and trusted-project
@@ -235,8 +235,8 @@ The refreshed configuration references match the inventory hashes:
 
 The Copilot CLI reference was refreshed for agent-local MCP. It documents
 `mcp-servers` in agent YAML with the user MCP schema. The
-[archived source](../WORKBENCH/evidence/native-draft2-debug/copilot-agent-mcp-docs.md)
-and [fetch record](../WORKBENCH/evidence/native-draft2-debug/copilot-agent-mcp-docs.source.json)
+archived source (`WORKBENCH/evidence/native-draft2-debug/copilot-agent-mcp-docs.md`)
+and fetch record (`WORKBENCH/evidence/native-draft2-debug/copilot-agent-mcp-docs.source.json`)
 retain the source URL and hashes. Pinned Copilot `1.0.83` tests verify local
 agent MCP calls, parent isolation, and a child override of a same-name user
 server in both scopes. See the
@@ -244,8 +244,8 @@ server in both scopes. See the
 These fixture results do not change adapter support or release gates.
 
 
-The [refreshed Copilot hook reference](../WORKBENCH/evidence/native-draft2-debug/copilot-hooks-docs.md)
-and [fetch record](../WORKBENCH/evidence/native-draft2-debug/copilot-hooks-docs.source.json)
+The refreshed Copilot hook reference (`WORKBENCH/evidence/native-draft2-debug/copilot-hooks-docs.md`)
+and fetch record (`WORKBENCH/evidence/native-draft2-debug/copilot-hooks-docs.source.json`)
 document hook directories, inline settings, native fields, and timeout behavior.
 Copilot `1.0.83` fixtures verify the bounded command and local HTTP mappings.
 Project results use CLI prompt mode; the ACP project attempts did not load hooks.
@@ -255,9 +255,9 @@ allowed tool execution to continue. See the
 These results do not establish portable permission enforcement or adapter support.
 
 
-The [allowing-tools article](../WORKBENCH/evidence/native-draft2-debug/copilot-shell-rules-docs.md),
-[fetch metadata](../WORKBENCH/evidence/native-draft2-debug/copilot-shell-rules-docs.source.json),
-and [pinned CLI help](../WORKBENCH/evidence/native-draft2-debug/copilot-shell-rules-help.txt)
+The allowing-tools article (`WORKBENCH/evidence/native-draft2-debug/copilot-shell-rules-docs.md`),
+fetch metadata (`WORKBENCH/evidence/native-draft2-debug/copilot-shell-rules-docs.source.json`),
+and pinned CLI help (`WORKBENCH/evidence/native-draft2-debug/copilot-shell-rules-help.txt`)
 are the sources for the follow-up
 [shell-rule review](NATIVE_DEBUG_RESEARCH.md#copilot-shell-rule-matching-and-interface-boundaries).
 Native tests distinguish command stems, full arguments, exact executable
@@ -267,8 +267,8 @@ not establish a portable permission mapping.
 
 The OpenAI Codex index now routes hook documentation to
 [the official hook page](https://learn.chatgpt.com/docs/hooks). The
-[archived document](../WORKBENCH/evidence/native-draft2-debug/codex-hooks-docs.md)
-and [fetch metadata](../WORKBENCH/evidence/native-draft2-debug/codex-hooks-docs.source.json)
+archived document (`WORKBENCH/evidence/native-draft2-debug/codex-hooks-docs.md`)
+and fetch metadata (`WORKBENCH/evidence/native-draft2-debug/codex-hooks-docs.source.json`)
 record that route. Codex `0.154.0` native tests verify command hooks only after
 exact native hash trust is configured. Unknown JSON root fields cause native
 file rejection; `prompt` handlers are skipped. See the
@@ -296,7 +296,7 @@ for evidence and limits. Full adapter support remains unchanged.
 The official [hooks](https://learn.chatgpt.com/docs/hooks.md) and
 [app-server](https://learn.chatgpt.com/docs/app-server.md) pages describe
 background execution, per-handler context limits, and the unsubscribe grace
-period. The [source record](../WORKBENCH/evidence/native-draft2-debug/codex-background-docs.source.json)
+period. The source record (`WORKBENCH/evidence/native-draft2-debug/codex-background-docs.source.json`)
 contains the archived paths and hashes.
 
 Pinned Codex `0.154.0` evidence now covers delayed background context, ignored
@@ -322,7 +322,7 @@ local skill package in isolated project and user fixtures. Codex exposes
 `fixture:fixture` with its plugin ID and versioned cache path. Copilot's
 `skill list --json` exposes the live package skill; its broader `plugins list`
 output omits that skill in this fixture. Both stop exposing the skill after
-disable. The [verification record](../WORKBENCH/evidence/plugin-standard/verification-plugin-selections.json)
+disable. The verification record (`WORKBENCH/evidence/plugin-standard/verification-plugin-selections.json`)
 retains exact hashes, correlated native output, and failed attempts. These
 results cover local installation and discovery, not remote marketplaces,
 plugin MCP execution, or all package loading rules. Support gates are unchanged.
@@ -330,7 +330,7 @@ plugin MCP execution, or all package loading rules. Support gates are unchanged.
 ## Git marketplace fetching and Copilot update scope
 
 The [archived Copilot settings reference](../WORKBENCH/evidence/plugin-standard/copilot-marketplace-settings.md)
-and [source record](../WORKBENCH/evidence/plugin-standard/copilot-marketplace-settings.source.json)
+and source record (`WORKBENCH/evidence/plugin-standard/copilot-marketplace-settings.source.json`)
 state that marketplace `autoUpdate` in project settings is ignored. Its opt-in
 requires user or managed scope, and applies to interactive or prompt sessions.
 The adapter now keeps project entries with this field inactive and refuses
@@ -343,13 +343,13 @@ before package installation when its cache is absent; its `ref` selects the
 tested tag instead of the default branch. Copilot `1.0.83` fetches a configured
 Git source during plugin install. Both clients discover the package skill and
 stop exposing it after disable. See the
-[Git verification](../WORKBENCH/evidence/plugin-standard/verification-plugin-git.json).
+Git verification (`WORKBENCH/evidence/plugin-standard/verification-plugin-git.json`).
 This is loopback HTTP Git evidence. Public HTTPS/SSH, GitHub API behavior,
 credentials, and automatic updates remain separate checks.
 
 ## Shared stdio MCP package execution
 
-The [MCP verification](../WORKBENCH/evidence/plugin-standard/verification-plugin-mcp.json)
+The MCP verification (`WORKBENCH/evidence/plugin-standard/verification-plugin-mcp.json`)
 records 14 MCP cases and eight repeated marketplace cases with Codex `0.154.0`
 and Copilot `1.0.83`. An identical Agent Plugins 1.0.0 package executes through
 both clients. Approval acceptance and denial, native completion, server calls,
@@ -364,7 +364,7 @@ with `codex_approval_kind=mcp_tool_call`. Copilot's ACP permission request uses
 server. Copilot ends the turn after denial without a model follow-up.
 
 The [standard environment requirements](../WORKBENCH/evidence/plugin-standard/agent-plugins-environment-requirements.md)
-and [source hashes](../WORKBENCH/evidence/plugin-standard/agent-plugins-environment-requirements.source.json)
+and source hashes (`WORKBENCH/evidence/plugin-standard/agent-plugins-environment-requirements.source.json`)
 establish two pinned Copilot limits: it expands the unknown `${ODA_AMBIENT}`
 placeholder, and a `${PLUGIN_DATA}` environment value remains literal during the
 ACP session. Argument/cwd expansion and reserved variables work in this fixture.
@@ -373,15 +373,15 @@ and adapter support are not claimed.
 
 ## Copilot legacy preference migration
 
-The [native config help](../WORKBENCH/evidence/native-draft2-debug/copilot-legacy-config-help.txt),
-[settings reference](../WORKBENCH/evidence/native-draft2-debug/copilot-legacy-settings-reference.md),
-and [source record](../WORKBENCH/evidence/native-draft2-debug/copilot-legacy-sources.json)
+The native config help (`WORKBENCH/evidence/native-draft2-debug/copilot-legacy-config-help.txt`),
+settings reference (`WORKBENCH/evidence/native-draft2-debug/copilot-legacy-settings-reference.md`),
+and source record (`WORKBENCH/evidence/native-draft2-debug/copilot-legacy-sources.json`)
 identify the modern preferences file and separate application state. Three native
 `1.0.83` fixtures establish precedence: legacy preferences replace matching
 modern roots, including complete objects. This was measured in an independent
 control home, not inferred from the migration note.
 
-The [verification](../WORKBENCH/evidence/native-draft2-debug/verification-copilot-legacy.json)
+The verification (`WORKBENCH/evidence/native-draft2-debug/verification-copilot-legacy.json`)
 checks that read-only import matches native migration, preserves source bytes
 and modes, excludes application state, writes private user preferences, survives
 native startup, and reimports unchanged. It also checks refusal when pending
@@ -393,7 +393,7 @@ prove memory-service behavior or graphical rendering of UI preferences.
 
 ## Copilot terminal preferences
 
-The pinned [native help](../WORKBENCH/evidence/native-draft2-debug/copilot-legacy-config-help.txt)
+The pinned native help (`WORKBENCH/evidence/native-draft2-debug/copilot-legacy-config-help.txt`)
 documents user preference names, tab matching, history bounds, and status-line
 commands. It explicitly permits an omitted `statusLine.type`. The online
 settings table describes `type` as `"command"`; the native fixture tests both
@@ -401,7 +401,7 @@ the explicit and omitted forms.
 
 The [preference runner](../WORKBENCH/conformance/run_native_copilot_preferences.py)
 applies canonical user settings, then starts fresh Copilot `1.0.83` sessions in
-an isolated terminal and native home. Its [result](../WORKBENCH/evidence/native-draft2-debug/copilot-preferences-final.json)
+an isolated terminal and native home. Its result (`WORKBENCH/evidence/native-draft2-debug/copilot-preferences-final.json`)
 records initial plan and interactive mode indicators, tab order, case-insensitive
 names, hide/restore, and disabled tabs. Native status JSON correlates with command
 file events and terminal output. The one-second fixture produced nine calls;
@@ -411,13 +411,13 @@ further calls after restart. Padding values three and zero are observed.
 The adapter preserves native state during apply, creates private user settings,
 and preserves preference values through reimport. The first terminal assertion
 failed because column one was reached with CRLF instead of an explicit cursor
-command. The [failed attempt](../WORKBENCH/evidence/native-draft2-debug/copilot-preferences-first.json)
+command. The failed attempt (`WORKBENCH/evidence/native-draft2-debug/copilot-preferences-first.json`)
 and its runner remain available. No mode-change event, model turn, notification,
 image, autopilot, or full adapter conformance claim follows from these checks.
 
 ## Copilot dispatch preferences
 
-The [source manifest](../WORKBENCH/evidence/native-draft2-debug/copilot-subagents-sources.json)
+The source manifest (`WORKBENCH/evidence/native-draft2-debug/copilot-subagents-sources.json`)
 records the settings reference, subagent-limit reference, and pinned native BYOK
 help. Per-agent configuration uses native model names, effort values, and context
 tiers. The limit reference states that depth and concurrency overrides require
@@ -429,15 +429,15 @@ uses Copilot `1.0.83`, an isolated native home, and a deterministic local provid
 It applies canonical settings and the agent asset before each test. Its controls
 establish these observations:
 
-- [Inherit](../WORKBENCH/evidence/native-draft2-debug/copilot-subagents-verified-inherit.json):
+- Inherit (`WORKBENCH/evidence/native-draft2-debug/copilot-subagents-verified-inherit.json`):
   the parent and child both request `gpt-5.4` with low effort.
-- [Override](../WORKBENCH/evidence/native-draft2-debug/copilot-subagents-verified-override.json):
+- Override (`WORKBENCH/evidence/native-draft2-debug/copilot-subagents-verified-override.json`):
   the parent requests `gpt-5.4` with low effort; the child requests `gpt-5-mini`
   with high effort. The native configured event records `long_context`.
-- [Disabled](../WORKBENCH/evidence/native-draft2-debug/copilot-subagents-verified-disabled.json):
+- Disabled (`WORKBENCH/evidence/native-draft2-debug/copilot-subagents-verified-disabled.json`):
   the custom agent is absent from the task schema. A direct dispatch request
   fails and creates no child effect.
-- [Limits](../WORKBENCH/evidence/native-draft2-debug/copilot-subagents-verified-limits.json):
+- Limits (`WORKBENCH/evidence/native-draft2-debug/copilot-subagents-verified-limits.json`):
   both limits are one, but two nested agents start and complete. This BYOK
   fixture does not satisfy the native usage-based billing prerequisite.
 
@@ -448,13 +448,13 @@ or full adapter support claim follows from these fixtures.
 
 ## Codex telemetry scope
 
-The [source manifest](../WORKBENCH/evidence/native-draft2-debug/codex-otel-sources.json)
+The source manifest (`WORKBENCH/evidence/native-draft2-debug/codex-otel-sources.json`)
 retains the current official reference and advanced configuration page. The
 reference states that project-local `otel` is ignored. Its `<id>` exporter
 notation denotes `otlp-http` or `otlp-grpc`; it does not define arbitrary names.
 The embedded `0.154.0` schema contains these concrete variants.
 
-The [native adapter fixture](../WORKBENCH/evidence/native-draft2-debug/codex-otel-adapter-final.json)
+The native adapter fixture (`WORKBENCH/evidence/native-draft2-debug/codex-otel-adapter-final.json`)
 uses Codex `0.154.0`, synthetic prompts, and local model and collector services.
 It correlates completed turns, prompt log events, and exported trace IDs.
 User environment tags and headers reach the collector. Prompt export emits the
@@ -475,7 +475,7 @@ certificate rotation, and live reload remain unverified.
 ## Canonical instruction-link lifecycle — 2026-09-11
 
 Current official instruction pages confirm project `AGENTS.md` discovery.
-The [saved source records](../WORKBENCH/evidence/native-draft2-debug/instruction-link-docs.sources.json)
+The saved source records (`WORKBENCH/evidence/native-draft2-debug/instruction-link-docs.sources.json`)
 include URLs and hashes. The [draft.2 instruction-link checks](NATIVE_DEBUG_RESEARCH.md#draft2-instruction-links-and-re-import)
 verify the local canonical symlink with Codex `0.154.0` and Copilot `1.0.83`.
 They cover stable-to-draft projection, ownership migration, re-import, and

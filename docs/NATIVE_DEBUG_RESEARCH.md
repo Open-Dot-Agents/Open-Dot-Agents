@@ -371,32 +371,32 @@ available. The implementation state continues to say `complete: false`.
 ## Sources
 
 [^1]: Open-Dot-Agents. [Native configuration draft.2](../SPEC/spec/1.1-draft.2/SPECIFICATION.md). Current working-tree proposal, reviewed 2026-09-10. Contract and evidence boundaries.
-[^2]: Open-Dot-Agents Workbench. [Codex alias load, first attempt](../WORKBENCH/evidence/native-draft2-debug/codex-alias-load.json) and [corrected assessment](../WORKBENCH/evidence/native-draft2-debug/codex-alias-load-v2.json). Native Codex 0.154.0, 2026-09-10. Raw events and runner snapshots are local evidence.
+[^2]: Open-Dot-Agents Workbench. Codex alias load, first attempt (`WORKBENCH/evidence/native-draft2-debug/codex-alias-load.json`) and corrected assessment (`WORKBENCH/evidence/native-draft2-debug/codex-alias-load-v2.json`). Native Codex 0.154.0, 2026-09-10. Raw events and runner snapshots are local evidence.
 [^3]: Open-Dot-Agents CLI. [Native debug regressions](../CLI/internal/config/native_debug_test.go), [native projection tests](../CLI/internal/config/native_test.go), and [native projection implementation](../CLI/internal/config/native.go). Current uncommitted implementation, reviewed 2026-09-10.
 [^4]: OpenAI. [Codex configuration schema, rust-v0.154.0](https://raw.githubusercontent.com/openai/codex/rust-v0.154.0/codex-rs/core/config.schema.json). Retrieved 2026-09-10. [Vendored source metadata](../CLI/internal/config/native_schemas/codex-0.154.0.source.json).
 [^5]: OpenAI. [Official configuration schema](https://learn.chatgpt.com/docs/config-schema.json) and [Configuration Reference](https://learn.chatgpt.com/docs/config-file/config-reference.md). Retrieved 2026-09-10. Live documentation can change after this review.
 [^6]: OpenAI. [Config TOML definitions, rust-v0.154.0](https://github.com/openai/codex/blob/rust-v0.154.0/codex-rs/config/src/config_toml.rs). `AgentsToml`, `AgentRoleToml`, and legacy no-op definitions. Retrieved 2026-09-10.
 [^7]: OpenAI. [Configuration types, rust-v0.154.0](https://github.com/openai/codex/blob/rust-v0.154.0/codex-rs/config/src/types.rs). `MemoriesToml` alias definition. Retrieved 2026-09-10.
-[^8]: Open-Dot-Agents Workbench. [Codex skill discovery](../WORKBENCH/evidence/native-draft2-debug/codex-skill-discovery.json). Native Codex 0.154.0, 2026-09-10. Discovery only; no model turn.
+[^8]: Open-Dot-Agents Workbench. Codex skill discovery (`WORKBENCH/evidence/native-draft2-debug/codex-skill-discovery.json`). Native Codex 0.154.0, 2026-09-10. Discovery only; no model turn.
 [^9]: OpenAI. [Build skills](https://learn.chatgpt.com/docs/build-skills.md). Retrieved 2026-09-10. Native skill layout and discovery guidance.
 [^10]: Open-Dot-Agents. [Frozen source inventory](../.agents/features/codex-copilot.json), [semantic coverage](../.agents/features/coverage.json), [generator](../CLI/scripts/native_coverage.py), and [coverage tests](../CLI/scripts/native_coverage_test.py). Current working tree, 2026-09-10.
 [^11]: GitHub. [Copilot CLI configuration directory reference](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-config-dir-reference). Retrieved 2026-09-10. User settings, native assets, saved permissions, managed policy, and runtime state.
 [^12]: Open-Dot-Agents Workbench. [Draft.2 native observations](../WORKBENCH/evidence/NATIVE_DRAFT2.md), with links to retained raw security runs. Native Codex 0.154.0 and Copilot 1.0.83, 2026-09-10. Earlier runs inspected in this review; not rerun as part of the alias probe.
-[^13]: Open-Dot-Agents Workbench. [Native debug verification](../WORKBENCH/evidence/native-draft2-debug/verification.json). Local deterministic commands and results, 2026-09-10.
+[^13]: Open-Dot-Agents Workbench. Native debug verification (`WORKBENCH/evidence/native-draft2-debug/verification.json`). Local deterministic commands and results, 2026-09-10.
 
 [^14]: Open-Dot-Agents CLI. [Field selection](../CLI/internal/config/native_selection.go), [selection regressions](../CLI/internal/config/native_selection_test.go), [native agent validation](../CLI/internal/config/native_agents.go), and [agent/import regressions](../CLI/internal/config/native_agents_test.go). Working-tree follow-up, 2026-09-10.
-[^15]: Open-Dot-Agents Workbench. [Safe-command failed expectation](../WORKBENCH/evidence/native-draft2-debug/codex-local-trust-safe.json), [corrected safe-command assessment](../WORKBENCH/evidence/native-draft2-debug/codex-local-trust-safe-v2.json), [built-in image read](../WORKBENCH/evidence/native-draft2-debug/codex-local-trust-image.json), [explicit rule acceptance](../WORKBENCH/evidence/native-draft2-debug/codex-local-trust-rule-allow.json), and [explicit rule denial](../WORKBENCH/evidence/native-draft2-debug/codex-local-trust-rule-deny.json). Codex 0.154.0, 2026-09-10. Isolated untrusted workspace and local deterministic provider.
+[^15]: Open-Dot-Agents Workbench. Safe-command failed expectation (`WORKBENCH/evidence/native-draft2-debug/codex-local-trust-safe.json`), corrected safe-command assessment (`WORKBENCH/evidence/native-draft2-debug/codex-local-trust-safe-v2.json`), built-in image read (`WORKBENCH/evidence/native-draft2-debug/codex-local-trust-image.json`), explicit rule acceptance (`WORKBENCH/evidence/native-draft2-debug/codex-local-trust-rule-allow.json`), and explicit rule denial (`WORKBENCH/evidence/native-draft2-debug/codex-local-trust-rule-deny.json`). Codex 0.154.0, 2026-09-10. Isolated untrusted workspace and local deterministic provider.
 [^16]: OpenAI. [Responses test support, rust-v0.154.0](https://github.com/openai/codex/blob/rust-v0.154.0/codex-rs/core/tests/common/responses.rs). Retrieved 2026-09-10. Open-Dot-Agents [native local-model runner](../WORKBENCH/conformance/run_native_local_model.py) retains each executed runner version beside its result.
-[^17]: Open-Dot-Agents Workbench. [User agent execution](../WORKBENCH/evidence/native-draft2-debug/codex-projected-agent-execution-v2.json) and [project agent execution](../WORKBENCH/evidence/native-draft2-debug/codex-projected-project-agent-execution.json). Codex 0.154.0, 2026-09-10. Correlated native child events, effective model request, and file effect.
+[^17]: Open-Dot-Agents Workbench. User agent execution (`WORKBENCH/evidence/native-draft2-debug/codex-projected-agent-execution-v2.json`) and project agent execution (`WORKBENCH/evidence/native-draft2-debug/codex-projected-project-agent-execution.json`). Codex 0.154.0, 2026-09-10. Correlated native child events, effective model request, and file effect.
 [^18]: OpenAI. [Custom subagents](https://learn.chatgpt.com/docs/agent-configuration/subagents.md) and [pinned agent-role parser](https://github.com/openai/codex/blob/rust-v0.154.0/codex-rs/agent-roles/src/agent_role_config.rs). Retrieved 2026-09-10. Documented required fields, native name normalization, and config-layer semantics.
-[^19]: Open-Dot-Agents Workbench. [Follow-up verification](../WORKBENCH/evidence/native-draft2-debug/verification-followup.json). Local deterministic checks, 2026-09-10.
+[^19]: Open-Dot-Agents Workbench. Follow-up verification (`WORKBENCH/evidence/native-draft2-debug/verification-followup.json`). Local deterministic checks, 2026-09-10.
 
 [^20]: Open-Dot-Agents CLI. [Filesystem race and rollback regressions](../CLI/internal/config/native_fs_linux_test.go). Working-tree follow-up, 2026-09-10. Tests include directory replacement, post-write rollback, stale plans, backup creation races, concurrent edits, special files, and import preconditions.
 [^21]: Open-Dot-Agents CLI. [Linux filesystem backend](../CLI/internal/config/native_fs_linux.go), [snapshot checks](../CLI/internal/config/native_fs.go), and [native lock handling](../CLI/internal/config/native_lock_linux.go). Current implementation; no full crash-recovery claim.
-[^22]: Open-Dot-Agents Workbench. [User agent after filesystem changes](../WORKBENCH/evidence/native-draft2-debug/codex-pinned-fs-user-agent.json) and [project agent after filesystem changes](../WORKBENCH/evidence/native-draft2-debug/codex-pinned-fs-project-agent.json). Codex 0.154.0, 2026-09-10.
-[^23]: Open-Dot-Agents Workbench. [Filesystem follow-up verification](../WORKBENCH/evidence/native-draft2-debug/verification-filesystem.json). Local deterministic commands, output, implementation hashes, and native evidence links.
+[^22]: Open-Dot-Agents Workbench. User agent after filesystem changes (`WORKBENCH/evidence/native-draft2-debug/codex-pinned-fs-user-agent.json`) and project agent after filesystem changes (`WORKBENCH/evidence/native-draft2-debug/codex-pinned-fs-project-agent.json`). Codex 0.154.0, 2026-09-10.
+[^23]: Open-Dot-Agents Workbench. Filesystem follow-up verification (`WORKBENCH/evidence/native-draft2-debug/verification-filesystem.json`). Local deterministic commands, output, implementation hashes, and native evidence links.
 
-[^24]: Open-Dot-Agents Workbench. [Pre-change writer reproduction](../WORKBENCH/evidence/native-draft2-debug/filesystem-race-before.json) and [isolated writer source](../WORKBENCH/evidence/native-draft2-debug/filesystem-race-before.writer.go). This reproduces the old writer algorithm and retains the initial failed regression result; it is not a native CLI support test.
+[^24]: Open-Dot-Agents Workbench. Pre-change writer reproduction (`WORKBENCH/evidence/native-draft2-debug/filesystem-race-before.json`) and isolated writer source (`WORKBENCH/evidence/native-draft2-debug/filesystem-race-before.writer.go`). This reproduces the old writer algorithm and retains the initial failed regression result; it is not a native CLI support test.
 
 
 ## Copilot LSP configuration and native execution
@@ -417,8 +417,8 @@ field declarations. The coverage file includes these declarations under
 `native_artifacts`; it does not add them to the original semantic completion
 count. Request timeout behavior is tested separately below.
 
-The [project fixture](../WORKBENCH/evidence/native-draft2-debug/copilot-lsp-projected-project-v3.json)
-and [user fixture](../WORKBENCH/evidence/native-draft2-debug/copilot-lsp-projected-user.json)
+The project fixture (`WORKBENCH/evidence/native-draft2-debug/copilot-lsp-projected-project-v3.json`)
+and user fixture (`WORKBENCH/evidence/native-draft2-debug/copilot-lsp-projected-user.json`)
 passed with Copilot `1.0.83`, SHA256
 `a3262c4513ef1fc2ca21485261ca73196977ad76bd5e7990fb572f6134aaeedd`.
 The [runner](../WORKBENCH/conformance/run_native_copilot_lsp.py) uses an isolated
@@ -438,16 +438,16 @@ or combined portable sandbox enforcement.
 
 Failed and incomplete attempts remain available:
 
-- [ACP slash command](../WORKBENCH/evidence/native-draft2-debug/copilot-lsp-initial.json):
+- ACP slash command (`WORKBENCH/evidence/native-draft2-debug/copilot-lsp-initial.json`):
   session startup succeeded; `/lsp` was absent from the advertised commands and
   the prompt reached its deadline.
-- [Local-provider discovery](../WORKBENCH/evidence/native-draft2-debug/copilot-lsp-local-initial.json):
+- Local-provider discovery (`WORKBENCH/evidence/native-draft2-debug/copilot-lsp-local-initial.json`):
   confirmed the native `lsp` tool schema; did not issue an LSP call.
-- [Direct native hover](../WORKBENCH/evidence/native-draft2-debug/copilot-lsp-local-hover.json):
+- Direct native hover (`WORKBENCH/evidence/native-draft2-debug/copilot-lsp-local-hover.json`):
   confirmed initialization and hover before adapter projection tests.
-- [First projection attempt](../WORKBENCH/evidence/native-draft2-debug/copilot-lsp-projected-project.json):
+- First projection attempt (`WORKBENCH/evidence/native-draft2-debug/copilot-lsp-projected-project.json`):
   runner used unsupported positional CLI arguments; apply refused before writes.
-- [Second projection attempt](../WORKBENCH/evidence/native-draft2-debug/copilot-lsp-projected-project-v2.json):
+- Second projection attempt (`WORKBENCH/evidence/native-draft2-debug/copilot-lsp-projected-project-v2.json`):
   runner used `harnessVersion` instead of `harness_version`; profile validation
   refused before writes.
 
@@ -456,33 +456,33 @@ preservation, unknown fields, malformed configuration, literal credential
 exclusion, environment references, portable policy refusal, shared ownership,
 `--force` conflict refusal, removal, and private new-file permissions.
 
-The official document is retained as a [source snapshot](../WORKBENCH/evidence/native-draft2-debug/copilot-lsp-docs.md)
-with [URL, time, and hash](../WORKBENCH/evidence/native-draft2-debug/copilot-lsp-docs.source.json).
+The official document is retained as a source snapshot (`WORKBENCH/evidence/native-draft2-debug/copilot-lsp-docs.md`)
+with URL, time, and hash (`WORKBENCH/evidence/native-draft2-debug/copilot-lsp-docs.source.json`).
 
 A second fixture compares the same five-second hover delay with two timeout
-settings. The project [30-second control](../WORKBENCH/evidence/native-draft2-debug/copilot-lsp-delayed-project.json)
+settings. The project 30-second control (`WORKBENCH/evidence/native-draft2-debug/copilot-lsp-delayed-project.json`)
 returns the marker after about 5.05 seconds. The
-[one-second limit](../WORKBENCH/evidence/native-draft2-debug/copilot-lsp-timeout-project-v2.json)
+one-second limit (`WORKBENCH/evidence/native-draft2-debug/copilot-lsp-timeout-project-v2.json`)
 returns an empty hover result after about 1.06 seconds. Both events use the
-same expected tool-call ID. The [user control](../WORKBENCH/evidence/native-draft2-debug/copilot-lsp-delayed-user.json)
-and [user limit](../WORKBENCH/evidence/native-draft2-debug/copilot-lsp-timeout-user.json)
+same expected tool-call ID. The user control (`WORKBENCH/evidence/native-draft2-debug/copilot-lsp-delayed-user.json`)
+and user limit (`WORKBENCH/evidence/native-draft2-debug/copilot-lsp-timeout-user.json`)
 also pass. Each run records the native request time and prompt completion time.
 The delayed marker is absent from the model request when the short limit applies.
 
 Copilot reports `No hover information available at this position.` with a
 completed status when this request times out. It does not expose a specific
 timeout event through ACP. The
-[first timeout expectation](../WORKBENCH/evidence/native-draft2-debug/copilot-lsp-projected-timeout-project.json)
+first timeout expectation (`WORKBENCH/evidence/native-draft2-debug/copilot-lsp-projected-timeout-project.json`)
 failed because it required such an event. The comparative result proves bounded
 request timeout behavior, not an explicit native timeout diagnostic.
 
 
 The final hover reruns use the current implementation in
-[project scope](../WORKBENCH/evidence/native-draft2-debug/copilot-lsp-final-project-v2.json)
-and [user scope](../WORKBENCH/evidence/native-draft2-debug/copilot-lsp-final-user-v2.json).
-The [verification record](../WORKBENCH/evidence/native-draft2-debug/verification-lsp-final.json)
+project scope (`WORKBENCH/evidence/native-draft2-debug/copilot-lsp-final-project-v2.json`)
+and user scope (`WORKBENCH/evidence/native-draft2-debug/copilot-lsp-final-user-v2.json`).
+The verification record (`WORKBENCH/evidence/native-draft2-debug/verification-lsp-final.json`)
 contains the current file hashes and check output. The earlier
-[verification record](../WORKBENCH/evidence/native-draft2-debug/verification-lsp.json)
+verification record (`WORKBENCH/evidence/native-draft2-debug/verification-lsp.json`)
 retains an incorrect test expectation of eight LSP fields; the documented
 configuration has seven fields. The corrected coverage test passes.
 
@@ -502,8 +502,8 @@ stores, or portable security checks.
 
 ## Copilot agent projection and native delegation
 
-The [CLI reference snapshot](../WORKBENCH/evidence/native-draft2-debug/copilot-command-reference-agent-docs.md)
-and [common agent reference snapshot](../WORKBENCH/evidence/native-draft2-debug/copilot-agents-docs.md)
+The CLI reference snapshot (`WORKBENCH/evidence/native-draft2-debug/copilot-command-reference-agent-docs.md`)
+and common agent reference snapshot (`WORKBENCH/evidence/native-draft2-debug/copilot-agents-docs.md`)
 were checked through the official GitHub index on 2026-09-10. Their corresponding
 `.source.json` files record URLs, retrieval times, and hashes. The common
 reference permits `.md` and `.agent.md` names and a string or array for `tools`.
@@ -519,8 +519,8 @@ both Markdown suffixes. Collision checks compare display names and normalized
 filename stems. They preserve unrelated native files with unknown nonidentity
 fields. Existing portable security checks remain in place.
 
-The [project execution](../WORKBENCH/evidence/native-draft2-debug/copilot-agent-final-project.json)
-and [user execution](../WORKBENCH/evidence/native-draft2-debug/copilot-agent-final-user.json)
+The project execution (`WORKBENCH/evidence/native-draft2-debug/copilot-agent-final-project.json`)
+and user execution (`WORKBENCH/evidence/native-draft2-debug/copilot-agent-final-user.json`)
 fixtures pass with Copilot `1.0.83` and the same binary SHA256 used by the LSP
 fixtures. The [runner](../WORKBENCH/conformance/run_native_copilot_agent.py)
 projects the configuration before it starts Copilot. It uses an isolated home
@@ -536,20 +536,20 @@ unchanged.
 
 Additional bounded checks pass:
 
-- [`infer: false`, project](../WORKBENCH/evidence/native-draft2-debug/copilot-agent-no-infer.json)
-  and [user](../WORKBENCH/evidence/native-draft2-debug/copilot-agent-no-infer-user.json):
+- `infer: false`, project (`WORKBENCH/evidence/native-draft2-debug/copilot-agent-no-infer.json`)
+  and user (`WORKBENCH/evidence/native-draft2-debug/copilot-agent-no-infer-user.json`):
   the agent is absent from automatic task selection and no child runs.
-- [`tools: []`](../WORKBENCH/evidence/native-draft2-debug/copilot-agent-tool-none.json):
+- `tools: []` (`WORKBENCH/evidence/native-draft2-debug/copilot-agent-tool-none.json`):
   the provider deliberately requests the absent Bash tool. Copilot emits a
   correlated failed tool event and the marker is absent.
-- [String-form tools](../WORKBENCH/evidence/native-draft2-debug/copilot-agent-tool-string.json):
+- String-form tools (`WORKBENCH/evidence/native-draft2-debug/copilot-agent-tool-string.json`):
   `tools: bash` exposes the Bash group and the child command completes.
 
-The [first direct probe](../WORKBENCH/evidence/native-draft2-debug/copilot-agent-initial.json)
-and [second probe](../WORKBENCH/evidence/native-draft2-debug/copilot-agent-allow.json)
+The first direct probe (`WORKBENCH/evidence/native-draft2-debug/copilot-agent-initial.json`)
+and second probe (`WORKBENCH/evidence/native-draft2-debug/copilot-agent-allow.json`)
 retain rejected commands. The first used the wrong approval decision label;
 the second used a shell command that did not match the client's exact Python
-probe allowlist. The [corrected probe](../WORKBENCH/evidence/native-draft2-debug/copilot-agent-exact-allow.json)
+probe allowlist. The corrected probe (`WORKBENCH/evidence/native-draft2-debug/copilot-agent-exact-allow.json`)
 uses that allowlist and produces the correlated marker and completion events.
 
 These results do not prove model or reasoning override behavior. Both the parent
@@ -562,23 +562,23 @@ reasoning defaults are not shared portable identities or scales.
 The Go tests cover field and YAML errors, unchanged bytes, both scopes,
 import/apply preservation, idempotence, `.md` ownership, display-name and filename
 collisions, and preservation of unrelated native agents. The final check record
-is [verification-copilot-agent.json](../WORKBENCH/evidence/native-draft2-debug/verification-copilot-agent.json).
+is verification-copilot-agent.json (`WORKBENCH/evidence/native-draft2-debug/verification-copilot-agent.json`).
 It supersedes the earlier LSP-only file hashes. The complete universal milestone
 and adapter support gates remain incomplete.
 
 
 ## Copilot MCP import, projection, and source priority
 
-The [MCP guide snapshot](../WORKBENCH/evidence/native-draft2-debug/copilot-mcp-docs.md)
-and the earlier [full CLI reference snapshot](../WORKBENCH/evidence/native-draft2-debug/copilot-command-reference-agent-docs.md)
+The MCP guide snapshot (`WORKBENCH/evidence/native-draft2-debug/copilot-mcp-docs.md`)
+and the earlier full CLI reference snapshot (`WORKBENCH/evidence/native-draft2-debug/copilot-command-reference-agent-docs.md`)
 provide the field definitions and source order. The
-[native config help](../WORKBENCH/evidence/native-draft2-debug/copilot-native-config-help.txt)
+native config help (`WORKBENCH/evidence/native-draft2-debug/copilot-native-config-help.txt`)
 also records the installed CLI's configuration guidance. The binary remains
 Copilot `1.0.83`, SHA256
 `a3262c4513ef1fc2ca21485261ca73196977ad76bd5e7990fb572f6134aaeedd`.
 
 The new regression first reproduced
-[rejection of the documented `type: local`](../WORKBENCH/evidence/native-draft2-debug/copilot-mcp-local-import-before.json).
+rejection of the documented `type: local` (`WORKBENCH/evidence/native-draft2-debug/copilot-mcp-local-import-before.json`).
 The importer previously sent that native spelling through the older portable
 converter. It now extracts literal commands, arguments, and applicable HTTPS
 URLs into the portable core, while it retains the explicit native transport and
@@ -598,24 +598,24 @@ an active portable server.
 
 ### Native source and trust checks
 
-The initial [plugin listing](../WORKBENCH/evidence/native-draft2-debug/copilot-mcp-paths.json)
-and [listing with misplaced trust fields](../WORKBENCH/evidence/native-draft2-debug/copilot-mcp-paths-trusted.json)
+The initial plugin listing (`WORKBENCH/evidence/native-draft2-debug/copilot-mcp-paths.json`)
+and listing with misplaced trust fields (`WORKBENCH/evidence/native-draft2-debug/copilot-mcp-paths-trusted.json`)
 found only the user source. ACP attempts with
-[`.github/mcp.json`](../WORKBENCH/evidence/native-draft2-debug/copilot-mcp-session-github.json)
-and [`.mcp.json`](../WORKBENCH/evidence/native-draft2-debug/copilot-mcp-session-root.json)
+`.github/mcp.json` (`WORKBENCH/evidence/native-draft2-debug/copilot-mcp-session-github.json`)
+and `.mcp.json` (`WORKBENCH/evidence/native-draft2-debug/copilot-mcp-session-root.json`)
 also omitted the project tools, including the
-[experimental `.github` attempt](../WORKBENCH/evidence/native-draft2-debug/copilot-mcp-session-github-experimental.json)
-and [experimental root attempt](../WORKBENCH/evidence/native-draft2-debug/copilot-mcp-session-root-experimental.json).
+experimental `.github` attempt (`WORKBENCH/evidence/native-draft2-debug/copilot-mcp-session-github-experimental.json`)
+and experimental root attempt (`WORKBENCH/evidence/native-draft2-debug/copilot-mcp-session-root-experimental.json`).
 Those fixtures put `trustedFolders` in `settings.json`. The native trust state
 belongs in `config.json`.
 
 With trust preconfigured in the isolated native state, both
-[`.github/mcp.json`](../WORKBENCH/evidence/native-draft2-debug/copilot-mcp-session-trusted-state-github.json)
-and [`.mcp.json`](../WORKBENCH/evidence/native-draft2-debug/copilot-mcp-session-trusted-state-root.json)
+`.github/mcp.json` (`WORKBENCH/evidence/native-draft2-debug/copilot-mcp-session-trusted-state-github.json`)
+and `.mcp.json` (`WORKBENCH/evidence/native-draft2-debug/copilot-mcp-session-trusted-state-root.json`)
 load and complete the MCP call. Two intervening recording attempts ran to
 completion but refused to replace the existing evidence filenames; the retained
 reruns use distinct filenames. The
-[precedence fixture](../WORKBENCH/evidence/native-draft2-debug/copilot-mcp-precedence-github.json)
+precedence fixture (`WORKBENCH/evidence/native-draft2-debug/copilot-mcp-precedence-github.json`)
 then defines the same server in both files. Only the root `.mcp.json` server gets
 the handshake and tool call. The lower-priority server has no process events.
 
@@ -635,23 +635,23 @@ Copilot with a local deterministic provider. It configures trust only as separat
 native test setup. It checks that apply leaves the trust file unchanged. It also
 checks that project apply leaves all user configuration hashes unchanged.
 
-The [final project run](../WORKBENCH/evidence/native-draft2-debug/copilot-mcp-final-project.json)
-and [final user run](../WORKBENCH/evidence/native-draft2-debug/copilot-mcp-final-user.json)
+The final project run (`WORKBENCH/evidence/native-draft2-debug/copilot-mcp-final-project.json`)
+and final user run (`WORKBENCH/evidence/native-draft2-debug/copilot-mcp-final-user.json`)
 pass. The MCP server logs the configured working directory, literal and expanded
 environment values, protocol initialization, tool discovery, and the tool call's
 marker. A completed native event has the expected tool-call ID and returned
 marker. The next model request contains that result. The initial projected
-[project](../WORKBENCH/evidence/native-draft2-debug/copilot-mcp-projected-project.json)
-and [user](../WORKBENCH/evidence/native-draft2-debug/copilot-mcp-projected-user.json)
+project (`WORKBENCH/evidence/native-draft2-debug/copilot-mcp-projected-project.json`)
+and user (`WORKBENCH/evidence/native-draft2-debug/copilot-mcp-projected-user.json`)
 runs remain available.
 
-The [tool filter probe](../WORKBENCH/evidence/native-draft2-debug/copilot-mcp-blocked-project.json)
+The tool filter probe (`WORKBENCH/evidence/native-draft2-debug/copilot-mcp-blocked-project.json`)
 deliberately requests an excluded tool. Copilot emits a correlated failed event,
 and no tool call reaches the MCP server. The
-[command and argument expansion probe](../WORKBENCH/evidence/native-draft2-debug/copilot-mcp-expansion-user.json)
+command and argument expansion probe (`WORKBENCH/evidence/native-draft2-debug/copilot-mcp-expansion-user.json`)
 also passes. Local HTTP fixtures pass in
-[project scope](../WORKBENCH/evidence/native-draft2-debug/copilot-mcp-http-project.json)
-and [user scope](../WORKBENCH/evidence/native-draft2-debug/copilot-mcp-http-user.json).
+project scope (`WORKBENCH/evidence/native-draft2-debug/copilot-mcp-http-project.json`)
+and user scope (`WORKBENCH/evidence/native-draft2-debug/copilot-mcp-http-user.json`).
 They verify the handshake, filtered call, and literal and expanded headers on
 all recorded HTTP requests. They do not test TLS, SSE, OAuth, or external services.
 
@@ -671,7 +671,7 @@ MCP still needs its own projection and isolation evidence. The larger permission
 approval, and native feature matrices remain incomplete. The original 1,679
 source entries and their SHA256 remain unchanged.
 
-The [verification record](../WORKBENCH/evidence/native-draft2-debug/verification-copilot-mcp.json)
+The verification record (`WORKBENCH/evidence/native-draft2-debug/verification-copilot-mcp.json`)
 contains the implementation hashes at the end of that MCP step, native evidence references, and
 check outputs. Earlier records remain historical evidence.
 
@@ -679,17 +679,17 @@ check outputs. Earlier records remain historical evidence.
 ## Copilot agent-local MCP and parent isolation
 
 The follow-up resolves the inactive agent-local MCP mapping. The
-[refreshed CLI reference](../WORKBENCH/evidence/native-draft2-debug/copilot-agent-mcp-docs.md)
-and [fetch metadata](../WORKBENCH/evidence/native-draft2-debug/copilot-agent-mcp-docs.source.json)
+refreshed CLI reference (`WORKBENCH/evidence/native-draft2-debug/copilot-agent-mcp-docs.md`)
+and fetch metadata (`WORKBENCH/evidence/native-draft2-debug/copilot-agent-mcp-docs.source.json`)
 confirm the documented `mcp-servers` field and native MCP schema. Native tests
 use Copilot `1.0.83`, SHA256
 `a3262c4513ef1fc2ca21485261ca73196977ad76bd5e7990fb572f6134aaeedd`.
 
 Before changing activation, the
-[direct isolation probe](../WORKBENCH/evidence/native-draft2-debug/copilot-agent-mcp-direct-project.json)
+direct isolation probe (`WORKBENCH/evidence/native-draft2-debug/copilot-agent-mcp-direct-project.json`)
 verified that the child loads and calls its own local MCP tool while the parent
 has no such tool. The
-[direct override probe](../WORKBENCH/evidence/native-draft2-debug/copilot-agent-mcp-direct-override-project.json)
+direct override probe (`WORKBENCH/evidence/native-draft2-debug/copilot-agent-mcp-direct-override-project.json`)
 verified that a child can override a same-name user server. The parent calls its
 original server before and after delegation. These direct probes test native
 behavior; they do not test the adapter.
@@ -728,17 +728,17 @@ exact source bytes. It then starts the native session with isolated local model
 and MCP fixtures. Trust is preconfigured as native test state; apply leaves that
 file unchanged. Project apply also leaves all user configuration unchanged.
 
-The [project isolation run](../WORKBENCH/evidence/native-draft2-debug/copilot-agent-mcp-final-project.json)
-and [user isolation run](../WORKBENCH/evidence/native-draft2-debug/copilot-agent-mcp-final-user.json)
+The project isolation run (`WORKBENCH/evidence/native-draft2-debug/copilot-agent-mcp-final-project.json`)
+and user isolation run (`WORKBENCH/evidence/native-draft2-debug/copilot-agent-mcp-final-user.json`)
 pass. Child instructions, exposed tool schema, child tool-call ID, native child
 agent ID, server request marker, completed event, and returned model input agree.
 The agent-only tool is absent from parent model requests before and after the
 child. The initial
-[projected project run](../WORKBENCH/evidence/native-draft2-debug/copilot-agent-mcp-projected-project.json)
+projected project run (`WORKBENCH/evidence/native-draft2-debug/copilot-agent-mcp-projected-project.json`)
 remains available as historical evidence.
 
-The [project override run](../WORKBENCH/evidence/native-draft2-debug/copilot-agent-mcp-override-project.json)
-and [user override run](../WORKBENCH/evidence/native-draft2-debug/copilot-agent-mcp-override-user.json)
+The project override run (`WORKBENCH/evidence/native-draft2-debug/copilot-agent-mcp-override-project.json`)
+and user override run (`WORKBENCH/evidence/native-draft2-debug/copilot-agent-mcp-override-user.json`)
 also pass. The child server receives only the child call. The same-name user
 server receives the parent calls before and after delegation. Parent and child
 return different fixture markers. This establishes the tested user-server
@@ -747,7 +747,7 @@ project, plugin, or managed source.
 
 ### Verification and remaining work
 
-The [verification record](../WORKBENCH/evidence/native-draft2-debug/verification-copilot-agent-mcp.json)
+The verification record (`WORKBENCH/evidence/native-draft2-debug/verification-copilot-agent-mcp.json`)
 records the current source hashes and executed checks. It covers Go race tests,
 vet, stable and both draft conformance suites, Workbench tests, compatibility,
 coverage, repository validation, JSON, report links, and whitespace. The compiled
@@ -762,38 +762,38 @@ incomplete. Adapter support and release gates remain unchanged.
 
 ## Copilot native hook fields and authority
 
-The [refreshed source](../WORKBENCH/evidence/native-draft2-debug/copilot-hooks-docs.md)
-and [fetch metadata](../WORKBENCH/evidence/native-draft2-debug/copilot-hooks-docs.source.json)
+The refreshed source (`WORKBENCH/evidence/native-draft2-debug/copilot-hooks-docs.md`)
+and fetch metadata (`WORKBENCH/evidence/native-draft2-debug/copilot-hooks-docs.source.json`)
 cover file and inline hooks, direct executables, command fields, HTTP fields,
 matchers, native decisions, and timeout behavior. Tests use Copilot `1.0.83`,
 SHA256 `a3262c4513ef1fc2ca21485261ca73196977ad76bd5e7990fb572f6134aaeedd`.
 
 ### Failed probes and interface differences
 
-The initial [project ACP file probe](../WORKBENCH/evidence/native-draft2-debug/copilot-hooks-direct-project.json)
-and [project ACP inline probe](../WORKBENCH/evidence/native-draft2-debug/copilot-hooks-direct-inline-project.json)
+The initial project ACP file probe (`WORKBENCH/evidence/native-draft2-debug/copilot-hooks-direct-project.json`)
+and project ACP inline probe (`WORKBENCH/evidence/native-draft2-debug/copilot-hooks-direct-inline-project.json`)
 loaded no hooks. Neither
-[tracking the project file](../WORKBENCH/evidence/native-draft2-debug/copilot-hooks-direct-tracked-project.json)
-nor [the prompt-mode repository-hook opt-in](../WORKBENCH/evidence/native-draft2-debug/copilot-hooks-direct-opt-in-project.json)
+tracking the project file (`WORKBENCH/evidence/native-draft2-debug/copilot-hooks-direct-tracked-project.json`)
+nor the prompt-mode repository-hook opt-in (`WORKBENCH/evidence/native-draft2-debug/copilot-hooks-direct-opt-in-project.json`)
 changed that result. Each fixture had isolated native folder trust. This is an
 unresolved ACP difference, not proof that every ACP path lacks project hooks.
 
-The first [user file probe](../WORKBENCH/evidence/native-draft2-debug/copilot-hooks-direct-user.json)
+The first user file probe (`WORKBENCH/evidence/native-draft2-debug/copilot-hooks-direct-user.json`)
 loaded hooks but failed its environment-expansion expectation: `${ODA_HOOK_INPUT}`
 remained literal in the direct executable's environment. Direct arguments also
 remained literal. The corrected
-[user inline probe](../WORKBENCH/evidence/native-draft2-debug/copilot-hooks-direct-inline-user.json)
+user inline probe (`WORKBENCH/evidence/native-draft2-debug/copilot-hooks-direct-inline-user.json`)
 passed. The adapter preserves these native values without claiming portable
 fail-on-missing environment-reference semantics.
 
-The [first prompt-mode project probe](../WORKBENCH/evidence/native-draft2-debug/copilot-hooks-direct-prompt-project.json)
+The first prompt-mode project probe (`WORKBENCH/evidence/native-draft2-debug/copilot-hooks-direct-prompt-project.json`)
 loaded project hooks, but its tool was denied. Moving the script
-[inside the workspace](../WORKBENCH/evidence/native-draft2-debug/copilot-hooks-direct-prompt-workspace-project.json),
-adding an [exact normalized command rule](../WORKBENCH/evidence/native-draft2-debug/copilot-hooks-direct-prompt-normalized-project.json),
-and [granting paths](../WORKBENCH/evidence/native-draft2-debug/copilot-hooks-direct-prompt-paths-project.json)
+inside the workspace (`WORKBENCH/evidence/native-draft2-debug/copilot-hooks-direct-prompt-workspace-project.json`),
+adding an exact normalized command rule (`WORKBENCH/evidence/native-draft2-debug/copilot-hooks-direct-prompt-normalized-project.json`),
+and granting paths (`WORKBENCH/evidence/native-draft2-debug/copilot-hooks-direct-prompt-paths-project.json`)
 still did not grant the command. The cause of those exact-rule failures needs a
 separate permission test. A
-[shell-granted prompt fixture](../WORKBENCH/evidence/native-draft2-debug/copilot-hooks-direct-prompt-granted-project.json)
+shell-granted prompt fixture (`WORKBENCH/evidence/native-draft2-debug/copilot-hooks-direct-prompt-granted-project.json`)
 passed. It uses a deterministic local provider that requests only the isolated
 marker script. That fixture tests hooks, not native approval acceptance.
 
@@ -835,45 +835,45 @@ separate native source and applies to a fresh target. Final runs import again
 and compare the hook configuration. It checks that apply leaves native trust
 state unchanged and that project apply leaves user configuration unchanged.
 
-The [final project run](../WORKBENCH/evidence/native-draft2-debug/copilot-hooks-final-project.json)
-and [final user run](../WORKBENCH/evidence/native-draft2-debug/copilot-hooks-final-user.json)
+The final project run (`WORKBENCH/evidence/native-draft2-debug/copilot-hooks-final-project.json`)
+and final user run (`WORKBENCH/evidence/native-draft2-debug/copilot-hooks-final-user.json`)
 verify shell-field precedence, direct executable arguments, working directory,
 literal environment values, matching and excluded tools, and injected context.
 Hook payload session IDs and tool arguments correlate with the native tool
 completion and marker file. The initial projected
-[project](../WORKBENCH/evidence/native-draft2-debug/copilot-hooks-projected-project.json)
-and [user](../WORKBENCH/evidence/native-draft2-debug/copilot-hooks-projected-user.json)
+project (`WORKBENCH/evidence/native-draft2-debug/copilot-hooks-projected-project.json`)
+and user (`WORKBENCH/evidence/native-draft2-debug/copilot-hooks-projected-user.json`)
 runs remain available. Inline settings pass in
-[project](../WORKBENCH/evidence/native-draft2-debug/copilot-hooks-inline-project.json)
-and [user](../WORKBENCH/evidence/native-draft2-debug/copilot-hooks-inline-user.json)
+project (`WORKBENCH/evidence/native-draft2-debug/copilot-hooks-inline-project.json`)
+and user (`WORKBENCH/evidence/native-draft2-debug/copilot-hooks-inline-user.json`)
 scope.
 
 Explicit denial prevents the tool effect in
-[project](../WORKBENCH/evidence/native-draft2-debug/copilot-hooks-deny-project.json)
-and [user](../WORKBENCH/evidence/native-draft2-debug/copilot-hooks-deny-user.json)
+project (`WORKBENCH/evidence/native-draft2-debug/copilot-hooks-deny-project.json`)
+and user (`WORKBENCH/evidence/native-draft2-debug/copilot-hooks-deny-user.json`)
 scope. User ACP denial occurs before a permission prompt. The timeout probes in
-[project](../WORKBENCH/evidence/native-draft2-debug/copilot-hooks-timeout-project.json)
-and [user](../WORKBENCH/evidence/native-draft2-debug/copilot-hooks-timeout-user.json)
+project (`WORKBENCH/evidence/native-draft2-debug/copilot-hooks-timeout-project.json`)
+and user (`WORKBENCH/evidence/native-draft2-debug/copilot-hooks-timeout-user.json`)
 scope terminate a five-second hook after one second. The hook does not finish,
 but the tool runs through the normal permission flow. The same result holds
 with the alias alone in
-[project](../WORKBENCH/evidence/native-draft2-debug/copilot-hooks-timeout-alias-project.json)
-and [user](../WORKBENCH/evidence/native-draft2-debug/copilot-hooks-timeout-alias-user.json)
+project (`WORKBENCH/evidence/native-draft2-debug/copilot-hooks-timeout-alias-project.json`)
+and user (`WORKBENCH/evidence/native-draft2-debug/copilot-hooks-timeout-alias-user.json`)
 scope. These results exclude timeout as mandatory denial enforcement.
 
 File-level disable tests pass in
-[project](../WORKBENCH/evidence/native-draft2-debug/copilot-hooks-disabled-project.json)
-and [user](../WORKBENCH/evidence/native-draft2-debug/copilot-hooks-disabled-user.json)
+project (`WORKBENCH/evidence/native-draft2-debug/copilot-hooks-disabled-project.json`)
+and user (`WORKBENCH/evidence/native-draft2-debug/copilot-hooks-disabled-user.json`)
 scope: only the neighbouring file runs. Local HTTP post-tool hooks pass in
-[project](../WORKBENCH/evidence/native-draft2-debug/copilot-hooks-http-project.json)
-and [user](../WORKBENCH/evidence/native-draft2-debug/copilot-hooks-http-user.json)
+project (`WORKBENCH/evidence/native-draft2-debug/copilot-hooks-http-project.json`)
+and user (`WORKBENCH/evidence/native-draft2-debug/copilot-hooks-http-user.json`)
 scope. The HTTP handler records the session, tool arguments, and literal header;
 its returned context reaches the next model request. These fixtures use the
 native localhost opt-in and do not test TLS or header expansion.
 
 ### Verification and remaining work
 
-The [verification record](../WORKBENCH/evidence/native-draft2-debug/verification-copilot-hooks.json)
+The verification record (`WORKBENCH/evidence/native-draft2-debug/verification-copilot-hooks.json`)
 records source hashes and all executed repository checks. Tests cover typed
 fields, unknown ordered arrays, import refusal, idempotence, removal, portable
 merging, unowned event protection, foreign ownership, global-control refusal,
@@ -890,9 +890,9 @@ No support or release gate is promoted by these results.
 ## Copilot shell-rule matching and interface boundaries
 
 This follow-up resolves the exact-command expectation from the hook review.
-The [allowing-tools reference](../WORKBENCH/evidence/native-draft2-debug/copilot-shell-rules-docs.md),
-[fetch metadata](../WORKBENCH/evidence/native-draft2-debug/copilot-shell-rules-docs.source.json),
-and [pinned CLI help](../WORKBENCH/evidence/native-draft2-debug/copilot-shell-rules-help.txt)
+The allowing-tools reference (`WORKBENCH/evidence/native-draft2-debug/copilot-shell-rules-docs.md`),
+fetch metadata (`WORKBENCH/evidence/native-draft2-debug/copilot-shell-rules-docs.source.json`),
+and pinned CLI help (`WORKBENCH/evidence/native-draft2-debug/copilot-shell-rules-help.txt`)
 provide the documented syntax. The help says that matching is usually against
 the command name. The tests below use Copilot `1.0.83`, SHA256
 `a3262c4513ef1fc2ca21485261ca73196977ad76bd5e7990fb572f6134aaeedd`.
@@ -908,22 +908,22 @@ security profile is projected.
 
 | Tested condition | Observed result | Evidence |
 | --- | --- | --- |
-| Prompt allowance includes executable and script argument | Denied | [Python](../WORKBENCH/evidence/native-draft2-debug/copilot-shell-absolute-exact.json), [touch](../WORKBENCH/evidence/native-draft2-debug/copilot-shell-touch-exact.json) |
-| Prompt allowance uses the absolute executable stem | Allowed | [Stem](../WORKBENCH/evidence/native-draft2-debug/copilot-shell-absolute-stem.json), [prefix](../WORKBENCH/evidence/native-draft2-debug/copilot-shell-absolute-prefix.json) |
-| Basename allowance applied to an absolute executable | Denied | [Absolute command](../WORKBENCH/evidence/native-draft2-debug/copilot-shell-basename-stem.json) |
-| Basename allowance applied to the same basename command | Allowed | [Basename command](../WORKBENCH/evidence/native-draft2-debug/copilot-shell-command-basename.json) |
-| Stem denial with a general shell grant | Denied | [Stem denial](../WORKBENCH/evidence/native-draft2-debug/copilot-shell-deny-stem.json) |
-| Full-command denial with a general shell grant | Denied | [Full-command denial](../WORKBENCH/evidence/native-draft2-debug/copilot-shell-deny-full-command.json) |
-| Full-command denial specifies a different argument | Allowed | [Other argument](../WORKBENCH/evidence/native-draft2-debug/copilot-shell-deny-other-argument.json) |
-| Basename denial applied to an absolute executable | Allowed | [Basename denial](../WORKBENCH/evidence/native-draft2-debug/copilot-shell-deny-basename.json) |
-| ACP allowance matches the full command | Allowed without a client permission request | [Full-command ACP](../WORKBENCH/evidence/native-draft2-debug/copilot-shell-full-command-acp.json) |
-| ACP allowance specifies only the executable stem | Client request; client denial blocks execution | [Client denial](../WORKBENCH/evidence/native-draft2-debug/copilot-shell-client-denial-acp.json) |
-| ACP command uses a different script argument from its allowance | Client request; client denial blocks execution | [Alternate argument](../WORKBENCH/evidence/native-draft2-debug/copilot-shell-alternate-operand-acp.json) |
-| ACP matching full-command denial with a general shell grant | Denied without a client permission request | [Denial precedence](../WORKBENCH/evidence/native-draft2-debug/copilot-shell-denial-precedence-acp.json) |
+| Prompt allowance includes executable and script argument | Denied | Python (`WORKBENCH/evidence/native-draft2-debug/copilot-shell-absolute-exact.json`), touch (`WORKBENCH/evidence/native-draft2-debug/copilot-shell-touch-exact.json`) |
+| Prompt allowance uses the absolute executable stem | Allowed | Stem (`WORKBENCH/evidence/native-draft2-debug/copilot-shell-absolute-stem.json`), prefix (`WORKBENCH/evidence/native-draft2-debug/copilot-shell-absolute-prefix.json`) |
+| Basename allowance applied to an absolute executable | Denied | Absolute command (`WORKBENCH/evidence/native-draft2-debug/copilot-shell-basename-stem.json`) |
+| Basename allowance applied to the same basename command | Allowed | Basename command (`WORKBENCH/evidence/native-draft2-debug/copilot-shell-command-basename.json`) |
+| Stem denial with a general shell grant | Denied | Stem denial (`WORKBENCH/evidence/native-draft2-debug/copilot-shell-deny-stem.json`) |
+| Full-command denial with a general shell grant | Denied | Full-command denial (`WORKBENCH/evidence/native-draft2-debug/copilot-shell-deny-full-command.json`) |
+| Full-command denial specifies a different argument | Allowed | Other argument (`WORKBENCH/evidence/native-draft2-debug/copilot-shell-deny-other-argument.json`) |
+| Basename denial applied to an absolute executable | Allowed | Basename denial (`WORKBENCH/evidence/native-draft2-debug/copilot-shell-deny-basename.json`) |
+| ACP allowance matches the full command | Allowed without a client permission request | Full-command ACP (`WORKBENCH/evidence/native-draft2-debug/copilot-shell-full-command-acp.json`) |
+| ACP allowance specifies only the executable stem | Client request; client denial blocks execution | Client denial (`WORKBENCH/evidence/native-draft2-debug/copilot-shell-client-denial-acp.json`) |
+| ACP command uses a different script argument from its allowance | Client request; client denial blocks execution | Alternate argument (`WORKBENCH/evidence/native-draft2-debug/copilot-shell-alternate-operand-acp.json`) |
+| ACP matching full-command denial with a general shell grant | Denied without a client permission request | Denial precedence (`WORKBENCH/evidence/native-draft2-debug/copilot-shell-denial-precedence-acp.json`) |
 
 Several early expectations were wrong. Those records remain failed tests,
 with their observed effects intact. They are not relabelled as passing runs.
-The first [ACP stem probe](../WORKBENCH/evidence/native-draft2-debug/copilot-shell-stem-acp.json)
+The first ACP stem probe (`WORKBENCH/evidence/native-draft2-debug/copilot-shell-stem-acp.json`)
 also assumed that a rejected tool must return to the model. ACP instead returned
 a correlated `rejected` result and ended the turn. The runner now accepts that
 specific denial path. It does not treat arbitrary tool failures as denial.
@@ -934,20 +934,20 @@ The results do not prove every executable, shell grammar, or argument pattern.
 
 ### Path permissions and hook-fixture correction
 
-The [workspace-only path probe](../WORKBENCH/evidence/native-draft2-debug/copilot-shell-workspace-paths.json)
+The workspace-only path probe (`WORKBENCH/evidence/native-draft2-debug/copilot-shell-workspace-paths.json`)
 denied the absolute interpreter despite its command-stem allowance. Adding
-`/usr/bin` in the [executable-path probe](../WORKBENCH/evidence/native-draft2-debug/copilot-shell-executable-path.json)
+`/usr/bin` in the executable-path probe (`WORKBENCH/evidence/native-draft2-debug/copilot-shell-executable-path.json`)
 allowed it. This establishes the tested executable path requirement without
-granting all paths. A [context-only hook probe](../WORKBENCH/evidence/native-draft2-debug/copilot-shell-context-hook.json)
+granting all paths. A context-only hook probe (`WORKBENCH/evidence/native-draft2-debug/copilot-shell-context-hook.json`)
 also passed with the stem allowance, so that hook response did not cause the
 original command-rule mismatch.
 
-The first [hook stem probe](../WORKBENCH/evidence/native-draft2-debug/copilot-hooks-stem-project.json)
+The first hook stem probe (`WORKBENCH/evidence/native-draft2-debug/copilot-hooks-stem-project.json`)
 removed the path grant and failed. Restoring paths in the
-[intermediate hook probe](../WORKBENCH/evidence/native-draft2-debug/copilot-hooks-stem-paths-project.json)
+intermediate hook probe (`WORKBENCH/evidence/native-draft2-debug/copilot-hooks-stem-paths-project.json`)
 passed. The hook runner now uses `shell(/usr/bin/python3)` plus `--add-dir /usr/bin`.
-The [final scoped-grant hook run](../WORKBENCH/evidence/native-draft2-debug/copilot-hooks-scoped-grant-project.json)
-and [explicit hook-denial run](../WORKBENCH/evidence/native-draft2-debug/copilot-hooks-scoped-grant-deny-project.json)
+The final scoped-grant hook run (`WORKBENCH/evidence/native-draft2-debug/copilot-hooks-scoped-grant-project.json`)
+and explicit hook-denial run (`WORKBENCH/evidence/native-draft2-debug/copilot-hooks-scoped-grant-deny-project.json`)
 both pass. The former broad shell and path grants are no longer required by the
 current runner. The interpreter grant is not an argument-level restriction;
 the local deterministic provider limits this fixture to its marker script.
@@ -955,19 +955,19 @@ the local deterministic provider limits this fixture to its marker script.
 ### Composed commands
 
 With one executable stem granted, two commands that use that stem both run in
-the [same-stem composition probe](../WORKBENCH/evidence/native-draft2-debug/copilot-shell-compound-same-stem.json).
+the same-stem composition probe (`WORKBENCH/evidence/native-draft2-debug/copilot-shell-compound-same-stem.json`).
 When only the first of two different executables is granted, neither marker is
-written in the [prompt-mode mixed probe](../WORKBENCH/evidence/native-draft2-debug/copilot-shell-compound-mixed.json).
+written in the prompt-mode mixed probe (`WORKBENCH/evidence/native-draft2-debug/copilot-shell-compound-mixed.json`).
 Granting both through the native general shell rule produces both markers in
-the [positive mixed probe](../WORKBENCH/evidence/native-draft2-debug/copilot-shell-compound-granted.json).
-The corresponding [ACP mixed probe](../WORKBENCH/evidence/native-draft2-debug/copilot-shell-compound-mixed-acp.json)
+the positive mixed probe (`WORKBENCH/evidence/native-draft2-debug/copilot-shell-compound-granted.json`).
+The corresponding ACP mixed probe (`WORKBENCH/evidence/native-draft2-debug/copilot-shell-compound-mixed-acp.json`)
 requests permission; client denial prevents both effects. This tests `&&`
 composition only. Other operators, substitutions, timeouts, disconnects, and
 background descendants still need separate evidence.
 
 ### Verification and remaining work
 
-The [verification record](../WORKBENCH/evidence/native-draft2-debug/verification-copilot-shell-rules.json)
+The verification record (`WORKBENCH/evidence/native-draft2-debug/verification-copilot-shell-rules.json`)
 records current source hashes, check results, native outcomes, and the retained
 failed expectations. The recorded native source and module hashes still match the hook verification.
 The current Go suite, changed Python runners, report links, JSON, coverage,
@@ -983,19 +983,19 @@ remaining native configuration families, and the full milestone remain open.
 
 The official Codex index routes to
 [OpenAI's hook reference](https://learn.chatgpt.com/docs/hooks). The
-[archived source](../WORKBENCH/evidence/native-draft2-debug/codex-hooks-docs.md)
-and [fetch metadata](../WORKBENCH/evidence/native-draft2-debug/codex-hooks-docs.source.json)
+archived source (`WORKBENCH/evidence/native-draft2-debug/codex-hooks-docs.md`)
+and fetch metadata (`WORKBENCH/evidence/native-draft2-debug/codex-hooks-docs.source.json`)
 retain the document and index hashes. Native tests use Codex `0.154.0`, SHA256
 `3188814c35471432d4123203e0eb38e5bddc60226e3d7ddf0e59e649ea140022`.
 
 ### Trust and parser research
 
-Initial [user](../WORKBENCH/evidence/native-draft2-debug/codex-hooks-direct-user.json)
-and [project](../WORKBENCH/evidence/native-draft2-debug/codex-hooks-direct-project.json)
+Initial user (`WORKBENCH/evidence/native-draft2-debug/codex-hooks-direct-user.json`)
+and project (`WORKBENCH/evidence/native-draft2-debug/codex-hooks-direct-project.json`)
 app-server probes ran the model's tool but no hooks. Setting the
-[feature flag explicitly](../WORKBENCH/evidence/native-draft2-debug/codex-hooks-enabled-user.json)
+feature flag explicitly (`WORKBENCH/evidence/native-draft2-debug/codex-hooks-enabled-user.json`)
 did not change that result. The
-[listing probe](../WORKBENCH/evidence/native-draft2-debug/codex-hooks-listed-user.json)
+listing probe (`WORKBENCH/evidence/native-draft2-debug/codex-hooks-listed-user.json`)
 then proved discovery: native `hooks/list` returned all four fixture definitions,
 with `enabled: true` and `trustStatus: untrusted`. The top-level
 `--dangerously-bypass-hook-trust` flag did not make those hooks execute through
@@ -1006,20 +1006,20 @@ The fixture now trusts only definitions from its exact generated source path,
 with commands that call its reviewed script. It reads native keys and hashes,
 records those in the isolated native user state, restarts the app-server, and
 checks `trusted` status. The direct trusted
-[user](../WORKBENCH/evidence/native-draft2-debug/codex-hooks-trusted-user.json),
-[project](../WORKBENCH/evidence/native-draft2-debug/codex-hooks-trusted-project.json),
-and [inline-user](../WORKBENCH/evidence/native-draft2-debug/codex-hooks-trusted-inline-user.json)
+user (`WORKBENCH/evidence/native-draft2-debug/codex-hooks-trusted-user.json`),
+project (`WORKBENCH/evidence/native-draft2-debug/codex-hooks-trusted-project.json`),
+and inline-user (`WORKBENCH/evidence/native-draft2-debug/codex-hooks-trusted-inline-user.json`)
 probes pass. No account credentials or external model are used.
 
-An initial [unreviewed probe](../WORKBENCH/evidence/native-draft2-debug/codex-hooks-unreviewed-user.json)
+An initial unreviewed probe (`WORKBENCH/evidence/native-draft2-debug/codex-hooks-unreviewed-user.json`)
 also recorded no hook effects, but lacked the later discovery check. The initial
-[disabled-field probe](../WORKBENCH/evidence/native-draft2-debug/codex-hooks-disable-field-user.json)
+disabled-field probe (`WORKBENCH/evidence/native-draft2-debug/codex-hooks-disable-field-user.json`)
 was similarly inconclusive about that field. The
-[listed disabled-field probe](../WORKBENCH/evidence/native-draft2-debug/codex-hooks-trusted-disable-field.json)
+listed disabled-field probe (`WORKBENCH/evidence/native-draft2-debug/codex-hooks-trusted-disable-field.json`)
 provided the decisive warning: `disableAllHooks` is an unknown JSON root field,
 so native parsing rejects the whole file.
 
-The [parser matrix](../WORKBENCH/evidence/native-draft2-debug/codex-hooks-parser.json)
+The parser matrix (`WORKBENCH/evidence/native-draft2-debug/codex-hooks-parser.json`)
 distinguishes root and nested handling. Unknown root fields reject the file.
 Unknown event, matcher-group, and command-handler fields do not stop the valid
 command from being listed. A `prompt` handler is skipped with a warning. An
@@ -1064,39 +1064,39 @@ applies again, and checks that native trust state is unchanged. Final runs
 import again and compare hook values. User-scope reimport excludes trust state.
 Project apply leaves the user configuration unchanged.
 
-The [final project run](../WORKBENCH/evidence/native-draft2-debug/codex-hooks-final-project.json)
-and [final user run](../WORKBENCH/evidence/native-draft2-debug/codex-hooks-final-user.json)
+The final project run (`WORKBENCH/evidence/native-draft2-debug/codex-hooks-final-project.json`)
+and final user run (`WORKBENCH/evidence/native-draft2-debug/codex-hooks-final-user.json`)
 pass. Hook payload session and tool-call IDs, exact tool arguments, native
 completion events, model context, and marker-file effects agree. The earlier
-projected [project](../WORKBENCH/evidence/native-draft2-debug/codex-hooks-projected-project.json)
-and [user](../WORKBENCH/evidence/native-draft2-debug/codex-hooks-projected-user.json)
+projected project (`WORKBENCH/evidence/native-draft2-debug/codex-hooks-projected-project.json`)
+and user (`WORKBENCH/evidence/native-draft2-debug/codex-hooks-projected-user.json`)
 runs remain available. Inline projection also passes in
-[project](../WORKBENCH/evidence/native-draft2-debug/codex-hooks-inline-project.json)
-and [user](../WORKBENCH/evidence/native-draft2-debug/codex-hooks-inline-user.json)
+project (`WORKBENCH/evidence/native-draft2-debug/codex-hooks-inline-project.json`)
+and user (`WORKBENCH/evidence/native-draft2-debug/codex-hooks-inline-user.json`)
 scope.
 
 The explicit review-gate tests in
-[project](../WORKBENCH/evidence/native-draft2-debug/codex-hooks-review-required-project.json)
-and [user](../WORKBENCH/evidence/native-draft2-debug/codex-hooks-review-required-user.json)
+project (`WORKBENCH/evidence/native-draft2-debug/codex-hooks-review-required-project.json`)
+and user (`WORKBENCH/evidence/native-draft2-debug/codex-hooks-review-required-user.json`)
 scope list the definitions but execute none without trust. The changed-definition
-runs in [project](../WORKBENCH/evidence/native-draft2-debug/codex-hooks-modified-project.json)
-and [user](../WORKBENCH/evidence/native-draft2-debug/codex-hooks-modified-user.json)
+runs in project (`WORKBENCH/evidence/native-draft2-debug/codex-hooks-modified-project.json`)
+and user (`WORKBENCH/evidence/native-draft2-debug/codex-hooks-modified-user.json`)
 scope apply a changed command without changing trust state. Native listing marks
 one hook `modified` and the other three `trusted`. Only the unchanged matching
 hooks run. The changed SessionStart hook contributes no context.
 
 Denial tests pass in
-[project](../WORKBENCH/evidence/native-draft2-debug/codex-hooks-deny-project.json)
-and [user](../WORKBENCH/evidence/native-draft2-debug/codex-hooks-deny-user.json)
+project (`WORKBENCH/evidence/native-draft2-debug/codex-hooks-deny-project.json`)
+and user (`WORKBENCH/evidence/native-draft2-debug/codex-hooks-deny-user.json`)
 scope: the native denial reaches the next model request and no tool effect is
-written. The [user timeout probe](../WORKBENCH/evidence/native-draft2-debug/codex-hooks-timeout-user.json)
+written. The user timeout probe (`WORKBENCH/evidence/native-draft2-debug/codex-hooks-timeout-user.json`)
 returns after the one-second limit, leaves no active timed-out script process,
 and allows the tool to run under the fixture's native policy. It does not
 establish mandatory permission enforcement or every timeout case.
 
 ### Verification and remaining work
 
-The [verification record](../WORKBENCH/evidence/native-draft2-debug/verification-codex-hooks.json)
+The verification record (`WORKBENCH/evidence/native-draft2-debug/verification-codex-hooks.json`)
 records current hashes and executed checks. Go regressions cover numeric bounds,
 unknown fields and arrays, skipped handlers, aliases, credential refusal,
 external-state exclusion, required native actions, shared ownership, removal,
@@ -1115,16 +1115,16 @@ support and release gates are unchanged.
 
 The current official index links to the
 [hook page](https://learn.chatgpt.com/docs/hooks.md). A fresh fetch matches the
-[archived source](../WORKBENCH/evidence/native-draft2-debug/codex-hooks-docs.md):
+archived source (`WORKBENCH/evidence/native-draft2-debug/codex-hooks-docs.md`):
 SHA256 `6b4c549c4f1df78e802f289151e54f7677128b8a9929912afb7e8ecd975d2ce9`.
 The page documents synchronous MCP handlers, existing-connection prerequisites,
 non-blocking error handling, and the unsupported `SessionEnd` combination.
 
-The [first projected test](../WORKBENCH/evidence/native-draft2-debug/codex-mcp-hooks-first-project.json)
+The first projected test (`WORKBENCH/evidence/native-draft2-debug/codex-mcp-hooks-first-project.json`)
 failed before execution. The native parser rejected `null` inside a nested
 input array. This exposed a gap in the pinned schema: it permits arbitrary JSON
 input, but native loading converts that input through TOML. The
-[parser matrix](../WORKBENCH/evidence/native-draft2-debug/codex-mcp-hooks-parser.json)
+parser matrix (`WORKBENCH/evidence/native-draft2-debug/codex-mcp-hooks-parser.json`)
 confirms rejection of direct, object, and array null values. Objects, mixed
 arrays, finite floating-point numbers, and tested 64-bit integer bounds parse.
 It also confirms that native discovery skips `SessionEnd` MCP handlers with an
@@ -1156,16 +1156,16 @@ unchanged. The native client restarts before the execution check.
 
 | Case | Project evidence | User evidence | Observed result |
 | --- | --- | --- | --- |
-| File execution | [Project](../WORKBENCH/evidence/native-draft2-debug/codex-mcp-hooks-final-execution-project.json) | [User](../WORKBENCH/evidence/native-draft2-debug/codex-mcp-hooks-final-execution-user.json) | Pre/post hooks, MCP request IDs and arguments, native hook events, model context, and command effects agree. |
-| Inline execution | [Project](../WORKBENCH/evidence/native-draft2-debug/codex-mcp-hooks-final-inline-project.json) | [User](../WORKBENCH/evidence/native-draft2-debug/codex-mcp-hooks-final-inline-user.json) | Inline hook values survive import, projection, native trust, reload, and reimport. |
-| Denial | [Project](../WORKBENCH/evidence/native-draft2-debug/codex-mcp-hooks-final-deny-project.json) | [User](../WORKBENCH/evidence/native-draft2-debug/codex-mcp-hooks-final-deny-user.json) | Native hook status is blocked; the model receives the reason; no command effect occurs. |
-| Missing server | [Project](../WORKBENCH/evidence/native-draft2-debug/codex-mcp-hooks-final-missing-server-project.json) | [User](../WORKBENCH/evidence/native-draft2-debug/codex-mcp-hooks-final-missing-server-user.json) | No pre-hook MCP call; native failure is explicit; command and post-hook complete. |
-| Unlisted tool | [Project](../WORKBENCH/evidence/native-draft2-debug/codex-mcp-hooks-final-missing-tool-project.json) | [User](../WORKBENCH/evidence/native-draft2-debug/codex-mcp-hooks-final-missing-tool-user.json) | Codex forwards the unlisted name. The server reports an unavailable tool; command and post-hook complete. |
-| Server error | [Project](../WORKBENCH/evidence/native-draft2-debug/codex-mcp-hooks-final-error-project.json) | [User](../WORKBENCH/evidence/native-draft2-debug/codex-mcp-hooks-final-error-user.json) | The native pre-hook fails with the server error; command and post-hook complete. |
-| Missing reference | [Project](../WORKBENCH/evidence/native-draft2-debug/codex-mcp-hooks-final-template-missing-project.json) | [User](../WORKBENCH/evidence/native-draft2-debug/codex-mcp-hooks-final-template-missing-user.json) | Missing event field stops the pre-hook before MCP dispatch; command and post-hook complete. |
-| Timeout | [Project](../WORKBENCH/evidence/native-draft2-debug/codex-mcp-hooks-final-timeout-project.json) | [User](../WORKBENCH/evidence/native-draft2-debug/codex-mcp-hooks-final-timeout-user.json) | Native wait ends after about one second; command and post-hook complete before the late MCP result. |
-| No hook trust | [Project](../WORKBENCH/evidence/native-draft2-debug/codex-mcp-hooks-final-unreviewed-project.json) | [User](../WORKBENCH/evidence/native-draft2-debug/codex-mcp-hooks-final-unreviewed-user.json) | Definitions are listed as untrusted; no hook event or MCP call occurs. |
-| Exact integers | [Project](../WORKBENCH/evidence/native-draft2-debug/codex-mcp-hooks-final-numbers-project.json) | [User](../WORKBENCH/evidence/native-draft2-debug/codex-mcp-hooks-final-numbers-user.json) | Values at signed and unsigned 64-bit bounds reach the server unchanged. |
+| File execution | Project (`WORKBENCH/evidence/native-draft2-debug/codex-mcp-hooks-final-execution-project.json`) | User (`WORKBENCH/evidence/native-draft2-debug/codex-mcp-hooks-final-execution-user.json`) | Pre/post hooks, MCP request IDs and arguments, native hook events, model context, and command effects agree. |
+| Inline execution | Project (`WORKBENCH/evidence/native-draft2-debug/codex-mcp-hooks-final-inline-project.json`) | User (`WORKBENCH/evidence/native-draft2-debug/codex-mcp-hooks-final-inline-user.json`) | Inline hook values survive import, projection, native trust, reload, and reimport. |
+| Denial | Project (`WORKBENCH/evidence/native-draft2-debug/codex-mcp-hooks-final-deny-project.json`) | User (`WORKBENCH/evidence/native-draft2-debug/codex-mcp-hooks-final-deny-user.json`) | Native hook status is blocked; the model receives the reason; no command effect occurs. |
+| Missing server | Project (`WORKBENCH/evidence/native-draft2-debug/codex-mcp-hooks-final-missing-server-project.json`) | User (`WORKBENCH/evidence/native-draft2-debug/codex-mcp-hooks-final-missing-server-user.json`) | No pre-hook MCP call; native failure is explicit; command and post-hook complete. |
+| Unlisted tool | Project (`WORKBENCH/evidence/native-draft2-debug/codex-mcp-hooks-final-missing-tool-project.json`) | User (`WORKBENCH/evidence/native-draft2-debug/codex-mcp-hooks-final-missing-tool-user.json`) | Codex forwards the unlisted name. The server reports an unavailable tool; command and post-hook complete. |
+| Server error | Project (`WORKBENCH/evidence/native-draft2-debug/codex-mcp-hooks-final-error-project.json`) | User (`WORKBENCH/evidence/native-draft2-debug/codex-mcp-hooks-final-error-user.json`) | The native pre-hook fails with the server error; command and post-hook complete. |
+| Missing reference | Project (`WORKBENCH/evidence/native-draft2-debug/codex-mcp-hooks-final-template-missing-project.json`) | User (`WORKBENCH/evidence/native-draft2-debug/codex-mcp-hooks-final-template-missing-user.json`) | Missing event field stops the pre-hook before MCP dispatch; command and post-hook complete. |
+| Timeout | Project (`WORKBENCH/evidence/native-draft2-debug/codex-mcp-hooks-final-timeout-project.json`) | User (`WORKBENCH/evidence/native-draft2-debug/codex-mcp-hooks-final-timeout-user.json`) | Native wait ends after about one second; command and post-hook complete before the late MCP result. |
+| No hook trust | Project (`WORKBENCH/evidence/native-draft2-debug/codex-mcp-hooks-final-unreviewed-project.json`) | User (`WORKBENCH/evidence/native-draft2-debug/codex-mcp-hooks-final-unreviewed-user.json`) | Definitions are listed as untrusted; no hook event or MCP call occurs. |
+| Exact integers | Project (`WORKBENCH/evidence/native-draft2-debug/codex-mcp-hooks-final-numbers-project.json`) | User (`WORKBENCH/evidence/native-draft2-debug/codex-mcp-hooks-final-numbers-user.json`) | Values at signed and unsigned 64-bit bounds reach the server unchanged. |
 
 Input tests cover a whole-object event reference, embedded string references,
 nested arrays and objects, numbers, and booleans. Status messages are verified
@@ -1187,17 +1187,17 @@ It does not establish behavior for all servers or remote transports.
 
 ### Retained attempts and verification
 
-The [initial unlisted-tool test](../WORKBENCH/evidence/native-draft2-debug/codex-mcp-hooks-first-missing-tool-user.json)
+The initial unlisted-tool test (`WORKBENCH/evidence/native-draft2-debug/codex-mcp-hooks-first-missing-tool-user.json`)
 expected no dispatch, but the native client sent the name to the server. That
 initial fixture returned success for every tool name. The final fixture returns
 an explicit missing-tool error. The
-[initial timeout test](../WORKBENCH/evidence/native-draft2-debug/codex-mcp-hooks-first-timeout-user.json)
+initial timeout test (`WORKBENCH/evidence/native-draft2-debug/codex-mcp-hooks-first-timeout-user.json`)
 used a serial server, so its five-second wait also delayed the post-hook. The
 final server handles calls independently and records the late result. Both
 failed expectations remain available with their runner snapshots. Earlier
 passing and reviewed probes also remain in the evidence directory.
 
-The [verification record](../WORKBENCH/evidence/native-draft2-debug/verification-codex-mcp-hooks.json)
+The verification record (`WORKBENCH/evidence/native-draft2-debug/verification-codex-mcp-hooks.json`)
 contains final source hashes, 20 final native runs, parser checks, and the
 stable, draft, Go, Workbench, repository, compatibility, and coverage checks.
 MCP field capabilities now use their own evidence. The timeout field identifies
@@ -1218,7 +1218,7 @@ The [official hook page](https://learn.chatgpt.com/docs/hooks.md) defines
 `async` and `additionalContextLimit`. The
 [app-server page](https://learn.chatgpt.com/docs/app-server.md) defines the
 thread lifecycle. Current documents were fetched through the official index;
-the [source record](../WORKBENCH/evidence/native-draft2-debug/codex-background-docs.source.json)
+the source record (`WORKBENCH/evidence/native-draft2-debug/codex-background-docs.source.json`)
 identifies the archived documents and their hashes.
 
 The [runner](../WORKBENCH/conformance/run_native_codex_background_hooks.py) uses
@@ -1256,14 +1256,14 @@ do emit native start and completion events. UI rendering is not tested.
 
 | Case | Project evidence | User evidence | Observed result |
 | --- | --- | --- | --- |
-| Next turn | [Project](../WORKBENCH/evidence/native-draft2-debug/codex-background-final-background-next-project.json) | [User](../WORKBENCH/evidence/native-draft2-debug/codex-background-final-background-next-user.json) | The command completes before gate release; the next user turn receives hook context. |
-| Active turn | [Project](../WORKBENCH/evidence/native-draft2-debug/codex-background-final-background-active-project.json) | [User](../WORKBENCH/evidence/native-draft2-debug/codex-background-final-background-active-user.json) | Context reaches a later model step in the same turn. |
-| Background denial | [Project](../WORKBENCH/evidence/native-draft2-debug/codex-background-final-background-deny-project.json) | [User](../WORKBENCH/evidence/native-draft2-debug/codex-background-final-background-deny-user.json) | The command effect remains; delayed context arrives despite a denial field. |
-| Timeout with attached child | [Project](../WORKBENCH/evidence/native-draft2-debug/codex-background-final-background-timeout-project.json) | [User](../WORKBENCH/evidence/native-draft2-debug/codex-background-final-background-timeout-user.json) | A one-second timeout stops the hook and its child in the same process group; neither completes its delayed output. |
-| Timeout with detached child | [Project](../WORKBENCH/evidence/native-draft2-debug/codex-background-final-background-detached-timeout-project.json) | [User](../WORKBENCH/evidence/native-draft2-debug/codex-background-final-background-detached-timeout-user.json) | The hook stops, but a child in a new process group survives and writes its marker after timeout. |
-| Unsubscribe | [Project](../WORKBENCH/evidence/native-draft2-debug/codex-background-final-background-unsubscribe-project.json) | [User](../WORKBENCH/evidence/native-draft2-debug/codex-background-final-background-unsubscribe-user.json) | The native thread remains loaded; the hook and child remain alive. Releasing the fixture gate lets the hook finish without a model request. |
-| Graceful shutdown | [Project](../WORKBENCH/evidence/native-draft2-debug/codex-background-final-background-shutdown-project.json) | [User](../WORKBENCH/evidence/native-draft2-debug/codex-background-final-background-shutdown-user.json) | Closing app-server stdin gives exit code zero; the hook and attached child stop before their delayed effects. |
-| Archive | [Project](../WORKBENCH/evidence/native-draft2-debug/codex-background-final-background-archive-project.json) | [User](../WORKBENCH/evidence/native-draft2-debug/codex-background-final-background-archive-user.json) | The persisted fixture thread leaves the loaded list; its hook and attached child stop. |
+| Next turn | Project (`WORKBENCH/evidence/native-draft2-debug/codex-background-final-background-next-project.json`) | User (`WORKBENCH/evidence/native-draft2-debug/codex-background-final-background-next-user.json`) | The command completes before gate release; the next user turn receives hook context. |
+| Active turn | Project (`WORKBENCH/evidence/native-draft2-debug/codex-background-final-background-active-project.json`) | User (`WORKBENCH/evidence/native-draft2-debug/codex-background-final-background-active-user.json`) | Context reaches a later model step in the same turn. |
+| Background denial | Project (`WORKBENCH/evidence/native-draft2-debug/codex-background-final-background-deny-project.json`) | User (`WORKBENCH/evidence/native-draft2-debug/codex-background-final-background-deny-user.json`) | The command effect remains; delayed context arrives despite a denial field. |
+| Timeout with attached child | Project (`WORKBENCH/evidence/native-draft2-debug/codex-background-final-background-timeout-project.json`) | User (`WORKBENCH/evidence/native-draft2-debug/codex-background-final-background-timeout-user.json`) | A one-second timeout stops the hook and its child in the same process group; neither completes its delayed output. |
+| Timeout with detached child | Project (`WORKBENCH/evidence/native-draft2-debug/codex-background-final-background-detached-timeout-project.json`) | User (`WORKBENCH/evidence/native-draft2-debug/codex-background-final-background-detached-timeout-user.json`) | The hook stops, but a child in a new process group survives and writes its marker after timeout. |
+| Unsubscribe | Project (`WORKBENCH/evidence/native-draft2-debug/codex-background-final-background-unsubscribe-project.json`) | User (`WORKBENCH/evidence/native-draft2-debug/codex-background-final-background-unsubscribe-user.json`) | The native thread remains loaded; the hook and child remain alive. Releasing the fixture gate lets the hook finish without a model request. |
+| Graceful shutdown | Project (`WORKBENCH/evidence/native-draft2-debug/codex-background-final-background-shutdown-project.json`) | User (`WORKBENCH/evidence/native-draft2-debug/codex-background-final-background-shutdown-user.json`) | Closing app-server stdin gives exit code zero; the hook and attached child stop before their delayed effects. |
+| Archive | Project (`WORKBENCH/evidence/native-draft2-debug/codex-background-final-background-archive-project.json`) | User (`WORKBENCH/evidence/native-draft2-debug/codex-background-final-background-archive-user.json`) | The persisted fixture thread leaves the loaded list; its hook and attached child stop. |
 
 The child fixture records its process-group ID. The detached case uses a new
 session and process group, so it is not equivalent to an attached child. The
@@ -1288,19 +1288,19 @@ output behavior.
 
 | Case | Project evidence | User evidence | Observed result |
 | --- | --- | --- | --- |
-| Positive limit | [Project](../WORKBENCH/evidence/native-draft2-debug/codex-background-final-spill-project.json) | [User](../WORKBENCH/evidence/native-draft2-debug/codex-background-final-spill-user.json) | A 128-token limit gives shortened context and the complete saved-file path. |
-| Tiny limit | [Project](../WORKBENCH/evidence/native-draft2-debug/codex-background-final-spill-tiny-project.json) | [User](../WORKBENCH/evidence/native-draft2-debug/codex-background-final-spill-tiny-user.json) | A 32-token limit gives the saved-file notice without the context head. |
-| Zero limit | [Project](../WORKBENCH/evidence/native-draft2-debug/codex-background-final-unlimited-project.json) | [User](../WORKBENCH/evidence/native-draft2-debug/codex-background-final-unlimited-user.json) | The full output remains in model input and no context spill file is created. |
-| Omitted limit | [Project](../WORKBENCH/evidence/native-draft2-debug/codex-background-final-spill-default-project.json) | [User](../WORKBENCH/evidence/native-draft2-debug/codex-background-final-spill-default-user.json) | The native default spills this large output; the exact default threshold is not measured. |
-| Independent handlers | [Project](../WORKBENCH/evidence/native-draft2-debug/codex-background-final-spill-mixed-project.json) | [User](../WORKBENCH/evidence/native-draft2-debug/codex-background-final-spill-mixed-user.json) | One handler spills; the zero-limit handler retains the full text. |
-| Background spill | [Project](../WORKBENCH/evidence/native-draft2-debug/codex-background-final-background-spill-project.json) | [User](../WORKBENCH/evidence/native-draft2-debug/codex-background-final-background-spill-user.json) | Full output is saved and shortened context reaches the next user turn. |
-| Background unlimited | [Project](../WORKBENCH/evidence/native-draft2-debug/codex-background-final-background-unlimited-project.json) | [User](../WORKBENCH/evidence/native-draft2-debug/codex-background-final-background-unlimited-user.json) | The next user turn receives full background context without a spill. |
+| Positive limit | Project (`WORKBENCH/evidence/native-draft2-debug/codex-background-final-spill-project.json`) | User (`WORKBENCH/evidence/native-draft2-debug/codex-background-final-spill-user.json`) | A 128-token limit gives shortened context and the complete saved-file path. |
+| Tiny limit | Project (`WORKBENCH/evidence/native-draft2-debug/codex-background-final-spill-tiny-project.json`) | User (`WORKBENCH/evidence/native-draft2-debug/codex-background-final-spill-tiny-user.json`) | A 32-token limit gives the saved-file notice without the context head. |
+| Zero limit | Project (`WORKBENCH/evidence/native-draft2-debug/codex-background-final-unlimited-project.json`) | User (`WORKBENCH/evidence/native-draft2-debug/codex-background-final-unlimited-user.json`) | The full output remains in model input and no context spill file is created. |
+| Omitted limit | Project (`WORKBENCH/evidence/native-draft2-debug/codex-background-final-spill-default-project.json`) | User (`WORKBENCH/evidence/native-draft2-debug/codex-background-final-spill-default-user.json`) | The native default spills this large output; the exact default threshold is not measured. |
+| Independent handlers | Project (`WORKBENCH/evidence/native-draft2-debug/codex-background-final-spill-mixed-project.json`) | User (`WORKBENCH/evidence/native-draft2-debug/codex-background-final-spill-mixed-user.json`) | One handler spills; the zero-limit handler retains the full text. |
+| Background spill | Project (`WORKBENCH/evidence/native-draft2-debug/codex-background-final-background-spill-project.json`) | User (`WORKBENCH/evidence/native-draft2-debug/codex-background-final-background-spill-user.json`) | Full output is saved and shortened context reaches the next user turn. |
+| Background unlimited | Project (`WORKBENCH/evidence/native-draft2-debug/codex-background-final-background-unlimited-project.json`) | User (`WORKBENCH/evidence/native-draft2-debug/codex-background-final-background-unlimited-user.json`) | The next user turn receives full background context without a spill. |
 
 Inline `config.toml` tests also pass for
-[project background execution](../WORKBENCH/evidence/native-draft2-debug/codex-background-final-inline-background-next-project.json),
-[user background execution](../WORKBENCH/evidence/native-draft2-debug/codex-background-final-inline-background-next-user.json),
-[project context spilling](../WORKBENCH/evidence/native-draft2-debug/codex-background-final-inline-spill-project.json),
-and [user context spilling](../WORKBENCH/evidence/native-draft2-debug/codex-background-final-inline-spill-user.json).
+project background execution (`WORKBENCH/evidence/native-draft2-debug/codex-background-final-inline-background-next-project.json`),
+user background execution (`WORKBENCH/evidence/native-draft2-debug/codex-background-final-inline-background-next-user.json`),
+project context spilling (`WORKBENCH/evidence/native-draft2-debug/codex-background-final-inline-spill-project.json`),
+and user context spilling (`WORKBENCH/evidence/native-draft2-debug/codex-background-final-inline-spill-user.json`).
 
 The runtime files appear under the fixture's private `TMPDIR/hook_outputs/`
 tree. Evidence records file modes as observed; apply does not create, own,
@@ -1311,14 +1311,14 @@ untested.
 
 ### Retained attempts and capability updates
 
-The [first background test](../WORKBENCH/evidence/native-draft2-debug/codex-background-first-next-project.json)
+The first background test (`WORKBENCH/evidence/native-draft2-debug/codex-background-first-next-project.json`)
 waited for native hook notifications that this path does not emit. Its log
 already showed independent hook completion. The final runner observes process
 completion, then checks a later model request. The
-[first small-limit test](../WORKBENCH/evidence/native-draft2-debug/codex-background-first-spill-user.json)
+first small-limit test (`WORKBENCH/evidence/native-draft2-debug/codex-background-first-spill-user.json`)
 expected a visible context head at 32 tokens, but native output contained only
 the saved-file notice. The final matrix includes that exact case. The
-[first unsubscribe test](../WORKBENCH/evidence/native-draft2-debug/codex-background-reviewed-background-cancel-user.json)
+first unsubscribe test (`WORKBENCH/evidence/native-draft2-debug/codex-background-reviewed-background-cancel-user.json`)
 expected immediate shutdown. Live documentation and `thread/loaded/list`
 resolved that incorrect expectation; separate archive and graceful-shutdown
 tests verify actual session termination. All failed records and runner
@@ -1330,7 +1330,7 @@ now distinguish attached and detached descendants. Plan actions identify
 background-control limits and the separate ownership of native runtime files.
 No portable permission mapping or native trust store was widened.
 
-The [verification record](../WORKBENCH/evidence/native-draft2-debug/verification-codex-background-hooks.json)
+The verification record (`WORKBENCH/evidence/native-draft2-debug/verification-codex-background-hooks.json`)
 contains 34 final native runs, final source hashes, retained-attempt checks,
 and the full stable, draft, Go, Workbench, coverage, and repository checks.
 The original 1,679-entry inventory and frozen hash remain unchanged. The full
@@ -1363,8 +1363,8 @@ The review corrected four defects or insufficient checks:
 
 | Native CLI | Project evidence | User evidence | Native loading |
 | --- | --- | --- | --- |
-| Codex 0.154.0 | [Project](../WORKBENCH/evidence/plugin-standard/codex-selection-verified-project.json) | [User](../WORKBENCH/evidence/plugin-standard/codex-selection-verified-user.json) | A versioned package copy; plugin-qualified skill name and exact plugin ID. |
-| Copilot 1.0.83 | [Project](../WORKBENCH/evidence/plugin-standard/copilot-selection-verified-project.json) | [User](../WORKBENCH/evidence/plugin-standard/copilot-selection-verified-user.json) | A live reference to the local package; no copied package. |
+| Codex 0.154.0 | Project (`WORKBENCH/evidence/plugin-standard/codex-selection-verified-project.json`) | User (`WORKBENCH/evidence/plugin-standard/codex-selection-verified-user.json`) | A versioned package copy; plugin-qualified skill name and exact plugin ID. |
+| Copilot 1.0.83 | Project (`WORKBENCH/evidence/plugin-standard/copilot-selection-verified-project.json`) | User (`WORKBENCH/evidence/plugin-standard/copilot-selection-verified-user.json`) | A live reference to the local package; no copied package. |
 
 All four cases use identical Agent Plugins 1.0.0 package bytes. They verify
 import, apply without installation, explicit native installation, exact skill
@@ -1373,7 +1373,7 @@ bytes. Project apply leaves user configuration unchanged. Native project trust
 is fixture setup, not adapter output. The earlier untrusted Copilot project
 attempt remains available as a separate failed prerequisite check.
 
-The [verification record](../WORKBENCH/evidence/plugin-standard/verification-plugin-selections.json)
+The verification record (`WORKBENCH/evidence/plugin-standard/verification-plugin-selections.json`)
 records deterministic checks, four final native runs, source hashes, and retained
 failures. Capabilities and semantic coverage use `native-discovery-only` for
 these plugin fields. Unverified overlays retain their separate status. The
@@ -1392,7 +1392,7 @@ The Git follow-up found one adapter status error and one required native action:
   but ignores it. The adapter had reported that entry as active configuration.
   It now retains the entry unchanged and inactive in project scope; required
   entries refuse activation. Unit tests cover both boolean values, both scopes,
-  and required refusal. The [official source](../WORKBENCH/evidence/plugin-standard/copilot-marketplace-settings.source.json)
+  and required refusal. The official source (`WORKBENCH/evidence/plugin-standard/copilot-marketplace-settings.source.json`)
   distinguishes user opt-in, managed authority, and session types.
 - Codex's configured Git marketplace is not available until its native cache
   has been populated. The first native list attempt reports a missing manifest.
@@ -1409,11 +1409,11 @@ assets, and native discovery no longer exposes the skill after disable.
 
 | Native CLI | Project evidence | User evidence |
 | --- | --- | --- |
-| Codex 0.154.0 | [Project](../WORKBENCH/evidence/plugin-standard/codex-git-verified-project.json) | [User](../WORKBENCH/evidence/plugin-standard/codex-git-verified-user.json) |
-| Copilot 1.0.83 | [Project](../WORKBENCH/evidence/plugin-standard/copilot-git-verified-project.json) | [User](../WORKBENCH/evidence/plugin-standard/copilot-git-verified-user.json) |
+| Codex 0.154.0 | Project (`WORKBENCH/evidence/plugin-standard/codex-git-verified-project.json`) | User (`WORKBENCH/evidence/plugin-standard/codex-git-verified-user.json`) |
+| Copilot 1.0.83 | Project (`WORKBENCH/evidence/plugin-standard/copilot-git-verified-project.json`) | User (`WORKBENCH/evidence/plugin-standard/copilot-git-verified-user.json`) |
 
 The local-directory matrix also passed again with the changed CLI. The
-[verification record](../WORKBENCH/evidence/plugin-standard/verification-plugin-git.json)
+verification record (`WORKBENCH/evidence/plugin-standard/verification-plugin-git.json`)
 checks all eight native runs against current source hashes. It retains the first
 two fixture build timeouts and the missing Codex cache attempt. The build
 timeouts came from an empty isolated Go cache; fixture builds now use the
@@ -1441,7 +1441,7 @@ together. Native fixture policy is explicit and does not pass through apply.
 | Disable and restart | Tool is absent; server does not start; package/data remain. | Tool is absent; server does not start; package/data remain. |
 
 Each applicable row passes in project and user scope. The
-[verification record](../WORKBENCH/evidence/plugin-standard/verification-plugin-mcp.json)
+verification record (`WORKBENCH/evidence/plugin-standard/verification-plugin-mcp.json`)
 covers 14 MCP runs and eight repeated local/Git marketplace runs with current
 source hashes. Native MCP execution is a separate `bounded-fixture-execution`
 capability. The original semantic inventory count does not increase.
@@ -1509,11 +1509,11 @@ Go regressions cover malformed legacy JSONC, external credentials and trust,
 whole-root precedence, removal, equal legacy values, source permissions,
 project isolation, known containers, arrays, and unknown descendants. The first
 ad hoc native probe used a plain JSON parser on Copilot's generated comment
-header; the [failed parser record](../WORKBENCH/evidence/native-draft2-debug/copilot-legacy-jsonc-probe-failure.json)
+header; the failed parser record (`WORKBENCH/evidence/native-draft2-debug/copilot-legacy-jsonc-probe-failure.json`)
 retains the observed files and limits of that attempt. The native runner handles the
 generated whole-line comments and does not claim to be a general JSONC parser.
 
-The [verification record](../WORKBENCH/evidence/native-draft2-debug/verification-copilot-legacy.json)
+The verification record (`WORKBENCH/evidence/native-draft2-debug/verification-copilot-legacy.json`)
 checks three migration cases and eight repeated marketplace cases with current
 source hashes. Earlier MCP execution records retain their historical source
 hashes. These results do not establish native behavior for every newly reachable
@@ -1530,7 +1530,7 @@ instead of being reported as successfully activated. Arrays remain atomic, and
 required invalid values refuse before writes. `defaultPermissionMode` has its
 documented enum declaration but remains blocked by the security gate.
 
-The [native test](../WORKBENCH/evidence/native-draft2-debug/copilot-preferences-final.json)
+The native test (`WORKBENCH/evidence/native-draft2-debug/copilot-preferences-final.json`)
 uses canonical apply before each of three fresh terminal sessions:
 
 | Phase | Native observations |
@@ -1546,7 +1546,7 @@ closed by the fixture. No model turn is submitted. Apply preserves native
 application state; new settings have mode `0600`. Native startup leaves the
 projected settings unchanged, and reimport preserves each phase's values.
 
-The [first attempt](../WORKBENCH/evidence/native-draft2-debug/copilot-preferences-first.json)
+The first attempt (`WORKBENCH/evidence/native-draft2-debug/copilot-preferences-first.json`)
 retains a fixture assertion failure: the terminal reached column one with CRLF,
 while the assertion expected an explicit cursor-position sequence. The corrected
 check accepts both representations. This is not a native padding failure.
@@ -1554,7 +1554,7 @@ check accepts both representations. This is not a native padding failure.
 Capabilities and semantic coverage link the measured preference subset to this
 evidence. Notification delivery, image rendering, autopilot execution, command
 history behavior, command failure handling, and event-only status refresh remain
-unverified. The [verification record](../WORKBENCH/evidence/native-draft2-debug/verification-copilot-preferences.json)
+unverified. The verification record (`WORKBENCH/evidence/native-draft2-debug/verification-copilot-preferences.json`)
 checks the current CLI, repository, and repeated plugin/migration fixtures.
 Earlier verification records retain the source hashes from their own revisions.
 
@@ -1587,26 +1587,26 @@ establishes runtime resource limits. Account state remains external.
 
 Two fixture failures remain available with their original runner snapshots:
 
-- [Tool parser](../WORKBENCH/evidence/native-draft2-debug/copilot-subagents-first-override.json):
+- Tool parser (`WORKBENCH/evidence/native-draft2-debug/copilot-subagents-first-override.json`):
   the request included a `tool_search` entry without a `function` member.
-- [Default tier parser](../WORKBENCH/evidence/native-draft2-debug/copilot-subagents-final-inherit.json):
+- Default tier parser (`WORKBENCH/evidence/native-draft2-debug/copilot-subagents-final-inherit.json`):
   the native configured event omitted the default `contextTier` member.
 
 Both attempts executed the child effect before the assertion failed. Neither
 is evidence of a native dispatch failure. The corrected test correlates model
 requests, native events, approval, file effects, and import preservation.
-The [verification record](../WORKBENCH/evidence/native-draft2-debug/verification-copilot-subagents.json)
+The verification record (`WORKBENCH/evidence/native-draft2-debug/verification-copilot-subagents.json`)
 checks the current CLI and repeated plugin, migration, preference, and dispatch
 fixtures. Remaining native configuration and security work stays open.
 
 The repeated preference fixture also retained a
-[terminal cleanup failure](../WORKBENCH/evidence/native-draft2-debug/copilot-preferences-subagents.json).
+terminal cleanup failure (`WORKBENCH/evidence/native-draft2-debug/copilot-preferences-subagents.json`).
 Pexpect reported that it could not terminate the child within its short wait.
 A subsequent process inspection found no remaining process in that fixture's
 native home. The runner now saves terminal output before cleanup and, if close
 fails, polls the same child for up to five seconds. It does not start a replacement
 session while that child remains live. The
-[repeated preference result](../WORKBENCH/evidence/native-draft2-debug/copilot-preferences-subagents-verified.json)
+repeated preference result (`WORKBENCH/evidence/native-draft2-debug/copilot-preferences-subagents-verified.json`)
 records process state after teardown as well as the original observations.
 
 ## Shared skill discovery and Codex selector references
@@ -1623,32 +1623,32 @@ relative references keep their original absolute targets, and `~` expressions
 retain native HOME expansion. Source configuration, assets, and permissions stay
 unchanged during import.
 
-The [path probe](../WORKBENCH/evidence/native-draft2-debug/codex-skill-path-probe.json)
+The path probe (`WORKBENCH/evidence/native-draft2-debug/codex-skill-path-probe.json`)
 found that file selectors disable a skill, while directory selectors leave it
-enabled. The [HOME probe](../WORKBENCH/evidence/native-draft2-debug/codex-skill-tilde-probe.json)
+enabled. The HOME probe (`WORKBENCH/evidence/native-draft2-debug/codex-skill-tilde-probe.json`)
 confirmed native tilde expansion. Directory selectors now remain inactive, with
 atomic selector arrays and required-value refusal. The coverage generator also
 matches schema `[]` indexes to documented `<index>` fields without changing
 semantic IDs or the frozen source entries.
 
-The [project discovery attempt](../WORKBENCH/evidence/native-draft2-debug/codex-skills-first-project.json),
-[absolute-path control](../WORKBENCH/evidence/native-draft2-debug/codex-skills-absolute-project.json),
-and [model-context control](../WORKBENCH/evidence/native-draft2-debug/codex-skills-catalog-project.json)
+The project discovery attempt (`WORKBENCH/evidence/native-draft2-debug/codex-skills-first-project.json`),
+absolute-path control (`WORKBENCH/evidence/native-draft2-debug/codex-skills-absolute-project.json`),
+and model-context control (`WORKBENCH/evidence/native-draft2-debug/codex-skills-catalog-project.json`)
 remain available. They show that loaded project selectors do not affect discovery
 or the initial model catalog in Codex `0.154.0`. Required project selectors now
 refuse before writes. The final project fixture performs direct native setup
 after that refusal to verify the limitation; it does not claim successful
 adapter projection of the ignored setting.
 
-The [user result](../WORKBENCH/evidence/native-draft2-debug/codex-skills-verified-user.json)
+The user result (`WORKBENCH/evidence/native-draft2-debug/codex-skills-verified-user.json`)
 correlates four discovery responses with four completed local-provider turns:
 source disabled, relocated disabled, enabled, and disabled again. Reimport keeps
 the same relative selector. The
-[project result](../WORKBENCH/evidence/native-draft2-debug/codex-skills-verified-project.json)
+project result (`WORKBENCH/evidence/native-draft2-debug/codex-skills-verified-project.json`)
 records the loaded value, unchanged user configuration, and three completed
 model turns that expose the ignored selector. No skill script executes.
 
-The [verification record](../WORKBENCH/evidence/native-draft2-debug/verification-codex-skills.json)
+The verification record (`WORKBENCH/evidence/native-draft2-debug/verification-codex-skills.json`)
 covers repository checks and these affected native cases. Previous plugin and
 Copilot native records keep their original source hashes; they were not rerun
 for this Codex skill-reference change. Broader native coverage stays incomplete.
@@ -1660,7 +1660,7 @@ settings, a duplicate field hidden by TOML table notation, and the empty keymap
 example counted separately from its setting. These records now link to their
 settings and do not increase feature counts. All 1,397 IDs and all 1,679 original
 source-row links remain unchanged; the tests compare them with the retained
-[baseline](../WORKBENCH/evidence/native-draft2-debug/coverage-classification-baseline.json).
+baseline (`WORKBENCH/evidence/native-draft2-debug/coverage-classification-baseline.json`).
 
 The map also applies the source's user-only scope for desktop file handlers and
 marks Windows and desktop-app records outside the Linux CLI milestone. This
@@ -1677,14 +1677,14 @@ and 1,361 Linux CLI milestone features. There are still 51 mapping-pending
 features, 83 security-evidence-required features, and 232 declared validators
 whose native behavior is not established by the map. These classifications
 are not completion totals. The
-[verification record](../WORKBENCH/evidence/native-draft2-debug/verification-coverage-classification.json)
+verification record (`WORKBENCH/evidence/native-draft2-debug/verification-coverage-classification.json`)
 checks source preservation, coverage tests, the repository, and the unchanged
 CLI against its existing pinned skill records. No native test is repeated for
 this coverage-only change.
 
 ## Codex telemetry scope and credential values
 
-The [direct native probe](../WORKBENCH/evidence/native-draft2-debug/codex-otel-direct-first.json)
+The direct native probe (`WORKBENCH/evidence/native-draft2-debug/codex-otel-direct-first.json`)
 confirmed that Codex `0.154.0` ignores project `otel`, even in a trusted workspace.
 The adapter had accepted it. Required project telemetry now refuses before
 writes, and optional project telemetry remains inactive. User telemetry keeps
@@ -1699,7 +1699,7 @@ apply does not read or copy the referenced files. Unit tests preserve both
 HTTP and gRPC configuration objects with absolute TLS references. This is
 configuration preservation evidence, not native TLS or gRPC execution evidence.
 
-The [adapter result](../WORKBENCH/evidence/native-draft2-debug/codex-otel-adapter-final.json)
+The adapter result (`WORKBENCH/evidence/native-draft2-debug/codex-otel-adapter-final.json`)
 verifies import, apply, reimport, and native execution. Three completed turns
 use local model and collector services. Native prompt events contain the
 synthetic prompt when enabled and `[REDACTED]` when disabled. Conversation IDs
@@ -1709,10 +1709,10 @@ collector and prompt-export overrides have no effect. The project control is
 written directly by the fixture after the adapter refuses it. New user config
 files have mode `0600`, and native execution leaves them unchanged.
 
-The [earlier adapter run](../WORKBENCH/evidence/native-draft2-debug/codex-otel-adapter-first.json)
+The earlier adapter run (`WORKBENCH/evidence/native-draft2-debug/codex-otel-adapter-first.json`)
 also passed; the final run adds explicit prompt-event, environment, and trace
 correlation assertions. Both runner snapshots remain available. The
-[verification record](../WORKBENCH/evidence/native-draft2-debug/verification-codex-otel-final.json)
+verification record (`WORKBENCH/evidence/native-draft2-debug/verification-codex-otel-final.json`)
 checks the affected native case, source hashes, and repository gates. Existing
 skill and plugin records retain their original implementation hashes.
 
@@ -1723,7 +1723,7 @@ remain intact. TLS fields are validator declarations; the measured HTTP JSON
 subset has separate native evidence. Metrics delivery, TLS, gRPC, binary
 encoding, live reload, and broader native coverage remain open.
 
-The [first full verification](../WORKBENCH/evidence/native-draft2-debug/verification-codex-otel.json)
+The first full verification (`WORKBENCH/evidence/native-draft2-debug/verification-codex-otel.json`)
 passed 26 of 27 checks. The compatibility check found that the new limitation
 was absent from the CLI capabilities text. The text is now synchronized with
 `CLI/compatibility.json`. The final native run uses the resulting source hashes;
@@ -1731,23 +1731,23 @@ the earlier native results and failed verification remain available.
 
 ## Codex telemetry TLS references and client identities
 
-The [first CA-only import test](../WORKBENCH/evidence/native-draft2-debug/codex-otel-tls-ca-relative-first.json)
+The first CA-only import test (`WORKBENCH/evidence/native-draft2-debug/codex-otel-tls-ca-relative-first.json`)
 reproduced a reference relocation defect. Native delivery worked from the source
 home, then failed after apply because the relative CA path pointed into the
 new home. User import now resolves known relative TLS references against the
 source configuration directory. The adapter does not read, copy, or own the
 referenced files. Absolute paths and native HOME expressions stay unchanged.
 
-The [pinned source review](../WORKBENCH/evidence/native-draft2-debug/codex-otel-tls-sources.json)
+The pinned source review (`WORKBENCH/evidence/native-draft2-debug/codex-otel-tls-sources.json`)
 records Codex commit `6b9826e3aa83b1a5947db50f4332cb9c65f1b340`, from tag
 `rust-v0.154.0`. Its TLS fields use `AbsolutePathBuf`; the saved implementation
 shows base-path resolution and native HOME expansion. The saved exporter source
 also shows the client certificate/key pairing and exporter builder calls.
 The measured native binary remains pinned independently by SHA256.
 
-The final [relative](../WORKBENCH/evidence/native-draft2-debug/codex-otel-tls-ca-relative-final.json),
-[absolute](../WORKBENCH/evidence/native-draft2-debug/codex-otel-tls-ca-absolute-final.json),
-and [HOME](../WORKBENCH/evidence/native-draft2-debug/codex-otel-tls-ca-home-final.json)
+The final relative (`WORKBENCH/evidence/native-draft2-debug/codex-otel-tls-ca-relative-final.json`),
+absolute (`WORKBENCH/evidence/native-draft2-debug/codex-otel-tls-ca-absolute-final.json`),
+and HOME (`WORKBENCH/evidence/native-draft2-debug/codex-otel-tls-ca-home-final.json`)
 CA tests each complete source and relocated model turns. A local TLS collector
 receives logs and traces; native thread events and exported trace IDs correlate.
 Import/apply/reimport preserves the reference targets. Source file hashes and
@@ -1764,9 +1764,9 @@ a deterministic local model turn but sends no telemetry to that collector.
 
 | Exporter | EC identity | RSA identity |
 | --- | --- | --- |
-| Logs | [Failure verified](../WORKBENCH/evidence/native-draft2-debug/codex-otel-tls-identity-exporter-ec-final.json) | [Failure verified](../WORKBENCH/evidence/native-draft2-debug/codex-otel-tls-identity-exporter-rsa-final.json) |
-| Traces | [Failure verified](../WORKBENCH/evidence/native-draft2-debug/codex-otel-tls-identity-trace_exporter-ec-final.json) | [Failure verified](../WORKBENCH/evidence/native-draft2-debug/codex-otel-tls-identity-trace_exporter-rsa-final.json) |
-| Metrics | [Failure verified](../WORKBENCH/evidence/native-draft2-debug/codex-otel-tls-identity-metrics_exporter-ec-final.json) | [Failure verified](../WORKBENCH/evidence/native-draft2-debug/codex-otel-tls-identity-metrics_exporter-rsa-final.json) |
+| Logs | Failure verified (`WORKBENCH/evidence/native-draft2-debug/codex-otel-tls-identity-exporter-ec-final.json`) | Failure verified (`WORKBENCH/evidence/native-draft2-debug/codex-otel-tls-identity-exporter-rsa-final.json`) |
+| Traces | Failure verified (`WORKBENCH/evidence/native-draft2-debug/codex-otel-tls-identity-trace_exporter-ec-final.json`) | Failure verified (`WORKBENCH/evidence/native-draft2-debug/codex-otel-tls-identity-trace_exporter-rsa-final.json`) |
+| Metrics | Failure verified (`WORKBENCH/evidence/native-draft2-debug/codex-otel-tls-identity-metrics_exporter-ec-final.json`) | Failure verified (`WORKBENCH/evidence/native-draft2-debug/codex-otel-tls-identity-metrics_exporter-rsa-final.json`) |
 
 The adapter now refuses required HTTP identity settings and keeps each optional
 exporter inactive as a whole. It does not remove identity fields and activate
@@ -1782,9 +1782,9 @@ The first metrics assertion expected the shorter logs/traces error text; the
 retained metrics record contains the actual prefixed builder error. These are
 fixture failures and do not establish native behavior by themselves.
 
-The [verification record](../WORKBENCH/evidence/native-draft2-debug/verification-codex-otel-tls.json)
+The verification record (`WORKBENCH/evidence/native-draft2-debug/verification-codex-otel-tls.json`)
 checks ten current native records, including the
-[repeated HTTP test](../WORKBENCH/evidence/native-draft2-debug/codex-otel-tls-http-final.json).
+repeated HTTP test (`WORKBENCH/evidence/native-draft2-debug/codex-otel-tls-http-final.json`).
 TLS records include CLI Go source, embedded schema, go.mod, go.sum, helper,
 and runner hashes. Stable and draft conformance, Go race/vet, Workbench,
 compatibility, and coverage checks remain required. Binary OTLP encoding,
@@ -1817,7 +1817,7 @@ setup errors were corrected before verification.
 
 The SPEC starter now includes the requested empty `.agents/plugins/.gitkeep`.
 Its manifest remains stable `1.0.0`; an empty unselected directory activates no
-plugin profile. The [verification record](../WORKBENCH/evidence/native-draft2-debug/verification-scoped-instruction-links.json)
+plugin profile. The verification record (`WORKBENCH/evidence/native-draft2-debug/verification-scoped-instruction-links.json`)
 checks the starter with the CLI as well as the specification conformance
 suite. Repository-only verification states that native tests were not run.
 Existing native evidence remains historical at its recorded source hashes.
@@ -1878,13 +1878,13 @@ Evidence:
   instruction links, write failure, backups, permissions, and target changes.
   The Claude cases use configuration fixtures only; native Claude testing
   remains skipped.
-- [Committed-baseline failures](../WORKBENCH/evidence/project-tools/stable-import-safety-baseline.json)
+- Committed-baseline failures (`WORKBENCH/evidence/project-tools/stable-import-safety-baseline.json`)
   come from a separate checkout of the recorded CLI commit, with a frozen copy
   of the new public-API tests. Each named defect fails there.
-- [First regression attempt](../WORKBENCH/evidence/project-tools/stable-import-safety-before.json)
+- First regression attempt (`WORKBENCH/evidence/project-tools/stable-import-safety-before.json`)
   is retained. Its policy test used an incorrect object shape for `requires`;
   the baseline record uses the correct array and reproduces policy removal.
-- [Public CLI checks](../WORKBENCH/evidence/project-tools/stable-import-cli.json)
+- Public CLI checks (`WORKBENCH/evidence/project-tools/stable-import-cli.json`)
   record four refusals with unchanged files, successful policy-preserving
   import, private backups, and the resulting mandatory-capability plan refusal.
 
@@ -1913,7 +1913,7 @@ appears after planning, and a concurrent replacement that rollback must retain.
 The placeholder check also permits an empty regular `.gitkeep` in unselected
 skills; nonempty content and indirect entries remain refused.
 
-The [pre-commit verification](../WORKBENCH/evidence/native-draft2-debug/verification-cumulative-precommit.json)
+The pre-commit verification (`WORKBENCH/evidence/native-draft2-debug/verification-cumulative-precommit.json`)
 covers the final cumulative source state. This is CLI projection evidence.
 Native discovery was not rerun and Claude native testing remains skipped.
 Draft.2 project interoperability with an existing root compatibility link,
@@ -1939,15 +1939,15 @@ canonical content, including with `--force`. Existing stable and draft.1
 manifests still require a separate migration decision.
 
 The failing import test is retained in
-[instruction-link-import-regression-first.json](../WORKBENCH/evidence/native-draft2-debug/instruction-link-import-regression-first.json).
+instruction-link-import-regression-first.json (`WORKBENCH/evidence/native-draft2-debug/instruction-link-import-regression-first.json`).
 Native Linux runs use Codex `0.154.0` and Copilot `1.0.83`, isolated native
 homes, and a local model endpoint. Four cases cover a stable-created link and
 a link that replaces an old draft.2 instruction copy for each client:
 
-- [Codex, stable link](../WORKBENCH/evidence/native-draft2-debug/codex-instruction-link-stable-final.json)
-- [Codex, migrated copy](../WORKBENCH/evidence/native-draft2-debug/codex-instruction-link-native-final.json)
-- [Copilot, stable link](../WORKBENCH/evidence/native-draft2-debug/copilot-instruction-link-stable-final.json)
-- [Copilot, migrated copy](../WORKBENCH/evidence/native-draft2-debug/copilot-instruction-link-native-final.json)
+- Codex, stable link (`WORKBENCH/evidence/native-draft2-debug/codex-instruction-link-stable-final.json`)
+- Codex, migrated copy (`WORKBENCH/evidence/native-draft2-debug/codex-instruction-link-native-final.json`)
+- Copilot, stable link (`WORKBENCH/evidence/native-draft2-debug/copilot-instruction-link-stable-final.json`)
+- Copilot, migrated copy (`WORKBENCH/evidence/native-draft2-debug/copilot-instruction-link-native-final.json`)
 
 Each case performs apply, import, and a fresh native turn for the original
 and updated instructions. The captured model request contains the selected
@@ -1965,7 +1965,7 @@ and unchanged `trustedFolders` across native execution separately. It records
 the native state-file change instead of treating it as an adapter write.
 
 Official instruction sources and hashes are retained in
-[instruction-link-docs.sources.json](../WORKBENCH/evidence/native-draft2-debug/instruction-link-docs.sources.json).
+instruction-link-docs.sources.json (`WORKBENCH/evidence/native-draft2-debug/instruction-link-docs.sources.json`).
 Run the affected repository and native-evidence checks with:
 
 ```sh

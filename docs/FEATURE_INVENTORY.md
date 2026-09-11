@@ -160,7 +160,7 @@ disposition does not change the ID. Settings, frontmatter fields, MCP fields,
 and managed policy have separate contexts. Aliases grouped in the original map
 share one ID. Newly identified syntax aliases retain their existing IDs and link
 to the counted record through `describes`. The
-[classification baseline](../WORKBENCH/evidence/native-draft2-debug/coverage-classification-baseline.json)
+classification baseline (`WORKBENCH/evidence/native-draft2-debug/coverage-classification-baseline.json`)
 checks that this correction preserves every ID and source-row assignment. This
 identity rule replaced the initial draft.2 IDs, which included classification.
 
@@ -182,7 +182,7 @@ scope; project telemetry is ignored by the pin.
 
 The coverage audit found eight records that incorrectly appeared as missing
 mappings or separate features. The
-[retained regression](../WORKBENCH/evidence/native-draft2-debug/coverage-native-links-before.json)
+retained regression (`WORKBENCH/evidence/native-draft2-debug/coverage-native-links-before.json`)
 records the old dispositions and three failed test groups.
 
 | Records | Correct disposition | Evidence boundary |
@@ -199,7 +199,7 @@ aliases retain all their validation paths.
 Relative project locations and explicit user-home locations now have separate
 scopes from their source tables. A scope correction does not activate a mapping.
 All 1,679 source rows, semantic IDs, and original evidence links remain intact.
-The [combined verification](../WORKBENCH/evidence/native-draft2-debug/verification-coverage-native-links-final.json)
+The combined verification (`WORKBENCH/evidence/native-draft2-debug/verification-coverage-native-links-final.json`)
 checks the corrected map, regression tests, repository gates, and the current
 recursive-instruction evidence. Other native evidence retains its original
 version and source hashes. Full feature coverage remains incomplete.

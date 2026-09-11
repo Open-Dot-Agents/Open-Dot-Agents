@@ -2,7 +2,7 @@
 
 Reviewed on 2026-09-11. This review covers catalog structure and selected
 package sources. It does not audit every listed plugin or establish native
-compatibility. [Source commits and hashes](../WORKBENCH/evidence/plugin-catalog-review/20260911.json)
+compatibility. Source commits and hashes (`WORKBENCH/evidence/plugin-catalog-review/20260911.json`)
 are recorded in Workbench. No catalog or additional native plugin was installed
 as part of this review.
 
@@ -87,7 +87,7 @@ The [AI Hero skills page](https://www.aihero.dev/skills) points to
 `3cca18b368ae95cdbdebbff572ccafa662551015`, the repository contains 37 `SKILL.md`
 files and an MIT license. The current README offers a Claude Code plugin and
 individual skill installation. It describes a native Codex plugin as planned.
-The [review record](../WORKBENCH/evidence/plugin-catalog-review/mattpocock-20260911.json)
+The review record (`WORKBENCH/evidence/plugin-catalog-review/mattpocock-20260911.json`)
 contains the source inventory and hashes.
 
 `diagnosing-bugs` is now installed under the project's shared `.agents/skills`

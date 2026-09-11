@@ -28,9 +28,9 @@ import, change, or remove that file.
 
 | Case | Observed result |
 | --- | --- |
-| [Earlier CLI](../WORKBENCH/evidence/native-draft2-debug/codex-provider-auth-baseline.json) | The source request had authentication. After import and apply, the request had none. Both native turns completed. The test failed. |
-| [Authentication on](../WORKBENCH/evidence/native-draft2-debug/codex-provider-auth-on-verified.json) | Source and relocated requests had the expected header. The Boolean survived reimport. Both account files stayed unchanged. |
-| [Authentication off](../WORKBENCH/evidence/native-draft2-debug/codex-provider-auth-off-verified.json) | Source and relocated requests had no account authentication header. The Boolean survived reimport. Both account files stayed unchanged. |
+| Earlier CLI (`WORKBENCH/evidence/native-draft2-debug/codex-provider-auth-baseline.json`) | The source request had authentication. After import and apply, the request had none. Both native turns completed. The test failed. |
+| Authentication on (`WORKBENCH/evidence/native-draft2-debug/codex-provider-auth-on-verified.json`) | Source and relocated requests had the expected header. The Boolean survived reimport. Both account files stayed unchanged. |
+| Authentication off (`WORKBENCH/evidence/native-draft2-debug/codex-provider-auth-off-verified.json`) | Source and relocated requests had no account authentication header. The Boolean survived reimport. Both account files stayed unchanged. |
 
 The [runner](../WORKBENCH/conformance/run_native_provider_auth.py) records native
 completion events and model requests with a unique prompt marker. It records
@@ -38,17 +38,17 @@ only the authentication match result, not the header value. Each result has a
 frozen runner and source hashes. The [verifier](../WORKBENCH/conformance/verify_native_provider_auth.py)
 checks the current source, native pin, observations, and retained failure.
 
-The [official source receipt](../WORKBENCH/evidence/native-draft2-debug/codex-provider-auth.sources.json)
+The official source receipt (`WORKBENCH/evidence/native-draft2-debug/codex-provider-auth.sources.json`)
 pins Codex source revision `6b9826e3aa83b1a5947db50f4332cb9c65f1b340`.
-The [provider definition](../WORKBENCH/evidence/native-draft2-debug/codex-provider-auth-source.source.txt)
-and [configuration reference](../WORKBENCH/evidence/native-draft2-debug/codex-provider-auth-reference.source.txt)
+The provider definition (`WORKBENCH/evidence/native-draft2-debug/codex-provider-auth-source.source.txt`)
+and configuration reference (`WORKBENCH/evidence/native-draft2-debug/codex-provider-auth-reference.source.txt`)
 describe the Boolean and its default of `false`.
 
 The [Go regression tests](../CLI/internal/config/native_auth_units_test.go)
 cover credential and malformed-control refusals in project and user scope,
 unchanged files and backups, optional forced apply, supported references,
 context-sensitive LSP initialization data, and standalone agent import.
-The [initial failed tests](../WORKBENCH/evidence/native-draft2-debug/native-auth-units-before.json)
+The initial failed tests (`WORKBENCH/evidence/native-draft2-debug/native-auth-units-before.json`)
 retain the authentication-loss regressions. Early atomicity-test attempts used
 an incomplete canonical fixture and failed before the authentication check;
 the corrected fixture uses a valid draft.2 tree.

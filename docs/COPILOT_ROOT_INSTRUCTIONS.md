@@ -26,12 +26,12 @@ instruction filenames, and live reload are outside this result.
 
 ## Evidence
 
-The [original CLI reproduction](../WORKBENCH/evidence/native-draft2-debug/copilot-root-instructions-import-before.json)
+The original CLI reproduction (`WORKBENCH/evidence/native-draft2-debug/copilot-root-instructions-import-before.json`)
 records a root-only import failure and a successful import that omits a
-distinct root body. The [failed regression](../WORKBENCH/evidence/native-draft2-debug/copilot-root-instructions-regression-before.json)
+distinct root body. The failed regression (`WORKBENCH/evidence/native-draft2-debug/copilot-root-instructions-regression-before.json`)
 also records acceptance of a directory in place of root `AGENTS.md`.
 
-The [source record](../WORKBENCH/evidence/native-draft2-debug/copilot-root-instructions.sources.json)
+The source record (`WORKBENCH/evidence/native-draft2-debug/copilot-root-instructions.sources.json`)
 contains the live GitHub documentation index and custom instruction guide.
 The guide documents combined instruction sources, identical-body removal,
 relative file references, and session restart for instruction changes.

@@ -77,23 +77,23 @@ support across both clients.
 
 - [Source-integrity check](../CLI/scripts/check_project_extensions.py) and
   [refusal tests](../CLI/scripts/check_project_extensions_test.py).
-- [Skill regression before the fix](../WORKBENCH/evidence/project-tools/skills-encoding-before.json).
-- [Native setup](../WORKBENCH/evidence/project-tools/github-project-setup.json)
-  and [Codex project discovery](../WORKBENCH/evidence/project-tools/github-codex-project-discovery-summary.json).
-- [GitHub connector lookup](../WORKBENCH/evidence/project-tools/github-connector-read.json)
-  and [shared skill discovery](../WORKBENCH/evidence/project-tools/diagnosing-bugs-native-discovery.json).
+- Skill regression before the fix (`WORKBENCH/evidence/project-tools/skills-encoding-before.json`).
+- Native setup (`WORKBENCH/evidence/project-tools/github-project-setup.json`)
+  and Codex project discovery (`WORKBENCH/evidence/project-tools/github-codex-project-discovery-summary.json`).
+- GitHub connector lookup (`WORKBENCH/evidence/project-tools/github-connector-read.json`)
+  and shared skill discovery (`WORKBENCH/evidence/project-tools/diagnosing-bugs-native-discovery.json`).
 - [Authentication runner](../WORKBENCH/conformance/run_github_plugin_auth.py).
   Each result has a frozen runner, exact native binary hash, source hashes,
   native events, local model requests, and HTTP authentication observations.
-- Codex with [token present](../WORKBENCH/evidence/project-tools/github-codex-auth-present-first.json)
-  and [token missing](../WORKBENCH/evidence/project-tools/github-codex-auth-missing.json).
-- Copilot with [token present](../WORKBENCH/evidence/project-tools/github-copilot-auth-present-first.json)
-  and [token missing](../WORKBENCH/evidence/project-tools/github-copilot-auth-missing.json).
+- Codex with token present (`WORKBENCH/evidence/project-tools/github-codex-auth-present-first.json`)
+  and token missing (`WORKBENCH/evidence/project-tools/github-codex-auth-missing.json`).
+- Copilot with token present (`WORKBENCH/evidence/project-tools/github-copilot-auth-present-first.json`)
+  and token missing (`WORKBENCH/evidence/project-tools/github-copilot-auth-missing.json`).
   A passed observation check records the native limitation; it is not a passed
   authentication or conversion claim.
-- [Initial marketplace attempts](../WORKBENCH/evidence/project-tools/github-initial-marketplace-attempts.json)
-  and [upstream validator refusal](../WORKBENCH/evidence/project-tools/github-upstream-validator.json).
-- [Official source captures](../WORKBENCH/evidence/project-tools/github-official-sources.json).
+- Initial marketplace attempts (`WORKBENCH/evidence/project-tools/github-initial-marketplace-attempts.json`)
+  and upstream validator refusal (`WORKBENCH/evidence/project-tools/github-upstream-validator.json`).
+- Official source captures (`WORKBENCH/evidence/project-tools/github-official-sources.json`).
 
 Run a new local authentication probe with a new output name:
 

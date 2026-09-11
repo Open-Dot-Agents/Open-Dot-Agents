@@ -36,7 +36,7 @@ ownership remains protected, including with force or adoption.
 
 ## Native evidence
 
-The [source receipt](../WORKBENCH/evidence/native-draft2-debug/copilot-canonical-instructions.sources.json)
+The source receipt (`WORKBENCH/evidence/native-draft2-debug/copilot-canonical-instructions.sources.json`)
 retains the live GitHub documentation index and custom instruction guide.
 The guide describes relative references and session restart for changes. It
 does not establish reference behavior through the canonical link.

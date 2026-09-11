@@ -17,7 +17,7 @@ competing package manifest.
 The [upstream repository](https://github.com/agentplugins/agent-plugins-spec)
 at commit `ff8ab5e392cc87bd88d87c060815a87490e51003` identifies 1.0.0 as the
 published release and 1.1.0 as a working draft. The
-[review record](../WORKBENCH/evidence/plugin-standard/agent-plugins-1.0.0-review.json)
+review record (`WORKBENCH/evidence/plugin-standard/agent-plugins-1.0.0-review.json`)
 contains immutable source links and hashes. The technical charter provides
 community governance and prevents a single vendor from controlling a majority
 of core maintainer seats. Schemas and software use Apache-2.0; specification
@@ -128,7 +128,7 @@ These tests establish installation and discovery for the local fixture. They
 do not establish MCP execution, all Agent Plugins loading rules,
 or cross-client support for arbitrary marketplace packages. A separate stdio
 MCP execution test is described below. The
-[verification record](../WORKBENCH/evidence/plugin-standard/verification-plugin-selections.json)
+verification record (`WORKBENCH/evidence/plugin-standard/verification-plugin-selections.json`)
 links each result and records source hashes.
 
 ## Git marketplace sources
@@ -152,7 +152,7 @@ produces a copy under the native installed-plugin directory.
 Both project and user cases pass. This proves the tested Git HTTP flow; it
 does not prove public HTTPS/SSH access, credentials, GitHub API source handling,
 or automatic update behavior. See the
-[Git verification record](../WORKBENCH/evidence/plugin-standard/verification-plugin-git.json).
+Git verification record (`WORKBENCH/evidence/plugin-standard/verification-plugin-git.json`).
 
 ## Stdio MCP execution and native limits
 
@@ -189,7 +189,7 @@ rewritten to hide them. The evidence field `standard_environment_conformance`
 covers only the tested environment values; it is not a full conformance result.
 Other transports, path rejection, component isolation, native extensions, and
 approval timeout/disconnect behavior still require tests. The
-[MCP verification](../WORKBENCH/evidence/plugin-standard/verification-plugin-mcp.json)
+MCP verification (`WORKBENCH/evidence/plugin-standard/verification-plugin-mcp.json`)
 checks 22 current native runs, including the repeated skill and Git matrices.
 
 ## Proposed local package layout
@@ -282,7 +282,7 @@ sources. The format comes from [Agent Skills](https://agentskills.io).
 Agent Plugins serves a separate purpose: it bundles skills, MCP servers, and
 defined native extensions in one plugin package.
 
-The pinned [skills CLI documentation](../WORKBENCH/evidence/native-draft2-debug/skills-sh-source.md)
+The pinned skills CLI documentation (`WORKBENCH/evidence/native-draft2-debug/skills-sh-source.md`)
 lists `.agents/skills/` as the project destination for both `codex` and
 `github-copilot`. This matches the canonical Open-Dot-Agents skill tree.
 Compatible packages can remain unchanged and serve both clients. Features

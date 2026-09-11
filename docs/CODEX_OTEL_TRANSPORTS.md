@@ -29,7 +29,7 @@ fixture and remain unchanged at their original paths.
 Before the fix, native import removed an external authentication header but kept
 the rest of the exporter. Native execution from the applied configuration sent
 telemetry without the original authentication. The collector observed this in
-the [retained failing run](../WORKBENCH/evidence/native-draft2-debug/codex-otel-auth-preservation-before.json).
+the retained failing run (`WORKBENCH/evidence/native-draft2-debug/codex-otel-auth-preservation-before.json`).
 No real credential or remote collector was used.
 
 The complete exporter is now one configuration unit for exclusion. If an
@@ -89,7 +89,7 @@ native events, wire observations, dependency versions, and native binary pin.
 The [evidence verifier](../WORKBENCH/conformance/verify_codex_otel_transports.py)
 checks all eight final records against the current implementation and retained
 failure. It also checks the
-[official source captures](../WORKBENCH/evidence/native-draft2-debug/codex-otel-transports.sources.json)
+official source captures (`WORKBENCH/evidence/native-draft2-debug/codex-otel-transports.sources.json`)
 and upstream source revision `6b9826e3aa83b1a5947db50f4332cb9c65f1b340`
 (`rust-v0.154.0`).
 

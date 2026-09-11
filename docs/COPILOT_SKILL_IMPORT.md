@@ -37,7 +37,7 @@ when import selects real skills. A changed or nonempty marker is not removed.
 With `--backup`, its private backup goes to
 `.agents/state/import-backups/skills.gitkeep.bak`. A backup inside the selected
 skills directory would violate the package structure. The
-[retained failure](../WORKBENCH/evidence/native-draft2-debug/copilot-project-skill-marker-backup-before.json)
+retained failure (`WORKBENCH/evidence/native-draft2-debug/copilot-project-skill-marker-backup-before.json`)
 shows that invalid placement. Native source markers remain unchanged. The [tests](../CLI/internal/config/native_copilot_skill_import_test.go)
 check repeated and additive imports, exact assets, package conflicts, symlink
 refusal, canonical conflicts, scope boundaries, and the marker's concurrent
@@ -54,9 +54,9 @@ scripts. Unknown native skill annotations keep the
 Native Copilot can load `.agents/skills` without an Open-Dot-Agents manifest.
 The earlier importer rejected that source. It also failed to select shared
 packages in an existing draft.2 tree when there was no other native source.
-The retained [Go failure](../WORKBENCH/evidence/native-draft2-debug/copilot-shared-skill-import-before.json)
+The retained Go failure (`WORKBENCH/evidence/native-draft2-debug/copilot-shared-skill-import-before.json`)
 records both cases. The retained
-[native failure](../WORKBENCH/evidence/native-draft2-debug/copilot-project-skill-agents-before.json)
+native failure (`WORKBENCH/evidence/native-draft2-debug/copilot-project-skill-agents-before.json`)
 shows successful source discovery and execution, followed by the missing
 manifest import error.
 
@@ -76,9 +76,9 @@ The [runner](../WORKBENCH/conformance/run_native_copilot_skill_import.py) and
 `1.0.83` on Linux, with binary SHA-256
 `a3262c4513ef1fc2ca21485261ca73196977ad76bd5e7990fb572f6134aaeedd`.
 The official discovery locations are in the captured
-[command reference](../WORKBENCH/evidence/native-draft2-debug/copilot-skill-frontmatter-reference.source.txt),
-with URLs and hashes in the [source record](../WORKBENCH/evidence/native-draft2-debug/copilot-skill-frontmatter.sources.json).
-The [shared-source record](../WORKBENCH/evidence/native-draft2-debug/copilot-shared-skills.sources.json)
+command reference (`WORKBENCH/evidence/native-draft2-debug/copilot-skill-frontmatter-reference.source.txt`),
+with URLs and hashes in the source record (`WORKBENCH/evidence/native-draft2-debug/copilot-skill-frontmatter.sources.json`).
+The shared-source record (`WORKBENCH/evidence/native-draft2-debug/copilot-shared-skills.sources.json`)
 retains a new live index and command reference for this extension.
 
 Each origin has a source and relocated native process. A local model endpoint
@@ -88,8 +88,8 @@ an observable workspace marker. Native skill, tool, approval, and session
 events correlate with model requests and the marker. A successful file copy
 alone cannot pass the verifier.
 
-The retained [GitHub-origin failure](../WORKBENCH/evidence/native-draft2-debug/copilot-project-skill-github-before.json)
-and [Claude-origin failure](../WORKBENCH/evidence/native-draft2-debug/copilot-project-skill-claude-before.json)
+The retained GitHub-origin failure (`WORKBENCH/evidence/native-draft2-debug/copilot-project-skill-github-before.json`)
+and Claude-origin failure (`WORKBENCH/evidence/native-draft2-debug/copilot-project-skill-claude-before.json`)
 both show source execution followed by missing relocated discovery, a native
 skill-not-found error, and no file effect. The fixed cases require source,
 imported, projected, and reimported asset hashes to match. They also check

@@ -12,15 +12,15 @@ The earlier validator accepted `model_provider='child'` in a user agent file.
 The CLI wrote the file and reported success. Codex applied the child model,
 reasoning effort, and instructions, but sent the child request to the parent
 provider endpoint. Both the direct native run and the projected run completed.
-The [failed adapter check](../WORKBENCH/evidence/native-draft2-debug/codex-role-user-before.json)
+The failed adapter check (`WORKBENCH/evidence/native-draft2-debug/codex-role-user-before.json`)
 retains the projected file, model requests, and correlated native events.
 
 The current [official agent reference](https://learn.chatgpt.com/docs/agent-configuration/subagents.md)
 says that agent files can override normal session settings. It also lists
 `sandbox_mode` and `mcp_servers` as agent-file examples. The pinned source and
 the provider probe show a narrower contract. The
-[documentation capture](../WORKBENCH/evidence/native-draft2-debug/codex-role-audit.sources.json)
-and [pinned role source](../WORKBENCH/evidence/native-draft2-debug/codex-agent-role-scope.sources.json)
+documentation capture (`WORKBENCH/evidence/native-draft2-debug/codex-role-audit.sources.json`)
+and pinned role source (`WORKBENCH/evidence/native-draft2-debug/codex-agent-role-scope.sources.json`)
 remain available to inspect this conflict. The adapter uses the bounded native
 contract and does not treat parsing as activation.
 

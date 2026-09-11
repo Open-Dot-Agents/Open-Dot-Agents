@@ -32,7 +32,7 @@ separate native check and its limits.
 
 ## Native behavior
 
-The [source record](../WORKBENCH/evidence/native-draft2-debug/copilot-agent-instructions.sources.json)
+The source record (`WORKBENCH/evidence/native-draft2-debug/copilot-agent-instructions.sources.json`)
 contains the live GitHub index and instruction guide. The guide lists all four
 agent instruction paths. The tests use Copilot `1.0.83` on Linux, binary SHA-256
 `a3262c4513ef1fc2ca21485261ca73196977ad76bd5e7990fb572f6134aaeedd`,

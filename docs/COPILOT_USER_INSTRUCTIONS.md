@@ -27,15 +27,15 @@ need for a new native session. Apply does not copy references or grant trust.
 
 ## Defect and evidence
 
-The [failed native receipt](../WORKBENCH/evidence/native-draft2-debug/copilot-user-instructions-custom-source-before.json)
+The failed native receipt (`WORKBENCH/evidence/native-draft2-debug/copilot-user-instructions-custom-source-before.json`)
 loads the same user body and references before and after relocation, then
 reimport changes the declaration. The
-[retained source inspection](../WORKBENCH/evidence/native-draft2-debug/copilot-user-instructions-source-duplication.json)
+retained source inspection (`WORKBENCH/evidence/native-draft2-debug/copilot-user-instructions-source-duplication.json`)
 shows both `policy/local.md` and a new `copilot-instructions.md` assigned to the
 same target. Source selection caused the loss; ownership did not change the
 declaration.
 
-The [source receipt](../WORKBENCH/evidence/native-draft2-debug/copilot-user-instructions.sources.json)
+The source receipt (`WORKBENCH/evidence/native-draft2-debug/copilot-user-instructions.sources.json`)
 contains the live GitHub index and instruction guide. Native tests use Copilot
 `1.0.83` on Linux, binary SHA-256
 `a3262c4513ef1fc2ca21485261ca73196977ad76bd5e7990fb572f6134aaeedd`,

@@ -40,7 +40,7 @@ external library portable to another machine.
 
 Linux Codex `0.154.0` is pinned to SHA256
 `3188814c35471432d4123203e0eb38e5bddc60226e3d7ddf0e59e649ea140022`.
-The [pinned loader source](../WORKBENCH/evidence/native-draft2-debug/codex-agent-role-scope.sources.json)
+The pinned loader source (`WORKBENCH/evidence/native-draft2-debug/codex-agent-role-scope.sources.json`)
 is revision `6b9826e3aa83b1a5947db50f4332cb9c65f1b340`.
 
 The native matrix has five cases in each scope: external relative reference,
@@ -59,8 +59,8 @@ and role files stay unchanged. No public model or account credential is used.
 The [verifier](../WORKBENCH/conformance/verify_codex_role_references.py) checks
 the `codex-role-reference-<case>-<scope>-checked.json` records, frozen runners,
 current Go source hashes, round-trip values, and retained failures. The
-[missing-role failure](../WORKBENCH/evidence/native-draft2-debug/codex-role-reference-external-before.json)
-and [changed-selector failure](../WORKBENCH/evidence/native-draft2-debug/codex-agent-skill-reference-user-before.json)
+missing-role failure (`WORKBENCH/evidence/native-draft2-debug/codex-role-reference-external-before.json`)
+and changed-selector failure (`WORKBENCH/evidence/native-draft2-debug/codex-agent-skill-reference-user-before.json`)
 remain available with native requests and events.
 
 ```sh

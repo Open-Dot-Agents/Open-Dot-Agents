@@ -18,7 +18,7 @@ support or complete the native milestone.
 
 The official command reference documents six skill frontmatter fields:
 `name`, `description`, `argument-hint`, `allowed-tools`, `user-invocable`, and
-`disable-model-invocation`. The [source record](../WORKBENCH/evidence/native-draft2-debug/copilot-skill-frontmatter.sources.json)
+`disable-model-invocation`. The source record (`WORKBENCH/evidence/native-draft2-debug/copilot-skill-frontmatter.sources.json`)
 contains the reference URL, documentation index, captured files, and hashes.
 
 Project apply keeps skills in `.agents/skills`. User apply copies valid skills to
@@ -102,7 +102,7 @@ This is distinct from selection of settings in a native namespace profile.
 The [regression tests](../CLI/internal/config/native_copilot_skill_metadata_test.go)
 verify refusal, exact byte preservation, user-file permissions, scoped
 destinations, type checks, redacted reports, and unchanged stable acceptance.
-The [retained failing test](../WORKBENCH/evidence/native-draft2-debug/copilot-skill-activation-refusal-before.json)
+The retained failing test (`WORKBENCH/evidence/native-draft2-debug/copilot-skill-activation-refusal-before.json`)
 shows that the earlier plan offered ignored native skills as applicable in
 both scopes. The six coverage records now link to the bounded field mapping.
 Their native limitations remain explicit. The 1,679 source rows are unchanged.

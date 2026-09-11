@@ -132,4 +132,4 @@ explicit-rule acceptance and denial also behaved as requested. However,
 `view_image` read the fixture image and returned it to the model without an
 approval request. Trust-derived approval therefore does not represent mandatory
 portable `ask` across the tested action classes. See the
-[local-model evidence](../WORKBENCH/evidence/native-draft2-debug/codex-local-trust-image.json).
+local-model evidence (`WORKBENCH/evidence/native-draft2-debug/codex-local-trust-image.json`).

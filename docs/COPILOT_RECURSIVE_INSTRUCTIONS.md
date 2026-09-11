@@ -44,7 +44,7 @@ rules; the initial test expectation of private project files was corrected.
 
 ## Native evidence and limits
 
-The [source record](../WORKBENCH/evidence/native-draft2-debug/copilot-recursive-instructions.sources.json)
+The source record (`WORKBENCH/evidence/native-draft2-debug/copilot-recursive-instructions.sources.json`)
 contains the live GitHub documentation index, command reference, and custom
 instruction guide. The guide lists recursive project and user directories and
 describes `applyTo` matching. Documentation alone does not establish behavior.
@@ -78,7 +78,7 @@ and wider fixture permission requests.
 The native runs perform file reads; they do not claim that a model follows
 arbitrary instruction text.
 
-A separate [matching Go-file read](../WORKBENCH/evidence/native-draft2-debug/copilot-recursive-instructions-project-yes-before.json)
+A separate matching Go-file read (`WORKBENCH/evidence/native-draft2-debug/copilot-recursive-instructions-project-yes-before.json`)
 did not automatically load either `applyTo: "**/*.go"` body. The earlier test
 expectation was incorrect. The native prompt lists the pattern, file path,
 and description, and tells the model to use `view` to read the instructions.
@@ -101,11 +101,11 @@ attempts. Their initial checks incorrectly required an edit or later file read
 after denial. Current tests check the denied instruction read and absent body;
 they do not require the native client to continue after denial.
 
-The retained [project](../WORKBENCH/evidence/native-draft2-debug/copilot-recursive-instructions-project-all-before.json)
-and [user](../WORKBENCH/evidence/native-draft2-debug/copilot-recursive-instructions-user-all-before.json)
+The retained project (`WORKBENCH/evidence/native-draft2-debug/copilot-recursive-instructions-project-all-before.json`)
+and user (`WORKBENCH/evidence/native-draft2-debug/copilot-recursive-instructions-user-all-before.json`)
 failures show both unconditional bodies at the source, followed by only the
-flat body after relocation. The [CLI import cases](../WORKBENCH/evidence/native-draft2-debug/copilot-recursive-instructions-import-before.json)
-and [Go failure](../WORKBENCH/evidence/native-draft2-debug/copilot-recursive-instructions-go-before.json)
+flat body after relocation. The CLI import cases (`WORKBENCH/evidence/native-draft2-debug/copilot-recursive-instructions-import-before.json`)
+and Go failure (`WORKBENCH/evidence/native-draft2-debug/copilot-recursive-instructions-go-before.json`)
 record the missing nested assets separately.
 
 ## Verification
@@ -121,7 +121,7 @@ python3 WORKBENCH/conformance/verify_plugin_selections.py \
   --output /absolute/new-verification.json
 ```
 
-The [combined record](../WORKBENCH/evidence/native-draft2-debug/verification-copilot-agent-instructions-final.json)
+The combined record (`WORKBENCH/evidence/native-draft2-debug/verification-copilot-agent-instructions-final.json`)
 includes stable and draft conformance, Go race tests and vet, Workbench tests,
 compatibility, repository validation, coverage, and the new native verifier.
 Other native families retain their historical source hashes and are not

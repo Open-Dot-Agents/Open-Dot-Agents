@@ -35,10 +35,10 @@ optional project telemetry stays inactive. User import and apply preserve the
 native exporter object. Known credentials in collector URLs and headers stay
 external, and import reports their field paths without their values. TLS paths
 remain references; apply does not copy certificates or private keys.
-The [telemetry fixture](../WORKBENCH/evidence/native-draft2-debug/codex-otel-adapter-final.json)
+The telemetry fixture (`WORKBENCH/evidence/native-draft2-debug/codex-otel-adapter-final.json`)
 verifies local OTLP HTTP JSON logs and traces, environment tags, static fixture
 headers, and prompt export on and off. Each test starts a new native process.
-CA-only TLS also has [native relocation evidence](../WORKBENCH/evidence/native-draft2-debug/codex-otel-tls-ca-relative-final.json).
+CA-only TLS also has native relocation evidence (`WORKBENCH/evidence/native-draft2-debug/codex-otel-tls-ca-relative-final.json`).
 Import makes relative TLS paths absolute against the source configuration
 directory. Absolute paths and native HOME expressions remain unchanged.
 Codex `0.154.0` fails to build the tested HTTP client identities. Required
@@ -88,7 +88,7 @@ User apply refuses a setting write or removal that pending legacy migration
 would undo. Use the pinned native client to migrate those preferences before
 retrying; force and adopt do not bypass this check. Apply does not migrate or
 edit `config.json`. Project operations do not inspect user application state.
-See the [legacy verification](../WORKBENCH/evidence/native-draft2-debug/verification-copilot-legacy.json).
+See the legacy verification (`WORKBENCH/evidence/native-draft2-debug/verification-copilot-legacy.json`).
 
 Copilot user preferences include `defaultMode`, `inlineImages`,
 `inlineImageLiveWindow`, `notifications`, and the `statusLine` fields.
@@ -104,7 +104,7 @@ A required inactive preference blocks apply before writes. These preferences
 are user-scoped; project scope does not activate them. `defaultPermissionMode`
 remains blocked by the native security gate.
 
-The [terminal fixture](../WORKBENCH/evidence/native-draft2-debug/copilot-preferences-final.json)
+The terminal fixture (`WORKBENCH/evidence/native-draft2-debug/copilot-preferences-final.json`)
 verifies initial plan/interactive mode, tab order and visibility, status command
 input/output, padding, timer refresh, and removal after restart. Apply writes
 the settings; the native terminal executes the status command. Notification
@@ -125,10 +125,10 @@ usage-based billing. The isolated BYOK test still starts two nested agents
 when both settings are one. Plan output reports the billing prerequisite.
 Apply changes neither account state nor runtime enforcement.
 
-The [dispatch evidence](../WORKBENCH/evidence/native-draft2-debug/copilot-subagents-verified-override.json)
+The dispatch evidence (`WORKBENCH/evidence/native-draft2-debug/copilot-subagents-verified-override.json`)
 correlates per-agent model and effort choices with provider requests, native
 configuration events, approved child execution, and a file effect. The
-[disabled control](../WORKBENCH/evidence/native-draft2-debug/copilot-subagents-verified-disabled.json)
+disabled control (`WORKBENCH/evidence/native-draft2-debug/copilot-subagents-verified-disabled.json`)
 confirms removal from discovery and refusal of a direct dispatch attempt.
 The context-tier event confirms configuration selection; actual context
 capacity and billing behavior are not measured.
@@ -150,9 +150,9 @@ Codex `0.154.0` reports project selectors in `config/read`, but ignores them in
 both skill discovery and the model's initial catalog. Optional project selectors
 remain inactive; required selectors refuse before writes. This does not prevent
 ordinary discovery of `.agents/skills`. The
-[user fixture](../WORKBENCH/evidence/native-draft2-debug/codex-skills-verified-user.json)
+user fixture (`WORKBENCH/evidence/native-draft2-debug/codex-skills-verified-user.json`)
 tests import, relocation, enable/disable, model context, and reimport. The
-[project fixture](../WORKBENCH/evidence/native-draft2-debug/codex-skills-verified-project.json)
+project fixture (`WORKBENCH/evidence/native-draft2-debug/codex-skills-verified-project.json`)
 tests refusal and the native limitation while preserving user configuration.
 
 Native version constraints currently accept only `=0.154.0` for Codex and
@@ -246,10 +246,10 @@ environment-value rules. Plan and capabilities report these native limits.
 Copilot marketplace
 `autoUpdate` is inactive in project scope because the client ignores it there.
 Plan reports Codex's separate Git marketplace-add prerequisite. See the [plugin guide](PLUGIN_STANDARD.md) and
-[verification record](../WORKBENCH/evidence/plugin-standard/verification-plugin-selections.json).
-The [Git follow-up](../WORKBENCH/evidence/plugin-standard/verification-plugin-git.json)
+verification record (`WORKBENCH/evidence/plugin-standard/verification-plugin-selections.json`).
+The Git follow-up (`WORKBENCH/evidence/plugin-standard/verification-plugin-git.json`)
 records the current implementation hashes and all eight native cases.
-The [MCP follow-up](../WORKBENCH/evidence/plugin-standard/verification-plugin-mcp.json)
+The MCP follow-up (`WORKBENCH/evidence/plugin-standard/verification-plugin-mcp.json`)
 supersedes those hashes with 22 native cases for the current implementation.
 This result does not close the full universal configuration milestone.
 

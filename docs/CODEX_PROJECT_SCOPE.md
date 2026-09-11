@@ -46,9 +46,9 @@ The fixture creates an isolated native home, a trusted project, and two local
 model endpoints. Trust is test setup in the isolated native home. Apply does
 not create or change trust entries.
 
-The [provider case](../WORKBENCH/evidence/native-draft2-debug/codex-project-provider-verified.json)
+The provider case (`WORKBENCH/evidence/native-draft2-debug/codex-project-provider-verified.json`)
 tests provider selection and definitions. The
-[complete unconditional-key case](../WORKBENCH/evidence/native-draft2-debug/codex-project-allkeys-verified.json)
+complete unconditional-key case (`WORKBENCH/evidence/native-draft2-debug/codex-project-allkeys-verified.json`)
 tests the table above. Each case has two completed native turns: direct native
 configuration, then optional adapter projection. Effective configuration
 retains user values. The changed project model proves that the trusted project
@@ -62,15 +62,15 @@ source. The [Go tests](../CLI/internal/config/native_codex_project_scope_test.go
 check each field, source preservation, declarations, ownership cleanup,
 unowned settings, file permissions, and refusal of modified owned settings.
 
-The [earlier native failure](../WORKBENCH/evidence/native-draft2-debug/codex-project-provider-before.json)
-and its [retained projected configuration](../WORKBENCH/evidence/native-draft2-debug/codex-project-provider-before-projection.json)
+The earlier native failure (`WORKBENCH/evidence/native-draft2-debug/codex-project-provider-before.json`)
+and its retained projected configuration (`WORKBENCH/evidence/native-draft2-debug/codex-project-provider-before-projection.json`)
 show that an optional profile wrote ignored provider settings. An early
 follow-up fixture incorrectly assumed that import creates a required profile.
 Its failed result remains as `codex-project-allkeys-first.json`. The corrected
 fixture explicitly sets `required: true` before testing refusal, then sets it
 to `false` before testing inactive optional content.
 
-The [source receipt](../WORKBENCH/evidence/native-draft2-debug/codex-provider-scope.sources.json)
+The source receipt (`WORKBENCH/evidence/native-draft2-debug/codex-provider-scope.sources.json`)
 pins revision `6b9826e3aa83b1a5947db50f4332cb9c65f1b340`. It includes the
 official documentation index, configuration reference, and native loader.
 The [verifier](../WORKBENCH/conformance/verify_codex_project_scope.py) checks
