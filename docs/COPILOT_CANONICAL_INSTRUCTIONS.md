@@ -8,6 +8,11 @@ separate Copilot instruction body. A verified root `AGENTS.md` link to
 {"kind": "canonical-instructions", "source": "AGENTS.md"}
 ```
 
+Import also uses this binding when a GitHub instruction body contains potential
+native references. It keeps that body at `.github/copilot-instructions.md` and
+preserves the separate root body or existing portable core. See the
+[GitHub reference audit](COPILOT_GITHUB_INSTRUCTIONS.md).
+
 Only the `com.github.copilot` native project profile maps this artifact.
 Its source must be exactly `AGENTS.md`, and `name` must be absent. This
 registered source refers to the portable `.agents/AGENTS.md`. It is the fixed

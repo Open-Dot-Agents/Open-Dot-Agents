@@ -3,6 +3,27 @@
 Status: experimental draft.2 selection import and projection. Direct loading of
 local canonical packages and public marketplace installation tests remain open.
 
+## Public GitHub MCP verification
+
+The vendored OpenAI GitHub plugin at revision
+`d416fd5a43426019986b1e489506db3db66dee3d` passed an authenticated discovery
+test with Codex `0.154.0` and Copilot `1.0.83`. A direct MCP handshake and both
+native plugin sessions exposed the same 47 tool names. Codex sent one
+`mcp__github` namespace. Copilot sent 47 `github-` prefixed functions. The local
+model fixtures did not request a tool. No GitHub mutation,
+approval request, external model request, credential value, or credential hash
+was recorded.
+
+The local package retains the upstream Codex `bearer_token_env_var` and adds a
+Copilot-compatible `Authorization` environment reference. The provenance file
+records this transformation and the original upstream digest. Local native
+tests with token-present and token-missing cases pass for both clients.
+
+These tests prove public service startup and tool discovery for this exact
+package, native versions, account session, and date. They do not approve GitHub
+write operations or establish complete plugin support. Plugin installation and
+authentication remain explicit native operations.
+
 Use existing marketplace and installed plugins as the normal workflow.
 `.agents/plugins/` records native selections, sources, activation choices, and
 settings. It keeps native version or revision fields where the client defines

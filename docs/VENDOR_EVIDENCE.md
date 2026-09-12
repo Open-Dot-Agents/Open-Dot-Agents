@@ -227,6 +227,12 @@ image read completes without approval. Explicit-rule acceptance and denial have
 correlated terminal events and the expected file effect. This excludes a
 mandatory portable `ask` mapping for the tested trust-derived native mode.
 
+A later approved command starts a detached Python descendant before its parent
+completes. The parent effect and correlated completed command item appear. The
+child's delayed effect does not appear before or after client disconnect. This
+is bounded evidence that Codex cleans up that descendant at command completion.
+It is not a universal process-containment claim.
+
 The refreshed configuration references match the inventory hashes:
 
 - Codex: `f432ae52ed50ad88998c396c8da88cba74ef022f51f2def7ca494fd08c94ae58`.
@@ -393,6 +399,22 @@ prove memory-service behavior or graphical rendering of UI preferences.
 
 ## Copilot terminal preferences
 
+The newer [global configuration evidence](GLOBAL_CONFIGURATION.md) uses six
+Codex and Copilot sessions. It establishes bounded global core loading, shared
+skill discovery, and Codex project model override and fallback. The tested
+Go source hashes are in those global receipts. Earlier user-skill and terminal
+preference receipts remain historical after the global implementation changes.
+The global receipts are also historical after the keymap guard. See the
+[current keymap and native limitation evidence](CODEX_KEYMAP.md) for this
+implementation cycle.
+
+The settings-file regression (`WORKBENCH/evidence/native-draft2-debug/copilot-settings-artifact.json`)
+repeats three terminal sessions against the user skill fixes. Its
+[verifier](../WORKBENCH/conformance/verify_copilot_settings.py) checks source
+hashes, private file modes, setting preservation, native session context,
+terminal output, status events, and removal. This is bounded evidence for
+the tested preferences; other fields retain their existing limits.
+
 The pinned native help (`WORKBENCH/evidence/native-draft2-debug/copilot-legacy-config-help.txt`)
 documents user preference names, tab matching, history bounds, and status-line
 commands. It explicitly permits an omitted `statusLine.type`. The online
@@ -493,7 +515,23 @@ package and reports its project selection enabled. A loopback MCP probe shows
 that it uses `bearer_token_env_var` when the named variable exists and makes no
 MCP request when it is absent. Copilot `1.0.83` installs the same package but
 does not send the named bearer token. Component listing alone does not show
-successful authentication. No external GitHub MCP request or write was tested.
+successful authentication. The initial package run did not test an external
+GitHub MCP request or write.
+
+A later direct public handshake (`WORKBENCH/evidence/native-draft2-debug/public-github-mcp-readonly-probe.json`)
+and pinned Codex session (`WORKBENCH/evidence/native-draft2-debug/native-public-github-plugin-shared-auth.json`)
+used the existing `gh` keyring credential. Both exposed the same 47 GitHub MCP
+tools. The native server reached `ready`, and Codex injected the complete tool
+namespace into a local model request. The model did not call a tool. No GitHub
+mutation, external model request, approval, credential value, or credential
+hash was recorded. This is bounded public discovery evidence. It does not
+authorize writes or establish full adapter support.
+
+The shared header mapping also passed a
+public Copilot session (`WORKBENCH/evidence/native-draft2-debug/native-public-github-plugin-copilot-final-complete.json`).
+Copilot exposed the same 47 names as `github-` prefixed functions. Its native
+first-launch process rewrote private settings and retained the exact trusted
+folder. It stored no credential. The model did not call a GitHub tool.
 
 The current session's already connected GitHub app completed a separate
 read-only repository lookup. Both native clients discovered the pinned
@@ -687,3 +725,35 @@ the declared source. Adapter calls preserve external configuration bytes;
 Copilot's own first-launch metadata update remains native runtime state. These
 checks do not prove arbitrary reference handling, live reload, model compliance,
 or a native Codex user-instruction result.
+
+## Copilot GitHub instruction reference base
+
+The [GitHub instruction audit](COPILOT_GITHUB_INSTRUCTIONS.md) reproduces a
+change from `.github/policy.md` to root `policy.md` after the old importer
+placed native references in the portable core. The retained failure records
+source and relocated Copilot `1.0.83` sessions with different loaded policies.
+
+The fix keeps the GitHub body at its native location. Twelve new sessions
+cover root links, regular roots, combined root references, updates, and removal.
+Eight root instruction regression sessions also pass. Correlated native events
+and model requests establish the loaded bodies and observable file reads.
+Referenced files and authority remain external. The
+source receipt (`WORKBENCH/evidence/native-draft2-debug/copilot-github-instructions.sources.json`)
+retains the live documentation index and guide. This bounded result does not
+establish live reload, arbitrary model compliance, or full adapter support.
+
+## Copilot personal and shared user skills
+
+The [user skill audit](COPILOT_USER_SKILLS.md) verifies `~/.copilot/skills` and
+`~/.agents/skills` as explicit import sources with Copilot `1.0.83`. Eight
+native sessions cover source and relocated discovery, approved asset execution,
+updates, and removal. Runtime workspaces are separate from the canonical
+repository, so project discovery cannot substitute for user-skill discovery.
+The catalogue source and package path, invocation event, shell approval, and
+file effect are checked together. Adapter calls retain external configuration.
+
+The retained probes include a test-client command mismatch and a project-skill
+fallback after user removal. Those attempts do not establish successful user
+execution. The corrected tests check user provenance explicitly. This evidence
+does not establish Codex native execution, inherited discovery, project
+precedence, arbitrary model compliance, or live reload.

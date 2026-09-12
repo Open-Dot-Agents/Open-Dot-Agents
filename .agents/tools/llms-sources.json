@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "updated": "2026-08-12",
+  "updated": "2026-09-11",
   "description": "Official llms.txt sources used by Open-Dot-Agents skills and tool guidance. Full-text sources are referenced by URL and verified by metadata; their large contents are not vendored.",
   "sources": [
     {
@@ -10,9 +10,9 @@
       "kind": "index",
       "requested_url": "https://learn.chatgpt.com/docs/llms.txt",
       "effective_url": "https://learn.chatgpt.com/docs/llms.txt",
-      "sha256": "eb23ffddc9480cd69104e13e8af4af7b0254e739380cedc1b5ce46306540411e",
-      "bytes": 23065,
-      "lines": 304
+      "sha256": "2ea9da1ea2cca1a375d782595444dc93c25918b66908a1aed493e9ed5ed2b586",
+      "bytes": 26047,
+      "lines": 323
     },
     {
       "id": "github-docs",

@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "updated": "2026-09-10",
+  "updated": "2026-09-12",
   "contract": "1.1.0-draft.1",
   "ratified": false,
   "inventory": {
@@ -32,7 +32,7 @@
     "IDE, cloud, or non-Linux security adapters"
   ],
   "native_observations": {
-    "codex": "Direct-shell subset: 27 sandbox observations, 23 refusal checks, and 9 lifecycle checks passed. Separate native model-tool allow and explicit denial tests passed; on-request does not preserve portable unattended ask.",
+    "codex": "Direct-shell subset: 27 sandbox observations, 23 refusal checks, and 9 lifecycle checks passed. Separate native model-tool allow and explicit denial tests passed; on-request does not preserve portable unattended ask. One approved detached Python descendant was terminated at command completion before client disconnect.",
     "copilot": "Native path denial blocks the named host Unix socket, but TCP/UDP/IPv6 loopback remains allowed. Native model-tool allow, explicit denial, and unattended denial were observed; portable security remains refused.",
     "claude": "Skipped at user request"
   },
@@ -52,7 +52,19 @@
     "coverage": "coverage.json",
     "implementation": "docs/NATIVE_CONFIGURATION.md",
     "native_evidence": "WORKBENCH/evidence/NATIVE_DRAFT2.md",
-    "status": "Scoped ownership and configuration foundation; full milestone remains incomplete",
+    "status": "Every documented feature has a disposition; native behavior, security, and release gates remain incomplete",
+    "current_audit": "docs/NATIVE_MILESTONE_AUDIT.md",
+    "current_verification": "WORKBENCH/evidence/native-draft2-debug/verification-public-github-trust-local-network-complete.json",
+    "public_github_mcp_evidence": "WORKBENCH/evidence/native-draft2-debug/native-public-github-plugin-shared-auth.json",
+    "public_github_mcp_copilot_evidence": "WORKBENCH/evidence/native-draft2-debug/native-public-github-plugin-copilot-final-complete.json",
+    "coverage_checkpoint": {
+      "source_entries": 1679,
+      "semantic_features": 1379,
+      "mapping_pending": 0,
+      "validator_declared": 234,
+      "security_evidence_required": 81,
+      "counts_are_completion": false
+    },
     "debug_review": "docs/NATIVE_DEBUG_RESEARCH.md",
     "debug_verification": "WORKBENCH/evidence/native-draft2-debug/verification.json",
     "agent_evidence": [

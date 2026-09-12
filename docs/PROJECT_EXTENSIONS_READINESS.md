@@ -14,10 +14,10 @@ plugin conversion.
 | Copilot shared skill import | Draft.2 selects existing `.agents/skills` packages in place and accepts a bare shared skill tree; native source and relocated execution are verified | Other unversioned canonical content and policy conflicts refuse; inherited parent and user discovery remain separate |
 | Skill input validation | Stable, draft.1, and draft.2 projection reject invalid UTF-8 definitions; stable and native user import refuse them before content writes or backups | Supporting assets can be binary; skill text is not rewritten |
 | Portable tools | Existing round-trip, ownership, conflict, and refusal tests pass; selected project server startup evidence is retained | Required portable `mcp.envRef` still blocks full root sync; native missing-variable behavior does not meet that contract |
-| OpenAI GitHub package | The unchanged pinned package is installed and enabled for this Codex project; all six cached files match the source | Its external HTTP MCP has not been exercised with a real token |
+| OpenAI GitHub package | The pinned package and recorded Copilot header compatibility mapping pass authenticated public discovery in Codex and Copilot; all six local files match provenance | GitHub tool calls and OpenAI app behavior need separate authorization and evidence |
 | GitHub app | The already connected app completed a read-only repository lookup | This is separate from activation of the new local package and its HTTP MCP server |
-| GitHub bearer reference | Codex sends the named test token and exposes the probe tool after authenticated MCP discovery; without the variable, no MCP request is sent | The probe redirects only the test copy's URL to loopback; it does not test the public GitHub service |
-| Copilot package conversion | Native installation and component listing were tested | Copilot ignores the package's bearer-token field, sends an unauthenticated request, and cannot expose the authenticated probe tool; OpenAI app mapping is not established |
+| GitHub bearer reference | Codex sends the named test token and exposes the probe tool after authenticated MCP discovery; without the variable, no MCP request is sent | The local probe redirects the test URL to loopback; the public service has separate discovery receipts |
+| Copilot package conversion | The added Authorization environment reference passes local and public authenticated discovery | Copilot still ignores the original bearer-token field; OpenAI app mapping and GitHub tool execution are not established |
 | Source integrity | CI checks full commit pins, file hashes, package membership, assets, and symlink/path refusal | Integrity does not replace source review or native behavioral tests |
 
 ## Changes from this review

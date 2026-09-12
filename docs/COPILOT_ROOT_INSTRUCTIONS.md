@@ -60,5 +60,13 @@ The [Go tests](../CLI/internal/config/native_root_instructions_test.go) check
 byte preservation, repeated import, conflicting canonical policy, force,
 malformed roots, scope isolation, and stale-root projection refusal.
 
-Current receipts end in `-user-instructions.json`. Earlier receipts are historical.
+Current root regression receipts end in `-github-reference-retry.json`, except
+the identical-body case, which uses `-github-reference-final.json`. Three
+concurrent final runs timed out during native initialization, before adapter
+execution. Those failed receipts remain unchanged. Earlier receipts are historical.
 This result does not promote adapter support or complete the Linux milestone.
+
+The [GitHub instruction audit](COPILOT_GITHUB_INSTRUCTIONS.md) covers the reverse
+reference-base change: a GitHub body projected through a root canonical link.
+Reference-bearing GitHub imports now retain a native artifact and bind the
+separate portable core to root `AGENTS.md`.

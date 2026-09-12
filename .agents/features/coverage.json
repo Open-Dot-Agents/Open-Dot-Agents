@@ -1405,6 +1405,18 @@
         "limitation": "Codex 0.154.0 user-scope token commands preserve command, arguments, working directory, timeout, caching, and refresh configuration. Success, timed refresh, and 401 retry have local native evidence. Timeout, empty output, nonzero exit, invalid UTF-8, and a missing executable log an error but still send an unauthenticated model request. This is native configuration, not authentication enforcement. Install and check the token command separately; apply does not execute it or copy its returned token. Project behavior, remote services, and background descendants are not verified."
       },
       {
+        "native_status": "unverified",
+        "feature": "artifact:canonical-instructions",
+        "source": ".agents/AGENTS.md",
+        "destination": "<native-home>/AGENTS.md",
+        "scope": "user",
+        "disposition": "portable-mapping",
+        "activation": "fixed core binding; start a new native session",
+        "ownership": "file",
+        "authority": "explicit native home; no trust grant",
+        "limitation": "Fixed user binding from canonical AGENTS.md to native user instructions. Reference-bearing content requires an explicit native artifact. Projection does not establish model compliance or combined project behavior."
+      },
+      {
         "native_status": "bounded-child-configuration",
         "evidence": [
           "WORKBENCH/evidence/native-draft2-debug/codex-agent-role-scope.sources.json",
@@ -1751,8 +1763,9 @@
         "evidence": [
           "WORKBENCH/evidence/plugin-standard/copilot-selection-mcp-reviewed-project.json",
           "WORKBENCH/evidence/plugin-standard/copilot-git-mcp-reviewed-project.json",
-          "WORKBENCH/evidence/project-tools/github-copilot-auth-present-first.json",
-          "WORKBENCH/evidence/project-tools/github-copilot-auth-missing.json"
+          "WORKBENCH/evidence/native-draft2-debug/copilot-github-shared-header-present.json",
+          "WORKBENCH/evidence/native-draft2-debug/copilot-github-shared-header-missing.json",
+          "WORKBENCH/evidence/native-draft2-debug/native-public-github-plugin-copilot-final-complete.json"
         ],
         "feature": "artifact:plugins:/enabledPlugins",
         "source": "native_plugins.go",
@@ -1762,15 +1775,16 @@
         "activation": "requires native installation, trust, and reload",
         "ownership": "setting",
         "authority": "registry target; native trust remains external",
-        "limitation": "The pinned native CLI installs the unchanged Agent Plugins 1.0.0 skill fixture from a local marketplace. Enable, reload, disable, and package preservation are verified. Git fetching is tested separately over loopback HTTP, including a pinned Codex tag and Copilot default branch. Stdio MCP execution and native approvals have separate component evidence. Public HTTPS/SSH services, authentication, automatic updates, other package components, per-server overlays, and arbitrary third-party packages need separate evidence. Native trust and package installation remain external. Copilot 1.0.83 does not preserve unknown environment placeholders and leaves PLUGIN_DATA literal in the tested session environment value; full Agent Plugins environment conformance is not verified. The OpenAI GitHub 0.1.11 package can install and expose its HTTP MCP entry while its bearer_token_env_var is ignored. Do not infer authentication or OpenAI app support from successful installation."
+        "limitation": "The pinned native CLI installs the unchanged Agent Plugins 1.0.0 skill fixture from a local marketplace. Enable, reload, disable, and package preservation are verified. Git fetching is tested separately over loopback HTTP, including a pinned Codex tag and Copilot default branch. Stdio MCP execution and native approvals have separate component evidence. Public HTTPS/SSH services, authentication, automatic updates, other package components, per-server overlays, and arbitrary third-party packages need separate evidence. Native trust and package installation remain external. Copilot 1.0.83 does not preserve unknown environment placeholders and leaves PLUGIN_DATA literal in the tested session environment value; full Agent Plugins environment conformance is not verified. Copilot 1.0.83 ignores the OpenAI GitHub 0.1.11 bearer_token_env_var. The repository package adds an Authorization environment reference that passes local and public authenticated discovery in both pinned clients. GitHub write operations and OpenAI app support need separate evidence and authorization."
       },
       {
         "native_status": "native-discovery-only",
         "evidence": [
           "WORKBENCH/evidence/plugin-standard/copilot-selection-mcp-reviewed-project.json",
           "WORKBENCH/evidence/plugin-standard/copilot-git-mcp-reviewed-project.json",
-          "WORKBENCH/evidence/project-tools/github-copilot-auth-present-first.json",
-          "WORKBENCH/evidence/project-tools/github-copilot-auth-missing.json"
+          "WORKBENCH/evidence/native-draft2-debug/copilot-github-shared-header-present.json",
+          "WORKBENCH/evidence/native-draft2-debug/copilot-github-shared-header-missing.json",
+          "WORKBENCH/evidence/native-draft2-debug/native-public-github-plugin-copilot-final-complete.json"
         ],
         "feature": "artifact:plugins:/extraKnownMarketplaces",
         "source": "native_plugins.go",
@@ -1780,7 +1794,7 @@
         "activation": "requires native installation, trust, and reload",
         "ownership": "setting",
         "authority": "registry target; native trust remains external",
-        "limitation": "The pinned native CLI installs the unchanged Agent Plugins 1.0.0 skill fixture from a local marketplace. Enable, reload, disable, and package preservation are verified. Git fetching is tested separately over loopback HTTP, including a pinned Codex tag and Copilot default branch. Stdio MCP execution and native approvals have separate component evidence. Public HTTPS/SSH services, authentication, automatic updates, other package components, per-server overlays, and arbitrary third-party packages need separate evidence. Native trust and package installation remain external. Copilot 1.0.83 does not preserve unknown environment placeholders and leaves PLUGIN_DATA literal in the tested session environment value; full Agent Plugins environment conformance is not verified. The OpenAI GitHub 0.1.11 package can install and expose its HTTP MCP entry while its bearer_token_env_var is ignored. Do not infer authentication or OpenAI app support from successful installation."
+        "limitation": "The pinned native CLI installs the unchanged Agent Plugins 1.0.0 skill fixture from a local marketplace. Enable, reload, disable, and package preservation are verified. Git fetching is tested separately over loopback HTTP, including a pinned Codex tag and Copilot default branch. Stdio MCP execution and native approvals have separate component evidence. Public HTTPS/SSH services, authentication, automatic updates, other package components, per-server overlays, and arbitrary third-party packages need separate evidence. Native trust and package installation remain external. Copilot 1.0.83 does not preserve unknown environment placeholders and leaves PLUGIN_DATA literal in the tested session environment value; full Agent Plugins environment conformance is not verified. Copilot 1.0.83 ignores the OpenAI GitHub 0.1.11 bearer_token_env_var. The repository package adds an Authorization environment reference that passes local and public authenticated discovery in both pinned clients. GitHub write operations and OpenAI app support need separate evidence and authorization."
       },
       {
         "native_status": "bounded-fixture-execution",
@@ -1912,6 +1926,22 @@
         "limitation": "Preserves complete relative paths under the registered instruction directory. Native evidence covers direct loading with applyTo '**' and model-requested reads of '**/*.go' instruction paths from the native catalog in fresh sessions. Path-specific discovery provides model guidance, not automatic body injection or deterministic glob enforcement. The model can skip instruction reads. User instruction reads can require native permission when the native home is outside trusted directories. Other metadata, imports, and live reload remain unverified. Apply does not write native trust or account state."
       },
       {
+        "native_status": "bounded-inherited-skill-execution",
+        "evidence": [
+          "docs/COPILOT_PARENT_SKILLS.md",
+          "WORKBENCH/conformance/verify_copilot_parent_skills.py"
+        ],
+        "feature": "artifact:skill-discovery:/Parent .github/skills/",
+        "source": "<selected-parent-root>/.github/skills/",
+        "destination": "<selected-parent-root>/.agents/skills/",
+        "scope": "project",
+        "disposition": "portable-mapping",
+        "activation": "import and apply at the owning parent root; start a descendant native session",
+        "ownership": "canonical package at selected parent; no ownership by descendant projection",
+        "authority": "explicit parent root selection; native repository and trust boundaries; no trust grant",
+        "limitation": "Copilot inherits parent .github/skills, .agents/skills, and .claude/skills up to the nearest Git root. A nested Git repository stops inheritance. Local definitions can shadow inherited names. Child import never captures parent assets; configure the parent through its explicit --root. Packages remain complete at their owning root."
+      },
+      {
         "native_status": "bounded-relocated-skill-execution",
         "evidence": [
           "docs/COPILOT_SKILL_IMPORT.md",
@@ -1958,6 +1988,22 @@
         "ownership": "canonical package; source native package remains unchanged",
         "authority": "supplied project root only; no added-directory or parent trust grant",
         "limitation": "Imports complete packages from the supplied root. Existing .agents/skills packages are selected in place; a bare shared skill tree can establish draft.2 without replacing source files. Other unversioned canonical content refuses. Conflicting packages or duplicate native names refuse before writes, including --force. Identical packages are deduplicated. Parent, user, plugin, and added-directory sources are not imported. Stable import behavior is unchanged."
+      },
+      {
+        "native_status": "bounded-github-instruction-loading",
+        "evidence": [
+          "docs/COPILOT_GITHUB_INSTRUCTIONS.md",
+          "WORKBENCH/conformance/verify_copilot_github_instructions.py"
+        ],
+        "feature": "artifact:instruction-discovery:/.github/copilot-instructions.md",
+        "source": ".github/copilot-instructions.md",
+        "destination": "<project-root>/.github/copilot-instructions.md",
+        "scope": "project",
+        "disposition": "artifact-mapping",
+        "activation": "import then project; start a new native session",
+        "ownership": "file",
+        "authority": "fixed registry project path; referenced files remain external",
+        "limitation": "Preserves .github/copilot-instructions.md bytes and its native relative reference base. Reference-bearing imports use native instructions plus a canonical root binding. Plain text can use the portable core. Native evidence covers relocation to a root link or regular root, combined root references, updated sessions, and removal. Referenced files remain external. Existing conflicting root artifacts or ambiguous core references require an explicit policy decision. Live reload and model compliance are not established."
       },
       {
         "native_status": "bounded-canonical-instruction-loading",
@@ -3017,8 +3063,9 @@
         "evidence": [
           "WORKBENCH/evidence/plugin-standard/copilot-selection-mcp-reviewed-user.json",
           "WORKBENCH/evidence/plugin-standard/copilot-git-mcp-reviewed-user.json",
-          "WORKBENCH/evidence/project-tools/github-copilot-auth-present-first.json",
-          "WORKBENCH/evidence/project-tools/github-copilot-auth-missing.json"
+          "WORKBENCH/evidence/native-draft2-debug/copilot-github-shared-header-present.json",
+          "WORKBENCH/evidence/native-draft2-debug/copilot-github-shared-header-missing.json",
+          "WORKBENCH/evidence/native-draft2-debug/native-public-github-plugin-copilot-final-complete.json"
         ],
         "feature": "artifact:plugins:/enabledPlugins",
         "source": "native_plugins.go",
@@ -3028,15 +3075,16 @@
         "activation": "requires native installation, trust, and reload",
         "ownership": "setting",
         "authority": "registry target; native trust remains external",
-        "limitation": "The pinned native CLI installs the unchanged Agent Plugins 1.0.0 skill fixture from a local marketplace. Enable, reload, disable, and package preservation are verified. Git fetching is tested separately over loopback HTTP, including a pinned Codex tag and Copilot default branch. Stdio MCP execution and native approvals have separate component evidence. Public HTTPS/SSH services, authentication, automatic updates, other package components, per-server overlays, and arbitrary third-party packages need separate evidence. Native trust and package installation remain external. Copilot 1.0.83 does not preserve unknown environment placeholders and leaves PLUGIN_DATA literal in the tested session environment value; full Agent Plugins environment conformance is not verified. The OpenAI GitHub 0.1.11 package can install and expose its HTTP MCP entry while its bearer_token_env_var is ignored. Do not infer authentication or OpenAI app support from successful installation."
+        "limitation": "The pinned native CLI installs the unchanged Agent Plugins 1.0.0 skill fixture from a local marketplace. Enable, reload, disable, and package preservation are verified. Git fetching is tested separately over loopback HTTP, including a pinned Codex tag and Copilot default branch. Stdio MCP execution and native approvals have separate component evidence. Public HTTPS/SSH services, authentication, automatic updates, other package components, per-server overlays, and arbitrary third-party packages need separate evidence. Native trust and package installation remain external. Copilot 1.0.83 does not preserve unknown environment placeholders and leaves PLUGIN_DATA literal in the tested session environment value; full Agent Plugins environment conformance is not verified. Copilot 1.0.83 ignores the OpenAI GitHub 0.1.11 bearer_token_env_var. The repository package adds an Authorization environment reference that passes local and public authenticated discovery in both pinned clients. GitHub write operations and OpenAI app support need separate evidence and authorization."
       },
       {
         "native_status": "native-discovery-only",
         "evidence": [
           "WORKBENCH/evidence/plugin-standard/copilot-selection-mcp-reviewed-user.json",
           "WORKBENCH/evidence/plugin-standard/copilot-git-mcp-reviewed-user.json",
-          "WORKBENCH/evidence/project-tools/github-copilot-auth-present-first.json",
-          "WORKBENCH/evidence/project-tools/github-copilot-auth-missing.json"
+          "WORKBENCH/evidence/native-draft2-debug/copilot-github-shared-header-present.json",
+          "WORKBENCH/evidence/native-draft2-debug/copilot-github-shared-header-missing.json",
+          "WORKBENCH/evidence/native-draft2-debug/native-public-github-plugin-copilot-final-complete.json"
         ],
         "feature": "artifact:plugins:/extraKnownMarketplaces",
         "source": "native_plugins.go",
@@ -3046,7 +3094,7 @@
         "activation": "requires native installation, trust, and reload",
         "ownership": "setting",
         "authority": "registry target; native trust remains external",
-        "limitation": "The pinned native CLI installs the unchanged Agent Plugins 1.0.0 skill fixture from a local marketplace. Enable, reload, disable, and package preservation are verified. Git fetching is tested separately over loopback HTTP, including a pinned Codex tag and Copilot default branch. Stdio MCP execution and native approvals have separate component evidence. Public HTTPS/SSH services, authentication, automatic updates, other package components, per-server overlays, and arbitrary third-party packages need separate evidence. Native trust and package installation remain external. Copilot 1.0.83 does not preserve unknown environment placeholders and leaves PLUGIN_DATA literal in the tested session environment value; full Agent Plugins environment conformance is not verified. The OpenAI GitHub 0.1.11 package can install and expose its HTTP MCP entry while its bearer_token_env_var is ignored. Do not infer authentication or OpenAI app support from successful installation."
+        "limitation": "The pinned native CLI installs the unchanged Agent Plugins 1.0.0 skill fixture from a local marketplace. Enable, reload, disable, and package preservation are verified. Git fetching is tested separately over loopback HTTP, including a pinned Codex tag and Copilot default branch. Stdio MCP execution and native approvals have separate component evidence. Public HTTPS/SSH services, authentication, automatic updates, other package components, per-server overlays, and arbitrary third-party packages need separate evidence. Native trust and package installation remain external. Copilot 1.0.83 does not preserve unknown environment placeholders and leaves PLUGIN_DATA literal in the tested session environment value; full Agent Plugins environment conformance is not verified. Copilot 1.0.83 ignores the OpenAI GitHub 0.1.11 bearer_token_env_var. The repository package adds an Authorization environment reference that passes local and public authenticated discovery in both pinned clients. GitHub write operations and OpenAI app support need separate evidence and authorization."
       },
       {
         "native_status": "bounded-fixture-execution",
@@ -3372,6 +3420,38 @@
         "limitation": "Positive integer mapping with native upper bounds. Copilot ignores this setting outside usage-based billing; the BYOK fixture still dispatches two nested agents with both limits set to one. Paid-plan limit enforcement and exact lower-bound behavior require a separate native account fixture. Apply does not change billing or enforce runtime limits."
       },
       {
+        "native_status": "bounded-user-skill-execution",
+        "evidence": [
+          "docs/COPILOT_USER_SKILLS.md",
+          "WORKBENCH/conformance/verify_copilot_user_skills.py"
+        ],
+        "feature": "artifact:skill-discovery:/~/.copilot/skills/",
+        "source": "~/.copilot/skills/",
+        "destination": "<native-home>/skills/<name>/",
+        "scope": "user",
+        "disposition": "artifact-mapping",
+        "activation": "explicit user import and apply; start a new native session",
+        "ownership": "file owned by source repository",
+        "authority": "explicit selected source and target homes; no implicit home scan or trust grant",
+        "limitation": "Import reads skills only from the explicitly selected --native-home: ~/.copilot for personal skills or ~/.agents for shared skills. Apply targets the explicitly selected Copilot home. Native evidence covers both source locations, user discovery from a separate workspace, asset execution, updates, and removal. Source bytes, executable assets, and portable policy are preserved. Complete-package and native-name conflicts refuse; backups stay in private state outside active packages. Other homes, inherited directories, project precedence, and live reload are not established."
+      },
+      {
+        "native_status": "bounded-user-skill-execution",
+        "evidence": [
+          "docs/COPILOT_USER_SKILLS.md",
+          "WORKBENCH/conformance/verify_copilot_user_skills.py"
+        ],
+        "feature": "artifact:skill-discovery:/~/.agents/skills/",
+        "source": "~/.agents/skills/",
+        "destination": "<native-home>/skills/<name>/",
+        "scope": "user",
+        "disposition": "artifact-mapping",
+        "activation": "explicit user import and apply; start a new native session",
+        "ownership": "file owned by source repository",
+        "authority": "explicit selected source and target homes; no implicit home scan or trust grant",
+        "limitation": "Import reads skills only from the explicitly selected --native-home: ~/.copilot for personal skills or ~/.agents for shared skills. Apply targets the explicitly selected Copilot home. Native evidence covers both source locations, user discovery from a separate workspace, asset execution, updates, and removal. Source bytes, executable assets, and portable policy are preserved. Complete-package and native-name conflicts refuse; backups stay in private state outside active packages. Other homes, inherited directories, project precedence, and live reload are not established."
+      },
+      {
         "native_status": "bounded-user-instruction-loading",
         "evidence": [
           "docs/COPILOT_USER_INSTRUCTIONS.md",
@@ -3514,6 +3594,18 @@
         "ownership": "file",
         "authority": "registry instruction directory only",
         "limitation": "Preserves complete relative paths under the registered instruction directory. Native evidence covers direct loading with applyTo '**' and model-requested reads of '**/*.go' instruction paths from the native catalog in fresh sessions. Path-specific discovery provides model guidance, not automatic body injection or deterministic glob enforcement. The model can skip instruction reads. User instruction reads can require native permission when the native home is outside trusted directories. Other metadata, imports, and live reload remain unverified. Apply does not write native trust or account state."
+      },
+      {
+        "native_status": "unverified",
+        "feature": "artifact:canonical-instructions",
+        "source": ".agents/AGENTS.md",
+        "destination": "<native-home>/copilot-instructions.md",
+        "scope": "user",
+        "disposition": "portable-mapping",
+        "activation": "fixed core binding; start a new native session",
+        "ownership": "file",
+        "authority": "explicit native home; no trust grant",
+        "limitation": "Fixed user binding from canonical AGENTS.md to native user instructions. Reference-bearing content requires an explicit native artifact. Projection does not establish model compliance or combined project behavior."
       },
       {
         "native_status": "bounded-fixture-execution",
@@ -4411,39 +4503,42 @@
   },
   "counts": {
     "artifact-field-mapping": 55,
-    "artifact-mapping": 14,
+    "artifact-mapping": 18,
     "external": 236,
-    "mapping-pending": 12,
+    "mapping-pending": 0,
+    "native-limitation": 7,
     "native-operation": 723,
     "outside-milestone": 12,
-    "portable-mapping": 5,
-    "security-evidence-required": 83,
-    "validator-declared": 233,
-    "value-mapping": 6
+    "portable-mapping": 6,
+    "security-evidence-required": 81,
+    "validator-declared": 234,
+    "value-mapping": 7
   },
   "record_counts": {
     "artifact-field-mapping": 55,
-    "artifact-mapping": 14,
+    "artifact-mapping": 18,
     "external": 236,
-    "mapping-pending": 12,
+    "mapping-pending": 0,
+    "native-limitation": 7,
     "native-operation": 723,
     "outside-milestone": 12,
-    "portable-mapping": 5,
-    "security-evidence-required": 83,
+    "portable-mapping": 6,
+    "security-evidence-required": 81,
     "syntax-reference": 18,
-    "validator-declared": 233,
-    "value-mapping": 6
+    "validator-declared": 234,
+    "value-mapping": 7
   },
   "milestone_counts": {
     "artifact-field-mapping": 55,
-    "artifact-mapping": 14,
+    "artifact-mapping": 18,
     "external": 224,
-    "mapping-pending": 12,
+    "mapping-pending": 0,
+    "native-limitation": 7,
     "native-operation": 723,
-    "portable-mapping": 5,
-    "security-evidence-required": 83,
-    "validator-declared": 233,
-    "value-mapping": 6
+    "portable-mapping": 6,
+    "security-evidence-required": 81,
+    "validator-declared": 234,
+    "value-mapping": 7
   },
   "features": [
     {
@@ -5837,10 +5932,12 @@
       ],
       "adapter": null,
       "version_constraint": "=0.154.0",
-      "disposition": "mapping-pending",
-      "native_status": "unverified",
+      "disposition": "native-limitation",
+      "native_status": "bounded-native-ignored",
       "limitations": [
-        "Artifact or setting mapping remains incomplete; this is implementation work, not a native limitation."
+        "Pinned Codex sends the same reasoning metadata with the field omitted, false, or an invalid string. The field is absent from the pinned type and schema.",
+        "Evidence covers the pinned app-server with an isolated provider and workspace. Other versions and interfaces remain unverified.",
+        "Required content remains refused; optional content remains inactive."
       ],
       "evidence": [
         {
@@ -5851,6 +5948,11 @@
           "line": 1115,
           "section": "config.toml"
         }
+      ],
+      "implemented_scopes": [],
+      "native_evidence": [
+        "WORKBENCH/conformance/verify_codex_setting_gaps.py",
+        "WORKBENCH/evidence/native-draft2-debug/codex-remaining-settings.sources.json"
       ],
       "record_kind": "feature",
       "counted_feature": true,
@@ -9530,10 +9632,12 @@
       ],
       "adapter": null,
       "version_constraint": "=0.154.0",
-      "disposition": "mapping-pending",
-      "native_status": "unverified",
+      "disposition": "native-limitation",
+      "native_status": "bounded-native-ignored",
       "limitations": [
-        "Artifact or setting mapping remains incomplete; this is implementation work, not a native limitation."
+        "Pinned Codex starts the stdio MCP fixture locally even with remote placement requested. The field is absent from the pinned server schema; remote execution is not implemented by this setting.",
+        "Evidence covers the pinned app-server with an isolated provider and workspace. Other versions and interfaces remain unverified.",
+        "Required content remains refused; optional content remains inactive."
       ],
       "evidence": [
         {
@@ -9544,6 +9648,11 @@
           "line": 675,
           "section": "config.toml"
         }
+      ],
+      "implemented_scopes": [],
+      "native_evidence": [
+        "WORKBENCH/conformance/verify_codex_setting_gaps.py",
+        "WORKBENCH/evidence/native-draft2-debug/codex-remaining-settings.sources.json"
       ],
       "record_kind": "feature",
       "counted_feature": true,
@@ -9962,12 +10071,15 @@
         "project",
         "user"
       ],
-      "adapter": null,
+      "adapter": "CLI/internal/config/native_codex_keymap.go",
       "version_constraint": "=0.154.0",
-      "disposition": "mapping-pending",
-      "native_status": "unverified",
+      "disposition": "value-mapping",
+      "native_status": "bounded-terminal-keymap",
       "limitations": [
-        "Artifact or setting mapping remains incomplete; this is implementation work, not a native limitation."
+        "Only pinned schema context and action names activate. Binding values use the pinned native grammar and retain source spelling and array order.",
+        "Only the external editor action has terminal execution evidence.",
+        "The terminal evidence covers replacement of a built-in shortcut, two-stroke chords, updates, and explicit empty-list unbinding in project and user scope.",
+        "Keyboard labels that name approval actions do not change the portable security gates."
       ],
       "evidence": [
         {
@@ -9978,6 +10090,18 @@
           "line": 1417,
           "section": "config.toml"
         }
+      ],
+      "validation_source": "CLI/internal/config/native_schemas/codex-0.154.0.json",
+      "implemented_scopes": [
+        "project",
+        "user"
+      ],
+      "native_targets": [
+        "<scope-root>/.codex/config.toml",
+        "<scope-root>/config.toml"
+      ],
+      "native_evidence": [
+        "WORKBENCH/conformance/verify_codex_keymap.py"
       ],
       "record_kind": "feature",
       "counted_feature": true,
@@ -16305,7 +16429,7 @@
       ],
       "adapter": "CLI/internal/config/native.go",
       "version_constraint": "=0.154.0",
-      "disposition": "security-evidence-required",
+      "disposition": "validator-declared",
       "native_status": "unverified",
       "limitations": [
         "A declared validator is not a tested field mapping.",
@@ -20145,10 +20269,12 @@
       ],
       "adapter": null,
       "version_constraint": "=0.154.0",
-      "disposition": "mapping-pending",
-      "native_status": "unverified",
+      "disposition": "native-limitation",
+      "native_status": "bounded-native-refused",
       "limitations": [
-        "Artifact or setting mapping remains incomplete; this is implementation work, not a native limitation."
+        "Pinned Codex rejects this field. The same enabled rollout budget with the current reminder_at_remaining_tokens field passes native configuration loading.",
+        "Evidence covers the pinned app-server with an isolated provider and workspace. Other versions and interfaces remain unverified.",
+        "Required content remains refused; optional content remains inactive."
       ],
       "evidence": [
         {
@@ -20159,6 +20285,11 @@
           "line": 462,
           "section": "config.toml"
         }
+      ],
+      "implemented_scopes": [],
+      "native_evidence": [
+        "WORKBENCH/conformance/verify_codex_setting_gaps.py",
+        "WORKBENCH/evidence/native-draft2-debug/codex-remaining-settings.sources.json"
       ],
       "record_kind": "feature",
       "counted_feature": true,
@@ -30877,12 +31008,12 @@
       "scope": [
         "user"
       ],
-      "adapter": null,
+      "adapter": "CLI/internal/config/native_user_skill_import.go",
       "version_constraint": "=1.0.83",
-      "disposition": "mapping-pending",
-      "native_status": "unverified",
+      "disposition": "artifact-mapping",
+      "native_status": "bounded-user-skill-execution",
       "limitations": [
-        "Artifact or setting mapping remains incomplete; this is implementation work, not a native limitation."
+        "Import reads skills only from the explicitly selected --native-home: ~/.copilot for personal skills or ~/.agents for shared skills. Apply targets the explicitly selected Copilot home. Native evidence covers both source locations, user discovery from a separate workspace, asset execution, updates, and removal. Source bytes, executable assets, and portable policy are preserved. Complete-package and native-name conflicts refuse; backups stay in private state outside active packages. Other homes, inherited directories, project precedence, and live reload are not established."
       ],
       "evidence": [
         {
@@ -30893,6 +31024,14 @@
           "line": 1105,
           "section": "Skill locations"
         }
+      ],
+      "validation_source": "CLI/internal/config/native_user_skill_import.go",
+      "implemented_scopes": [
+        "user"
+      ],
+      "native_evidence": [
+        "WORKBENCH/conformance/verify_copilot_user_skills.py",
+        "docs/COPILOT_USER_SKILLS.md"
       ],
       "record_kind": "feature",
       "counted_feature": true,
@@ -32130,12 +32269,12 @@
       "scope": [
         "project"
       ],
-      "adapter": null,
+      "adapter": "CLI/internal/config/native.go",
       "version_constraint": "=1.0.83",
-      "disposition": "mapping-pending",
-      "native_status": "unverified",
+      "disposition": "artifact-mapping",
+      "native_status": "bounded-github-instruction-loading",
       "limitations": [
-        "Artifact or setting mapping remains incomplete; this is implementation work, not a native limitation."
+        "Preserves .github/copilot-instructions.md bytes and its native relative reference base. Reference-bearing imports use native instructions plus a canonical root binding. Plain text can use the portable core. Native evidence covers relocation to a root link or regular root, combined root references, updated sessions, and removal. Referenced files remain external. Existing conflicting root artifacts or ambiguous core references require an explicit policy decision. Live reload and model compliance are not established."
       ],
       "evidence": [
         {
@@ -32146,6 +32285,14 @@
           "line": 797,
           "section": "Custom instructions locations"
         }
+      ],
+      "validation_source": "CLI/internal/config/native.go",
+      "implemented_scopes": [
+        "project"
+      ],
+      "native_evidence": [
+        "WORKBENCH/conformance/verify_copilot_github_instructions.py",
+        "docs/COPILOT_GITHUB_INSTRUCTIONS.md"
       ],
       "record_kind": "feature",
       "counted_feature": true,
@@ -32834,7 +32981,7 @@
       "disposition": "artifact-field-mapping",
       "native_status": "native-discovery-only",
       "limitations": [
-        "The pinned native CLI installs the unchanged Agent Plugins 1.0.0 skill fixture from a local marketplace. Enable, reload, disable, and package preservation are verified. Git fetching is tested separately over loopback HTTP, including a pinned Codex tag and Copilot default branch. Stdio MCP execution and native approvals have separate component evidence. Public HTTPS/SSH services, authentication, automatic updates, other package components, per-server overlays, and arbitrary third-party packages need separate evidence. Native trust and package installation remain external. Copilot 1.0.83 does not preserve unknown environment placeholders and leaves PLUGIN_DATA literal in the tested session environment value; full Agent Plugins environment conformance is not verified. The OpenAI GitHub 0.1.11 package can install and expose its HTTP MCP entry while its bearer_token_env_var is ignored. Do not infer authentication or OpenAI app support from successful installation."
+        "The pinned native CLI installs the unchanged Agent Plugins 1.0.0 skill fixture from a local marketplace. Enable, reload, disable, and package preservation are verified. Git fetching is tested separately over loopback HTTP, including a pinned Codex tag and Copilot default branch. Stdio MCP execution and native approvals have separate component evidence. Public HTTPS/SSH services, authentication, automatic updates, other package components, per-server overlays, and arbitrary third-party packages need separate evidence. Native trust and package installation remain external. Copilot 1.0.83 does not preserve unknown environment placeholders and leaves PLUGIN_DATA literal in the tested session environment value; full Agent Plugins environment conformance is not verified. Copilot 1.0.83 ignores the OpenAI GitHub 0.1.11 bearer_token_env_var. The repository package adds an Authorization environment reference that passes local and public authenticated discovery in both pinned clients. GitHub write operations and OpenAI app support need separate evidence and authorization."
       ],
       "evidence": [
         {
@@ -32860,12 +33007,13 @@
         "user"
       ],
       "native_evidence": [
+        "WORKBENCH/evidence/native-draft2-debug/copilot-github-shared-header-missing.json",
+        "WORKBENCH/evidence/native-draft2-debug/copilot-github-shared-header-present.json",
+        "WORKBENCH/evidence/native-draft2-debug/native-public-github-plugin-copilot-final-complete.json",
         "WORKBENCH/evidence/plugin-standard/copilot-git-mcp-reviewed-project.json",
         "WORKBENCH/evidence/plugin-standard/copilot-git-mcp-reviewed-user.json",
         "WORKBENCH/evidence/plugin-standard/copilot-selection-mcp-reviewed-project.json",
-        "WORKBENCH/evidence/plugin-standard/copilot-selection-mcp-reviewed-user.json",
-        "WORKBENCH/evidence/project-tools/github-copilot-auth-missing.json",
-        "WORKBENCH/evidence/project-tools/github-copilot-auth-present-first.json"
+        "WORKBENCH/evidence/plugin-standard/copilot-selection-mcp-reviewed-user.json"
       ],
       "record_kind": "feature",
       "counted_feature": true,
@@ -33690,14 +33838,17 @@
       "native": "triggers",
       "category": "native-configuration",
       "scope": [
+        "project",
         "user"
       ],
       "adapter": null,
       "version_constraint": "=1.0.83",
-      "disposition": "mapping-pending",
-      "native_status": "unverified",
+      "disposition": "native-limitation",
+      "native_status": "bounded-acp-native-ignored",
       "limitations": [
-        "Artifact or setting mapping remains incomplete; this is implementation work, not a native limitation."
+        "Pinned Copilot logs unknown field ignored: sidekick in project and user agent definitions, including with --experimental.",
+        "The ACP probe discovers the agent but starts no sidekick; this does not establish behavior in other versions or interfaces.",
+        "Required sidekick content remains refused by the adapter."
       ],
       "evidence": [
         {
@@ -33708,6 +33859,11 @@
           "line": 1308,
           "section": "Sidekick configuration fields"
         }
+      ],
+      "implemented_scopes": [],
+      "native_evidence": [
+        "WORKBENCH/evidence/native-draft2-debug/copilot-sidekick-project-ignored.json",
+        "WORKBENCH/evidence/native-draft2-debug/copilot-sidekick-user-ignored.json"
       ],
       "record_kind": "feature",
       "counted_feature": true,
@@ -36603,14 +36759,17 @@
       "native": "maxSendsPerTurn",
       "category": "native-configuration",
       "scope": [
+        "project",
         "user"
       ],
       "adapter": null,
       "version_constraint": "=1.0.83",
-      "disposition": "mapping-pending",
-      "native_status": "unverified",
+      "disposition": "native-limitation",
+      "native_status": "bounded-acp-native-ignored",
       "limitations": [
-        "Artifact or setting mapping remains incomplete; this is implementation work, not a native limitation."
+        "Pinned Copilot logs unknown field ignored: sidekick in project and user agent definitions, including with --experimental.",
+        "The ACP probe discovers the agent but starts no sidekick; this does not establish behavior in other versions or interfaces.",
+        "Required sidekick content remains refused by the adapter."
       ],
       "evidence": [
         {
@@ -36621,6 +36780,11 @@
           "line": 1310,
           "section": "Sidekick configuration fields"
         }
+      ],
+      "implemented_scopes": [],
+      "native_evidence": [
+        "WORKBENCH/evidence/native-draft2-debug/copilot-sidekick-project-ignored.json",
+        "WORKBENCH/evidence/native-draft2-debug/copilot-sidekick-user-ignored.json"
       ],
       "record_kind": "feature",
       "counted_feature": true,
@@ -37919,12 +38083,12 @@
       "scope": [
         "project"
       ],
-      "adapter": null,
+      "adapter": "CLI/internal/config/native_copilot_inherited_skills.go",
       "version_constraint": "=1.0.83",
-      "disposition": "mapping-pending",
-      "native_status": "unverified",
+      "disposition": "portable-mapping",
+      "native_status": "bounded-inherited-skill-execution",
       "limitations": [
-        "Artifact or setting mapping remains incomplete; this is implementation work, not a native limitation."
+        "Copilot inherits parent .github/skills, .agents/skills, and .claude/skills up to the nearest Git root. A nested Git repository stops inheritance. Local definitions can shadow inherited names. Child import never captures parent assets; configure the parent through its explicit --root. Packages remain complete at their owning root."
       ],
       "evidence": [
         {
@@ -37935,6 +38099,14 @@
           "line": 1104,
           "section": "Skill locations"
         }
+      ],
+      "validation_source": "CLI/internal/config/native_copilot_skill_import.go",
+      "implemented_scopes": [
+        "project"
+      ],
+      "native_evidence": [
+        "WORKBENCH/conformance/verify_copilot_parent_skills.py",
+        "docs/COPILOT_PARENT_SKILLS.md"
       ],
       "record_kind": "feature",
       "counted_feature": true,
@@ -40409,12 +40581,12 @@
       "scope": [
         "user"
       ],
-      "adapter": null,
+      "adapter": "CLI/internal/config/native_user_skill_import.go",
       "version_constraint": "=1.0.83",
-      "disposition": "mapping-pending",
-      "native_status": "unverified",
+      "disposition": "artifact-mapping",
+      "native_status": "bounded-user-skill-execution",
       "limitations": [
-        "Artifact or setting mapping remains incomplete; this is implementation work, not a native limitation."
+        "Import reads skills only from the explicitly selected --native-home: ~/.copilot for personal skills or ~/.agents for shared skills. Apply targets the explicitly selected Copilot home. Native evidence covers both source locations, user discovery from a separate workspace, asset execution, updates, and removal. Source bytes, executable assets, and portable policy are preserved. Complete-package and native-name conflicts refuse; backups stay in private state outside active packages. Other homes, inherited directories, project precedence, and live reload are not established."
       ],
       "evidence": [
         {
@@ -40425,6 +40597,14 @@
           "line": 1106,
           "section": "Skill locations"
         }
+      ],
+      "validation_source": "CLI/internal/config/native_user_skill_import.go",
+      "implemented_scopes": [
+        "user"
+      ],
+      "native_evidence": [
+        "WORKBENCH/conformance/verify_copilot_user_skills.py",
+        "docs/COPILOT_USER_SKILLS.md"
       ],
       "record_kind": "feature",
       "counted_feature": true,
@@ -42639,14 +42819,17 @@
       "native": "behavior",
       "category": "native-configuration",
       "scope": [
+        "project",
         "user"
       ],
       "adapter": null,
       "version_constraint": "=1.0.83",
-      "disposition": "mapping-pending",
-      "native_status": "unverified",
+      "disposition": "native-limitation",
+      "native_status": "bounded-acp-native-ignored",
       "limitations": [
-        "Artifact or setting mapping remains incomplete; this is implementation work, not a native limitation."
+        "Pinned Copilot logs unknown field ignored: sidekick in project and user agent definitions, including with --experimental.",
+        "The ACP probe discovers the agent but starts no sidekick; this does not establish behavior in other versions or interfaces.",
+        "Required sidekick content remains refused by the adapter."
       ],
       "evidence": [
         {
@@ -42657,6 +42840,11 @@
           "line": 1309,
           "section": "Sidekick configuration fields"
         }
+      ],
+      "implemented_scopes": [],
+      "native_evidence": [
+        "WORKBENCH/evidence/native-draft2-debug/copilot-sidekick-project-ignored.json",
+        "WORKBENCH/evidence/native-draft2-debug/copilot-sidekick-user-ignored.json"
       ],
       "record_kind": "feature",
       "counted_feature": true,
@@ -44581,13 +44769,14 @@
       "scope": [
         "user"
       ],
-      "adapter": "CLI/internal/config/native.go",
+      "adapter": "CLI/internal/config/native_selection.go",
       "version_constraint": "=1.0.83",
-      "disposition": "security-evidence-required",
-      "native_status": "unverified",
+      "disposition": "native-limitation",
+      "native_status": "bounded-local-network-mismatch",
       "limitations": [
-        "A declared validator is not a tested field mapping.",
-        "Concrete values, scope, authority, and native behavior still require checks."
+        "Pinned Copilot keeps sandbox-local abstract Unix sockets and IPv4 TCP, IPv6 TCP, and UDP loopback available when allowOutbound and allowLocalNetwork are false.",
+        "Filesystem denial can hide selected host Unix socket paths but cannot deny all local connection classes.",
+        "Portable network.local deny remains refused. Other versions and runtimes remain unverified."
       ],
       "evidence": [
         {
@@ -44599,9 +44788,11 @@
           "section": "User settings (`~/.copilot/settings.json`)"
         }
       ],
-      "validation_source": "CLI/internal/config/native_types.go",
-      "implemented_scopes": [
-        "user"
+      "implemented_scopes": [],
+      "validation_source": "CLI/internal/config/native.go",
+      "native_evidence": [
+        "WORKBENCH/conformance/verify_copilot_local_network.py",
+        "WORKBENCH/evidence/2026-09-10-copilot-local-classes/result.json"
       ],
       "record_kind": "feature",
       "counted_feature": true,
@@ -45807,12 +45998,14 @@
       "scope": [
         "user"
       ],
-      "adapter": null,
+      "adapter": "CLI/internal/config/native.go",
       "version_constraint": "=1.0.83",
-      "disposition": "mapping-pending",
+      "disposition": "artifact-mapping",
       "native_status": "unverified",
       "limitations": [
-        "Artifact or setting mapping remains incomplete; this is implementation work, not a native limitation."
+        "Import and projection use the registered JSONC configuration file with setting ownership.",
+        "Each setting retains its own validation and native evidence requirements.",
+        "Unknown optional settings remain inactive; required unmapped settings and excluded authority refuse activation."
       ],
       "evidence": [
         {
@@ -45831,6 +46024,13 @@
           "line": 397,
           "section": "What you can safely delete"
         }
+      ],
+      "validation_source": "CLI/internal/config/native_selection.go",
+      "implemented_scopes": [
+        "user"
+      ],
+      "native_targets": [
+        "<scope-root>/settings.json"
       ],
       "record_kind": "feature",
       "counted_feature": true,
@@ -49681,7 +49881,7 @@
       "disposition": "artifact-field-mapping",
       "native_status": "native-discovery-only",
       "limitations": [
-        "The pinned native CLI installs the unchanged Agent Plugins 1.0.0 skill fixture from a local marketplace. Enable, reload, disable, and package preservation are verified. Git fetching is tested separately over loopback HTTP, including a pinned Codex tag and Copilot default branch. Stdio MCP execution and native approvals have separate component evidence. Public HTTPS/SSH services, authentication, automatic updates, other package components, per-server overlays, and arbitrary third-party packages need separate evidence. Native trust and package installation remain external. Copilot 1.0.83 does not preserve unknown environment placeholders and leaves PLUGIN_DATA literal in the tested session environment value; full Agent Plugins environment conformance is not verified. The OpenAI GitHub 0.1.11 package can install and expose its HTTP MCP entry while its bearer_token_env_var is ignored. Do not infer authentication or OpenAI app support from successful installation."
+        "The pinned native CLI installs the unchanged Agent Plugins 1.0.0 skill fixture from a local marketplace. Enable, reload, disable, and package preservation are verified. Git fetching is tested separately over loopback HTTP, including a pinned Codex tag and Copilot default branch. Stdio MCP execution and native approvals have separate component evidence. Public HTTPS/SSH services, authentication, automatic updates, other package components, per-server overlays, and arbitrary third-party packages need separate evidence. Native trust and package installation remain external. Copilot 1.0.83 does not preserve unknown environment placeholders and leaves PLUGIN_DATA literal in the tested session environment value; full Agent Plugins environment conformance is not verified. Copilot 1.0.83 ignores the OpenAI GitHub 0.1.11 bearer_token_env_var. The repository package adds an Authorization environment reference that passes local and public authenticated discovery in both pinned clients. GitHub write operations and OpenAI app support need separate evidence and authorization."
       ],
       "evidence": [
         {
@@ -49707,12 +49907,13 @@
         "user"
       ],
       "native_evidence": [
+        "WORKBENCH/evidence/native-draft2-debug/copilot-github-shared-header-missing.json",
+        "WORKBENCH/evidence/native-draft2-debug/copilot-github-shared-header-present.json",
+        "WORKBENCH/evidence/native-draft2-debug/native-public-github-plugin-copilot-final-complete.json",
         "WORKBENCH/evidence/plugin-standard/copilot-git-mcp-reviewed-project.json",
         "WORKBENCH/evidence/plugin-standard/copilot-git-mcp-reviewed-user.json",
         "WORKBENCH/evidence/plugin-standard/copilot-selection-mcp-reviewed-project.json",
-        "WORKBENCH/evidence/plugin-standard/copilot-selection-mcp-reviewed-user.json",
-        "WORKBENCH/evidence/project-tools/github-copilot-auth-missing.json",
-        "WORKBENCH/evidence/project-tools/github-copilot-auth-present-first.json"
+        "WORKBENCH/evidence/plugin-standard/copilot-selection-mcp-reviewed-user.json"
       ],
       "record_kind": "feature",
       "counted_feature": true,

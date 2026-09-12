@@ -220,8 +220,31 @@ A later local-model fixture gives direct evidence for those two classes: safe
 to the model without an approval request. The native thread reports `untrusted`,
 the approval key is omitted, and project configuration is disabled. Mandatory
 portable `ask` therefore remains refused for this tested mode.[^15] Timeout,
-disconnect, composed shell commands, and background descendants still require
-complete scenarios. Native `on-request` remains a separate native setting.[^12]
+disconnect, and broader built-in coverage still require complete scenarios.
+Native `on-request` remains a separate native setting.[^12]
+
+A later local-provider matrix closes three command cases. In the same omitted-key
+untrusted configuration, `codex exec` has no approval channel and runs the
+fixture command. An app-server preflight reports the effective `untrusted`
+approval policy and fixture model; the disabled project model remains absent.
+This is a correlated unattended counterexample, so mandatory portable `ask`
+must remain refused. Interactive denial of both `A && B` and `A & B` produces
+one declined command item and no effect from either process. This establishes
+denial before the tested sequential and background descendants.
+
+An unanswered approval remains pending for the full five-second observation
+window. Codex stays alive and neither command starts. The fixture then sends an
+explicit denial and receives one declined terminal item. This does not prove a
+native timeout at a longer duration; it shows that no native timeout occurred
+within the measured window. In the disconnect case, the approval client exits
+without a response. Codex terminates and neither process writes an effect.
+One further case approves and starts a Python command. The parent starts a
+child with a new process session and writes its own effect. Codex reports the
+command item as completed before the client disconnects. The delayed child
+effect remains absent after the disconnect and an additional observation
+window. This verifies cleanup of the tested detached descendant at command
+completion. It does not establish cleanup for every shell, runtime, or process
+escape method.
 
 The Copilot local-network probe distinguishes host TCP, host filesystem Unix
 sockets, host abstract Unix sockets, sandbox abstract Unix sockets, and sandbox
@@ -1143,7 +1166,7 @@ The [runner](../WORKBENCH/conformance/run_native_codex_mcp_hooks.py) uses Codex
 `0.154.0`, binary SHA256
 `3188814c35471432d4123203e0eb38e5bddc60226e3d7ddf0e59e649ea140022`.
 It uses a deterministic local Responses provider, a local stdio MCP server,
-and separate temporary homes under `/mnt/DATA/tmp`. No real credentials or
+and separate homes under the system temporary directory. No real credentials or
 external model are used. Native plugin discovery is disabled in final runs.
 The MCP connection and native execution policy are explicit fixture setup;
 this runner does not claim to project or verify the full MCP configuration.
@@ -2298,3 +2321,196 @@ semantic feature counts and release gates are unchanged.
 Current skill and instruction regressions use `-user-instructions` receipts.
 The combined record is `verification-copilot-user-instructions-final.json`.
 The wider milestone remains incomplete.
+
+## GitHub instruction reference base
+
+The [GitHub instruction audit](COPILOT_GITHUB_INSTRUCTIONS.md) reproduced a
+policy-loading change after import and projection through a root canonical
+link. Copilot loaded the root `policy.md` instead of `.github/policy.md`.
+Draft.2 now retains a GitHub body with potential references as native content
+and uses the existing fixed root binding for the separate core. Existing
+policy and source paths remain protected. Ambiguous older core references
+and conflicting root artifacts refuse before writes.
+
+Twelve native sessions cover link and regular-root relocation, combined root
+references, updates, and removal. Eight root regression sessions check the
+previous cases. The source inventory remains unchanged; eleven mappings remain
+pending. The combined check uses `verification-copilot-github-instructions-final.json`.
+This fixes one remaining mapping and does not complete the wider milestone.
+
+## Whole user skill packages
+
+The [user skill audit](COPILOT_USER_SKILLS.md) reproduced package mixing during
+user import and adoption in both adapters. Complete-package comparisons now
+refuse those combinations while permitting identical imports and owned
+updates. Copilot native-name conflicts refuse before writes. User import
+removes an empty layout marker and refuses to select an existing nonportable
+system package. User skill backups now use private state outside active
+packages, with final-write rollback coverage.
+
+Eight Copilot sessions verify personal and shared user sources, relocation,
+asset execution, updates, and removal from a separate runtime workspace. The
+initial fixture's project fallback and command-approval mismatch remain
+recorded. The two user locations now have bounded mappings in the coverage
+map. Nine mappings and the wider security gates remain open. The combined
+record is `verification-copilot-user-skills-final.json`.
+
+## Settings file coverage and sidekick scope
+
+Two coverage regressions failed before this correction. The `settings.json`
+artifact remained pending despite the existing import, projection, ownership,
+and typed setting paths. Sidekick fields had user scope only, although the
+command reference places them in agent definitions. The coverage builder now
+links the settings artifact to compiled user setting targets and records both
+project and user scope for sidekick fields. Sidekick activation remains pending.
+
+The source receipt (`WORKBENCH/evidence/native-draft2-debug/copilot-settings-sidekick.sources.json`)
+retains the live GitHub index and both configuration and command references.
+The frozen 1,679 source entries and 1,379 semantic feature identifiers remain
+unchanged. Eight mappings remain pending. This count correction does not
+complete any individual setting's native evidence requirements.
+
+The repeated terminal test (`WORKBENCH/evidence/native-draft2-debug/copilot-settings-artifact.json`)
+uses the current Go sources with Copilot `1.0.83`. Three fresh sessions verify
+initial settings, updates, and removal of the status command. Native session
+input, terminal output, and status command events agree. Settings remain private
+and preserve their values through reimport. The adapter leaves native state
+unchanged. The [verifier](../WORKBENCH/conformance/verify_copilot_settings.py)
+and six mutation tests reject stale updates, wrong context, reused sessions,
+missing terminal evidence, and execution after removal. The combined check is
+`verification-copilot-settings-final.json`. No adapter support claim changes.
+
+The sidekick follow-up found a native parser limitation. Copilot `1.0.83` logs
+`unknown field ignored: sidekick` for both project and user agent definitions.
+This also occurs with `--experimental`. The agent is discovered and the parent
+turn completes, but there is no child request, approval, or marker. The original
+three failed activation probes remain in the evidence directory. The
+`copilot-sidekick-{project,user}-ignored.json` receipts retain the native logs
+and frozen runners. Their verifier and four mutation tests pass. The three
+sidekick fields now have a version-bound native limitation disposition, with
+no implemented scope. Five mappings remain pending. Other native interfaces
+and versions remain unverified.
+
+## Global canonical configuration follow-up
+
+The global canonical source is `$HOME/.agents`.
+That location currently uses the separate `dot-agents` format and has no
+Open-Dot-Agents manifest. Its files remain unchanged.
+
+[Global source selection](GLOBAL_CONFIGURATION.md) now supports init, validate,
+import, plan, apply, and sync. The starter uses one core instruction file and
+fixed user bindings for Codex and Copilot. Global defaults use user scope;
+project values override them according to native field rules. Draft.2 project
+preflight checks global portable requirements and refuses combined security
+requirements that it cannot enforce. Source ownership and private user
+transactions remain enforced. Tests cover rollback, conflict refusal,
+reference loss, unsupported versions, legacy-format preservation, and direct
+shared skill discovery without native package copies.
+
+The current global receipts are `global-config-codex-final.json` and
+`global-config-copilot-streaming-final.json`. They contain six native sessions
+with correlated model requests and native output. They verify global and
+project instruction loading, shared skill discovery, and Codex model override
+and fallback. Copilot BYOK requires an explicit model environment variable;
+its model precedence is not claimed. Previous Copilot attempts remain stored:
+missing provider model, JSONC parsing in the probe, and missing streamed native
+output. The verifier rejects the attempt that lacked native output even though
+the earlier probe marked its narrower request checks as passed.
+
+The earlier user-skill and settings receipts are historical after the global
+Go changes. Their source hashes must not be presented as current. The global
+interim combined check correctly rejected an old stable CLI source receipt.
+`verification-global-final.json` selects the new stable CLI receipt and checks
+the current global evidence and sidekick limitation evidence. No adapter support
+or production-readiness claim changes. Migration of the existing home format
+remains separate.
+
+## Codex keymap and absent setting audit
+
+The [keymap audit](CODEX_KEYMAP.md) reproduced a schema-to-runtime mismatch.
+The adapter accepted `ctrl+y`; pinned Codex refused it. The Go guard now
+uses the native key grammar for field selection and direct value validation.
+It preserves original binding values. Tests cover aliases, alternatives,
+empty unbindings, misplaced and duplicate modifiers, Unicode rejection, and
+the two-stroke limit. Unicode case folding must not turn the Kelvin sign
+into an accepted ASCII key.
+
+Eight terminal sessions pass with current Go source hashes: four user cases
+in `codex-keymap-user-global-action-probe.json` and four project cases in
+`codex-keymap-project-final.json`. The keymap verifier and six mutation tests
+check editor effects, process identity, key timing, roundtrip values,
+unbinding, and unchanged external authority. The gap verifier and five mutation
+tests cover six native turns and two rejected configurations. Reasoning and
+MCP placement fields are ignored by the pin; the old rollout reminder field
+is rejected. Their coverage dispositions now record native limitations.
+
+The four Codex rows are resolved without changing the 1,679 source entries
+or 1,379 semantic features. One mapping remains pending. Broader security and
+production gates remain open. Earlier global, user skill, and settings receipts
+are historical after the keymap Go guard. The combined
+`verification-codex-keymap-final.json` selects current source receipts.
+
+## Copilot parent skill inheritance
+
+The final unwritten coverage mapping was Copilot parent skill discovery. Native
+`1.0.83` probes show that `.github/skills`, `.agents/skills`, and
+`.claude/skills` packages are inherited from ancestors. A local package with
+the same name wins. A nested Git repository stops the inheritance boundary.
+
+The adapter now maps an explicitly selected parent root to that root's
+canonical `.agents/skills` packages. A descendant plan reports ancestor
+discovery as external and does not enumerate, copy, or own the parent package.
+Import at the child root leaves both the canonical parent and original native
+parent assets unchanged. Configure the owner with its explicit `--root`.
+
+The current `copilot-parent-skills-final.json` receipt covers source import,
+canonical relocation, a parent asset update, a child override, fallback after
+override removal, and a nested Git boundary. Six native sessions have distinct
+session IDs, correlated skill loads and command approvals, and observable asset
+effects. Six additional catalogue probes establish all three parent locations,
+local precedence, and repository boundaries. The verifier and six mutation
+tests pass. The first lifecycle attempt used an incorrect evidence field and
+remains stored.
+
+Coverage now has zero `mapping-pending` semantic features while preserving
+1,679 source rows and 1,379 semantic features. This is a mapping inventory
+checkpoint, not milestone completion. The [milestone audit](NATIVE_MILESTONE_AUDIT.md)
+keeps 233 validator declarations, 82 security evidence gates, native behavior,
+authenticated GitHub MCP behavior, and release support requirements open.
+
+## Public GitHub plugin MCP discovery
+
+The project package uses the public endpoint from the pinned OpenAI
+GitHub plugin. The direct receipt (`WORKBENCH/evidence/native-draft2-debug/public-github-mcp-readonly-probe.json`)
+records authenticated `initialize` and `tools/list` responses. The
+native receipt (`WORKBENCH/evidence/native-draft2-debug/native-public-github-plugin-shared-auth.json`)
+records Codex `0.154.0` installation, enablement, MCP startup, and model tool
+injection. Both paths expose the same 47 tool names, including `get_me`.
+
+Codex represents the server as one `mcp__github` namespace and converts each
+MCP input schema to a Responses API function `parameters` object. The native
+session reached one correlated `ready` event before the turn. The local model
+returned the fixture marker and did not call a GitHub tool. The run used the
+existing `gh` keyring credential only in process memory. Evidence contains no
+credential value or hash. No remote write operation was called.
+
+Two retained failed runs found test defects: one counted the namespace as one
+tool, and one checked MCP `inputSchema` names after Codex had converted them.
+A third retained run found that plugin installation correctly changes native
+configuration before the session. The final runner records the post-install
+configuration hash and checks that the session does not change that file.
+
+The verifier compares direct and native tool sets, source provenance, the
+pinned binary, runner snapshots, startup and completion thread IDs, schemas,
+approvals, and tool-call events. Eight mutation tests prove that these checks
+reject lost tools, lost schemas, event mismatch, tool calls, credential flags,
+and source changes. Authorized read calls remain open.
+
+Copilot ignores the upstream `bearer_token_env_var`. A shared compatibility
+mapping adds `Authorization: Bearer ${GITHUB_PAT_TOKEN}` and keeps the Codex
+field. Four local native sessions cover both clients with the variable present
+and absent. Authenticated discovery occurs only when the variable is present.
+The original upstream MCP file digest remains in provenance. This removes the
+need for a second package copy. A public Copilot session exposes the same 47
+tools as the direct handshake and Codex session. Copilot rewrites its private
+first-launch state while it keeps the exact trusted folder and stores no token.

@@ -1,8 +1,31 @@
 # Native configuration implementation
 
+Use [global configuration](GLOBAL_CONFIGURATION.md) for a canonical tree at
+`~/.agents`. The `--global` selector uses user scope with an explicit native
+destination. Project values can override applied user defaults where the
+native setting supports project scope. Portable requirements remain cumulative.
+
 The draft.2 implementation is incomplete. It adds a separate native profile and
 scope path without changing stable 1.0 or draft.1 security semantics. It does not
 mark Codex or Copilot fully supported.
+
+Codex keymaps use [native grammar validation](CODEX_KEYMAP.md) as well as the
+pinned schema. Three obsolete documented fields have evidenced native
+limitations. [Inherited Copilot skills](COPILOT_PARENT_SKILLS.md) use the
+explicit owning-root mapping. No inventory mappings remain unwritten, but the
+[native milestone audit](NATIVE_MILESTONE_AUDIT.md) keeps behavior, security,
+and release gates separate from that count.
+
+The [user skill audit](COPILOT_USER_SKILLS.md) covers explicitly selected
+personal and shared Copilot skill sources. Whole-package conflict checks apply
+to user import and adoption. User skill backups stay outside active packages
+in private XDG state. Project skills still use shared direct discovery.
+
+The [GitHub instruction reference audit](COPILOT_GITHUB_INSTRUCTIONS.md)
+covers native `@` references in `.github/copilot-instructions.md`. Draft.2
+preserves those bodies as native artifacts with a separate canonical root
+binding. Older imported core references need an explicit reference-base review
+before projection through a root compatibility link.
 
 Use `SPEC/examples/native-draft` as a project example:
 
@@ -78,6 +101,9 @@ Excluded authority and credential field names are recorded without values in
 established MCP fields to the portable core and keep other fields native.
 
 Copilot user import also reads recognized legacy preferences from `config.json`.
+The coverage map links the `settings.json` artifact to the compiled user
+configuration targets. This file mapping does not establish native behavior
+for every setting. Each field retains its own validation and evidence limits.
 Pinned Copilot `1.0.83` migrates these preferences at startup: a legacy root
 replaces a matching `settings.json` root, including a whole object. Import uses
 that precedence without changing either native file. Authentication, trust,

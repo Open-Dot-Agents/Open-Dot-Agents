@@ -1,10 +1,11 @@
 # Project GitHub plugin
 
-The project contains the unchanged OpenAI GitHub plugin `0.1.11` at
+The project contains the OpenAI GitHub plugin `0.1.11` at
 [`plugins/github`](plugins/github). Its source is
 [`openai/plugins` at `d416fd5a43426019986b1e489506db3db66dee3d`](https://github.com/openai/plugins/tree/d416fd5a43426019986b1e489506db3db66dee3d/plugins/github).
-[`provenance.json`](provenance.json) records all six source files and their
-hashes. Upstream declares MIT in the manifest but supplies no license file in
+[`provenance.json`](provenance.json) records all six local files, their hashes,
+and the MCP compatibility transformation with its upstream hash. Upstream
+declares MIT in the manifest but supplies no license file in
 the pinned package or repository root. No license notice was invented.
 
 [`profile.json`](profile.json) describes the draft.2 native selection source.
@@ -39,20 +40,22 @@ GitHub Enterprise. The existing GitHub connector is connected in the current
 session; a read-only lookup of this repository passed. That connector result
 does not prove that the newly installed package made an external MCP call.
 
-Direct HTTP MCP uses `GITHUB_PAT_TOKEN` from the process environment. It is
-currently absent. No token is stored here. Use the connected GitHub app, or
-provide a token through the native environment before a new session. Native
+Direct HTTP MCP uses `GITHUB_PAT_TOKEN` from the process environment. The
+upstream Codex `bearer_token_env_var` field remains present. The adjacent
+`Authorization` environment reference is the tested Copilot compatibility
+mapping. No token is stored here. Use the connected GitHub app, or provide a
+token through the native environment before a new session. Native
 authentication, project trust, and tool approvals remain in effect. This setup
 does not authorize publication, issue comments, merges, or other remote writes.
 
 ## Copilot limit
 
-Copilot `1.0.83` can accept the package and list its HTTP MCP component while
-ignoring `bearer_token_env_var`. The local authentication probe received an
-unauthenticated request even when the test token was present. Native install
-success is insufficient to activate this package as a working conversion.
-The OpenAI app file also has no established Copilot mapping. No Copilot
-selection or replacement GitHub MCP server was enabled by this setup.
+Copilot `1.0.83` ignores `bearer_token_env_var`. It expands the added
+`Authorization: Bearer ${GITHUB_PAT_TOKEN}` header. Local native probes verify
+authenticated discovery with the variable present and no authenticated tool
+discovery when it is absent. Codex accepts the same combined file. The OpenAI
+app file still has no established Copilot mapping. Public authenticated discovery
+also passed; see docs/PLUGIN_STANDARD.md for the bounded result.
 
 The bundled OpenAI plugin validator rejects the upstream app `required` fields.
 The failure is retained. The package was not changed to satisfy that validator;
