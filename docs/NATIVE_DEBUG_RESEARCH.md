@@ -2475,7 +2475,7 @@ remains stored.
 Coverage now has zero `mapping-pending` semantic features while preserving
 1,679 source rows and 1,379 semantic features. This is a mapping inventory
 checkpoint, not milestone completion. The [milestone audit](NATIVE_MILESTONE_AUDIT.md)
-keeps 233 validator declarations, 82 security evidence gates, native behavior,
+keeps 234 validator declarations, 81 security evidence gates, native behavior,
 authenticated GitHub MCP behavior, and release support requirements open.
 
 ## Public GitHub plugin MCP discovery

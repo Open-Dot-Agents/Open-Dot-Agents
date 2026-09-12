@@ -78,7 +78,51 @@ executables from `PATH`, or from an absolute `CODEX_BIN` or `COPILOT_BIN`
 override, and then enforce the recorded SHA256 pin. They do not depend on a
 developer-specific workspace or home path.
 
-Work remains local. Component commits preserve existing user configuration
+Remote publication must be checked separately for the root and each component.
+Component commits preserve existing user configuration
 and historical evidence. Claude Code native testing remains skipped. No runtime
 launcher or policy mediation service has been added. These commits do not
 establish current native support or release eligibility.
+
+## Draft.2 reproduction checkpoint
+
+The clean source archive at root `0aeff47`, CLI `5b4f3b0`, SPEC `2604896`,
+and Workbench `25eda52` passes the 26 stable specification checks, coverage
+regeneration, compatibility checks, and pinned project-extension checks.
+This archive contains committed files only. It is not a remote clone test.
+
+The uncached Go run fails the alternate-mount check in this execution sandbox.
+The 103 Workbench task tests have one error because local socket creation is
+blocked. These runs do not establish a passing full suite.
+
+The conformance verifier tests have a separate reproduction defect. They read
+ignored receipts under `WORKBENCH/evidence/native-draft2-debug`. The local
+workspace passes 126 tests; a clean archive reports missing receipt files.
+Separate deterministic verifier fixtures from native evidence artifacts before
+claiming that this suite works from a fresh checkout. Keep the existing
+mutation assertions. Synthetic fixtures must never count as native evidence.
+
+Of the 234 validator declarations, 37 have native or scope evidence links and
+197 have neither. All 234 retain `native_status: unverified`. A link can cover
+only one scope or an inactive field; it does not establish current behavioral
+support. All 81 security requirements have no native or scope evidence link in
+the coverage records. This does not mean that no related probes exist.
+
+The next native run must check binary hashes before execution. The available
+Codex command reports `0.154.0`; the available Copilot command reports
+`1.0.84-4`, which differs from the required `1.0.83` pin. Do not substitute it
+for the pinned campaign. Use an explicitly selected verified binary.
+
+GitHub DNS access remains unavailable from this execution environment.
+Remote component reachability and fresh recursive-clone validation remain
+open. Claude native tests remain deferred, and no support status changes.
+
+Eight verifier test families now use explicit synthetic inputs: global
+configuration, Codex setting gaps, Copilot sidekick, and Copilot root, user,
+canonical, GitHub, and agent instructions. All 40 tests pass in the clean
+archive without ignored receipts. The existing mutation checks remain, and
+the global tests add a valid Copilot case. The full workspace verifier suite
+passes 127 tests. Other verifier families still need independent fixtures.
+The unchanged global native verifier accepts the retained historical receipts
+but reports both vendors ineligible for current support because source hashes
+differ. Synthetic unit-test inputs do not change that result.

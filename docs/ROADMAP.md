@@ -1,5 +1,24 @@
 # Roadmap
 
+## Current draft.2 cycle
+
+Complete Codex/Copilot global and scoped configuration evidence before adding
+more native feature families. Keep Claude native tests deferred and the
+three-adapter release gate unchanged.
+
+1. Verify remote component commits and a fresh recursive checkout.
+2. Remove the deterministic verifier tests' dependency on ignored receipts.
+   Preserve mutation assertions with explicit synthetic test fixtures. Keep
+   real native receipts in the separate evidence verification path.
+3. Run global defaults, project overrides, fallback, inherited skills,
+   conflicts, relocation, removal, and rollback against the pinned binaries.
+4. Review the 234 validator declarations by activation and scope. Review the
+   81 security requirements separately. Retain unsafe-mapping refusals.
+5. Publish tested component commits before the root integration reference.
+
+See the [milestone audit](NATIVE_MILESTONE_AUDIT.md) for current reproduction
+failures and the difference between evidence links and behavior verification.
+
 ## Security and feature standardization
 
 The [inventory](FEATURE_INVENTORY.md) and [security draft](SECURITY_PROFILES.md)
