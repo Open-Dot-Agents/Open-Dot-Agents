@@ -15,3 +15,6 @@ Keep `.agents/AGENTS.md` as the canonical repository instructions and use root
 and nested compatibility files for native discovery and scoping. Keep the
 manifest, tool catalogue, skills, and implementation state under `.agents/`.
 Do not mark an adapter supported without version-pinned native harness evidence.
+
+
+If .agents/manifest.json selects permissions and .agents/permissions/development.json selects practical enforcement, read .agents/guardrails/development.md and follow the development decisions before work.

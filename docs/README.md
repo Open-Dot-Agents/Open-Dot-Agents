@@ -7,6 +7,7 @@ repository root keeps only the primary landing page and non-Markdown metadata.
 
 - [Installation](INSTALL.md)
 - [Migration](MIGRATION.md)
+- [Development permissions and guardrails](DEVELOPMENT_PRESET.md)
 - [Release process](RELEASING.md)
 - [Versioning](VERSIONING.md)
 - [Changelog](CHANGELOG.md)

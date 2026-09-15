@@ -1,0 +1,13 @@
+{
+  "enforcement": "practical",
+  "version": "1",
+  "preset": "development",
+  "project_work": "allow",
+  "local_commits": "allow",
+  "external_changes": "ask",
+  "destructive_work": "ask",
+  "protected_paths": [
+    ".env",
+    "secrets"
+  ]
+}

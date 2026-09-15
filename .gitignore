@@ -11,6 +11,11 @@
 /.codegraph/
 *.backup*
 
+# Local development authority and protected paths
+/.agents/state/
+/.env
+/secrets
+
 # Python test and coverage caches
 __pycache__/
 *.py[cod]

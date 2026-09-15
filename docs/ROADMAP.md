@@ -1,5 +1,24 @@
 # Roadmap
 
+## Development preset (active)
+
+Deliver one editable development policy: automatic project edits, tests,
+builds, formatting, and local commits; approval for push, publish, deployment,
+and other external changes. See [setup and current status](DEVELOPMENT_PRESET.md).
+
+1. Practical mode separates agent guidance from native settings. Starter,
+   migration, validation, projection, update, and removal are implemented.
+2. Codex uses a workspace profile and user-reviewed on-request approval.
+   Copilot receives guidance while its native permissions remain unchanged.
+3. Four Codex boundary checks passed through portable apply followed by native
+   execution. Command-network and protected-read results remain separate from
+   operation-level guidance. Further native coverage and Copilot evidence are
+   still required; no full adapter support is claimed.
+4. Keep strict mode fail-closed. A strict policy cannot become guidance
+   without an explicit configuration change.
+
+Native execution evidence remains separate from deterministic lifecycle tests.
+
 ## Current draft.2 cycle
 
 Complete Codex/Copilot global and scoped configuration evidence before adding

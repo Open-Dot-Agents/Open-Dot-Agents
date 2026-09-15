@@ -31,7 +31,7 @@ jobs:
           python3 -m json.tool .agents/tools/llms-sources.json >/dev/null
       - name: Validate dogfood .agents tree
         working-directory: CLI
-        run: go run ./cmd/agents validate --root .. --format json
+        run: go run ./cmd/agents validate --experimental --root .. --format json
       - name: Check compatibility data
         run: python3 CLI/scripts/check_compatibility.py --skip-workbench-pins
       - name: Check native coverage classification and reproducibility

@@ -40,7 +40,7 @@ jobs:
         run: python3 SPEC/conformance/run.py
       - name: Canonical repository validation
         working-directory: CLI
-        run: go run ./cmd/agents validate --root .. --format json
+        run: go run ./cmd/agents validate --experimental --root .. --format json
       - name: All deterministic Workbench tests
         working-directory: WORKBENCH
         run: python3 -m unittest discover -s task/test -p '*_test.py'
