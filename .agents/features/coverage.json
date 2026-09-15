@@ -5,7 +5,7 @@
   "source_inventory": ".agents/features/codex-copilot.json",
   "source_sha256": "f41f70b081e3920822c125f90a1c27b5bea920061f74510ed20dc49c419ed310",
   "source_entries": 1679,
-  "coverage_records": 1397,
+  "coverage_records": 1396,
   "semantic_features": 1379,
   "milestone_features": 1355,
   "complete": false,
@@ -4524,7 +4524,7 @@
     "outside-milestone": 12,
     "portable-mapping": 6,
     "security-evidence-required": 81,
-    "syntax-reference": 18,
+    "syntax-reference": 17,
     "validator-declared": 234,
     "value-mapping": 7
   },
@@ -9000,45 +9000,6 @@
       "record_kind": "feature",
       "counted_feature": true,
       "milestone_scope": "linux-cli"
-    },
-    {
-      "id": "codex.29652d83c9e6ff491f85",
-      "vendor": "codex",
-      "context": "settings",
-      "native": "[permissions.<name>.filesystem.<name>].<name>",
-      "category": "native-configuration",
-      "scope": [
-        "project",
-        "user"
-      ],
-      "adapter": "CLI/internal/config/native_selection.go",
-      "version_constraint": "=0.154.0",
-      "disposition": "security-evidence-required",
-      "native_status": "unverified",
-      "limitations": [
-        "The compiled adapter refuses the parent setting in these scopes.",
-        "This is refusal coverage, not a field mapping or native enforcement claim."
-      ],
-      "evidence": [
-        {
-          "entry_id": "source-entry-1422",
-          "source": "codex-permissions",
-          "native_name": "`[permissions.<name>.filesystem.\"<path>\"].\"<subpath>\"`",
-          "url": "https://learn.chatgpt.com/docs/permissions.md",
-          "line": 184,
-          "section": "Configuration spec"
-        }
-      ],
-      "validation_source": "CLI/internal/config/native.go",
-      "implemented_scopes": [],
-      "gate_scopes": [
-        "project",
-        "user"
-      ],
-      "record_kind": "feature",
-      "counted_feature": true,
-      "milestone_scope": "linux-cli",
-      "setting_path": "permissions.<name>.filesystem.<name>.<name>"
     },
     {
       "id": "codex.29737d589ec3a180ff6c",
@@ -17943,7 +17904,18 @@
           "url": "https://learn.chatgpt.com/docs/config-file/config-reference.md",
           "line": 1607,
           "section": "config.toml"
+        },
+        {
+          "entry_id": "source-entry-1421",
+          "source": "codex-permissions",
+          "native_name": "`[permissions.<name>.filesystem].\"<path>\"`",
+          "url": "https://learn.chatgpt.com/docs/permissions.md",
+          "line": 183,
+          "section": "Configuration spec"
         }
+      ],
+      "previous_ids": [
+        "codex.a9975c43231b3c2dbfbd"
       ],
       "validation_source": "CLI/internal/config/native.go",
       "implemented_scopes": [],
@@ -21041,42 +21013,6 @@
       "record_kind": "feature",
       "counted_feature": true,
       "milestone_scope": "linux-cli"
-    },
-    {
-      "id": "codex.a9975c43231b3c2dbfbd",
-      "vendor": "codex",
-      "context": "settings",
-      "native": "[permissions.<name>.filesystem].<name>",
-      "category": "native-configuration",
-      "scope": [
-        "project",
-        "user"
-      ],
-      "adapter": null,
-      "version_constraint": "=0.154.0",
-      "disposition": "syntax-reference",
-      "native_status": "not-applicable",
-      "limitations": [
-        "Syntax or a value of the linked setting; not a separate setting, operation, or completed mapping."
-      ],
-      "evidence": [
-        {
-          "entry_id": "source-entry-1421",
-          "source": "codex-permissions",
-          "native_name": "`[permissions.<name>.filesystem].\"<path>\"`",
-          "url": "https://learn.chatgpt.com/docs/permissions.md",
-          "line": 183,
-          "section": "Configuration spec"
-        }
-      ],
-      "implemented_scopes": [],
-      "record_kind": "alias",
-      "counted_feature": false,
-      "milestone_scope": "linux-cli",
-      "setting_path": "permissions.<name>.filesystem.<name>",
-      "describes": [
-        "codex.86e10dce1dec2e3a4970"
-      ]
     },
     {
       "id": "codex.aa2a684cffd6890571d6",
@@ -27709,6 +27645,47 @@
           "line": 1954,
           "section": "config.toml"
         }
+      ],
+      "record_kind": "feature",
+      "counted_feature": true,
+      "milestone_scope": "linux-cli"
+    },
+    {
+      "id": "codex.ee40e04a75c70cfd5fdd",
+      "vendor": "codex",
+      "context": "settings",
+      "native": "permissions.<name>.filesystem.<name>.<name>",
+      "category": "native-configuration",
+      "scope": [
+        "project",
+        "user"
+      ],
+      "adapter": "CLI/internal/config/native_selection.go",
+      "version_constraint": "=0.154.0",
+      "disposition": "security-evidence-required",
+      "native_status": "unverified",
+      "limitations": [
+        "The compiled adapter refuses the parent setting in these scopes.",
+        "This is refusal coverage, not a field mapping or native enforcement claim."
+      ],
+      "evidence": [
+        {
+          "entry_id": "source-entry-1422",
+          "source": "codex-permissions",
+          "native_name": "`[permissions.<name>.filesystem.\"<path>\"].\"<subpath>\"`",
+          "url": "https://learn.chatgpt.com/docs/permissions.md",
+          "line": 184,
+          "section": "Configuration spec"
+        }
+      ],
+      "previous_ids": [
+        "codex.29652d83c9e6ff491f85"
+      ],
+      "validation_source": "CLI/internal/config/native.go",
+      "implemented_scopes": [],
+      "gate_scopes": [
+        "project",
+        "user"
       ],
       "record_kind": "feature",
       "counted_feature": true,

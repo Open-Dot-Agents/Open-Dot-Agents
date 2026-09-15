@@ -116,7 +116,6 @@ jobs:
       - name: Check compatibility including Workbench pins
         if: steps.workbench.outputs.available == 'true'
         run: python3 CLI/scripts/check_compatibility.py
-      - name: Test all deterministic Workbench checks
+      - name: Test deterministic checks without ignored local artifacts
         if: steps.workbench.outputs.available == 'true'
-        working-directory: WORKBENCH
-        run: python3 -m unittest discover -s task/test -p '*_test.py'
+        run: python3 WORKBENCH/conformance/check_clean_source.py

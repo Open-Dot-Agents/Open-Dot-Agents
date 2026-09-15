@@ -7,9 +7,11 @@ more native feature families. Keep Claude native tests deferred and the
 three-adapter release gate unchanged.
 
 1. Verify remote component commits and a fresh recursive checkout.
-2. Remove the deterministic verifier tests' dependency on ignored receipts.
-   Preserve mutation assertions with explicit synthetic test fixtures. Keep
-   real native receipts in the separate evidence verification path.
+2. Keep deterministic verifier tests independent of ignored receipts. All
+   verifier test families now use synthetic inputs. The clean-source CI check
+   copies source files without ignored artifacts and runs the deterministic
+   suites. Real native receipts remain in the separate evidence verification
+   path.
 3. Run global defaults, project overrides, fallback, inherited skills,
    conflicts, relocation, removal, and rollback against the pinned binaries.
 4. Review the 234 validator declarations by activation and scope. Review the

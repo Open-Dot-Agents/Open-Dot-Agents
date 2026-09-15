@@ -133,7 +133,7 @@ Coverage format version 3 separates records, features, and the Linux CLI milesto
 | `semantic_features`, `counts` | Records whose `counted_feature` value is true. |
 | `milestone_features`, `milestone_counts` | Counted features within the Linux CLI milestone. |
 | `record_kind`, `describes` | Identify a configuration value, path selector, or alias and link it to its setting. |
-| `setting_path` | A lookup path when a source uses TOML table notation around part of the field. |
+| `previous_ids` | Earlier coverage IDs that now resolve to this canonical setting. |
 | `validation_paths` | Compiled schema paths for a finite alias or a concrete named object. |
 | `native_targets` | Registry-defined destinations from the linked artifact capabilities. |
 | `milestone_scope`, `milestone_reason` | State an evidenced platform or client boundary. |
@@ -149,6 +149,16 @@ record and feature counts. Syntax and alias records retain source evidence but
 do not add features. Windows and desktop records have separate milestone
 boundaries. Desktop file handlers use user scope, as their source specifies.
 Managed policy remains external even when it is also outside the platform scope.
+
+Permissions table-key syntax now uses the same identity as its dotted setting
+path. The nested path is `permissions.<name>.filesystem.<name>.<name>`.
+The original table spelling remains in `evidence.native_name`. The old nested
+ID `codex.29652d83c9e6ff491f85` resolves to `codex.ee40e04a75c70cfd5fdd`.
+The old table alias `codex.a9975c43231b3c2dbfbd` is merged into
+`codex.86e10dce1dec2e3a4970`. Each target lists its old ID in `previous_ids`.
+The frozen inventory and its source assignments are unchanged. This correction
+removes one duplicate record; it does not change the semantic feature count
+or security support status.
 
 For undeclared children of a security setting, the map consults the compiled
 parent gate. `security-evidence-required` with `gate_scopes` records a refusal

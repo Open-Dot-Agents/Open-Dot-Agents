@@ -5,8 +5,8 @@ for plugins, skills, tools, and global configuration. The milestone is not
 complete. A zero count of unwritten mappings does not establish production
 readiness or native enforcement.
 
-The current inventory retains 1,679 original source rows, 1,397 coverage
-records, and 1,379 distinct semantic features. The 18 alias records do not add
+The current inventory retains 1,679 original source rows, 1,396 coverage
+records, and 1,379 distinct semantic features. The 17 syntax and alias records do not add
 features. The Linux CLI milestone contains 1,355 semantic features.
 
 | Requirement | Current evidence | Remaining work |
@@ -122,7 +122,40 @@ configuration, Codex setting gaps, Copilot sidekick, and Copilot root, user,
 canonical, GitHub, and agent instructions. All 40 tests pass in the clean
 archive without ignored receipts. The existing mutation checks remain, and
 the global tests add a valid Copilot case. The full workspace verifier suite
-passes 127 tests. Other verifier families still need independent fixtures.
+passes 127 tests. At that checkpoint, other verifier families still needed
+independent fixtures.
 The unchanged global native verifier accepts the retained historical receipts
 but reports both vendors ineligible for current support because source hashes
 differ. Synthetic unit-test inputs do not change that result.
+
+## Deterministic verifier follow-up
+
+All verifier test families now use explicit synthetic inputs. The remaining
+keymap, settings, skill, recursive instruction, trust-boundary, local-network,
+and public MCP tests no longer read ignored receipts. Existing mutation checks
+remain. The retained skill-refusal regression is checked by the native evidence
+verifier instead of the deterministic suite. Production verifier discovery
+excludes `_test.py` files and still checks production eligibility reporting.
+
+Run `python3 WORKBENCH/conformance/check_clean_source.py` from the superproject
+to copy tracked and new non-ignored source files into a temporary tree and run
+the deterministic checks there. The Verify workflow uses this command. It
+does not copy Git metadata or ignored local evidence. Before commit, this is
+a working-source reproduction check, not a remote checkout check.
+
+The permissions coverage correction uses canonical dotted paths for table-key
+syntax and retains old IDs in `previous_ids`. One duplicate syntax record is
+merged. The 1,679 source rows, 1,379 semantic features, 234 validator declarations,
+and 81 security requirements remain unchanged. No native support is promoted.
+
+On 2026-09-15, the maintainer ran coverage regeneration and the clean-source
+check in the host terminal. The supplied output reports all checks passing:
+26 stable specification checks, 59 security draft cases, 40 native draft cases,
+both Go packages, repository validation, 56 coverage tests, compatibility
+consistency, 104 Workbench task tests, and 129 verifier tests. The host run
+passes the mount and TLS socket checks that the execution sandbox blocked.
+The regenerated coverage file was then checked locally against the reviewed
+output; both have SHA-256
+`e7bdbd89af11412aa1e70d234a756e95041655dd2456039673a1945bb66799a7`.
+Whitespace checks pass for the root, CLI, and Workbench changes. This is local
+working-source validation; remote CI and native support were not tested.
