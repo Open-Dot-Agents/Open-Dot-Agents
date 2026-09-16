@@ -10,14 +10,26 @@ and other external changes. See [setup and current status](DEVELOPMENT_PRESET.md
    migration, validation, projection, update, and removal are implemented.
 2. Codex uses a workspace profile and user-reviewed on-request approval.
    Copilot receives guidance while its native permissions remain unchanged.
-3. Four Codex boundary checks passed through portable apply followed by native
-   execution. Command-network and protected-read results remain separate from
-   operation-level guidance. Further native coverage and Copilot evidence are
-   still required; no full adapter support is claimed.
-4. Keep strict mode fail-closed. A strict policy cannot become guidance
-   without an explicit configuration change.
+3. The 2026-09-16 workflow baseline passed 28 required native cases: 20 Codex
+   cases and eight Copilot cases. Five Codex observations remain guidance-only.
+   This includes setup, adoption, updates, conflicts, removal, rollback,
+   project/user scope, relocation, and Codex local operations and boundaries.
+   See the [recorded versions and hashes](../WORKBENCH/evidence/DEVELOPMENT_WORKFLOWS.md).
+4. Add read-only `agents doctor --experimental --vendor codex|copilot` to
+   explain requested policy, disk configuration, and unknown session authority.
+   The command, lifecycle checks, clean-source gate, and refreshed
+   installed-binary campaign passed. See the recorded doctor acceptance.
+   Full adapter support remains false.
+5. Keep strict mode refused where native enforcement is not equivalent.
+   Keep automatic repairs, native smoke tests in doctor, user-home migration,
+   new profiles, Claude verification, and the broad settings/security audit
+   deferred. Publish component commits before root references only after
+   separate approval.
 
 Native execution evidence remains separate from deterministic lifecycle tests.
+The prior passing receipt remains historical evidence after source changes;
+it cannot qualify the new doctor implementation. Full adapter support is not
+claimed.
 
 ## Current draft.2 cycle
 
