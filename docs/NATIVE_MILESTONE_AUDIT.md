@@ -13,7 +13,7 @@ features. The Linux CLI milestone contains 1,355 semantic features.
 | --- | --- | --- |
 | Separate stable, draft.1, and experimental draft.2 contracts | Separate schemas and fixtures; combined stable, draft, and Go checks | Keep these checks passing during the remaining work. |
 | Source-linked feature dispositions | Reproducible coverage map; zero `mapping-pending`; frozen source hash retained | Review native behavior independently of these counts. |
-| Native setting validation | 234 `validator-declared` semantic features | These are declarations of validators, not complete native behavior proofs. Audit activation, scope, precedence, reload, and effects by family. |
+| Native setting validation | 233 `validator-declared` semantic features | These are declarations of validators, not complete native behavior proofs. Audit activation, scope, precedence, reload, and effects by family. |
 | Native security settings | 81 `security-evidence-required` features: 71 Codex and 10 Copilot | Establish safe native-only configurations and scope authority. Refuse conflicts with portable requirements. Do not treat missing tests as native limitations. |
 | Scoped ownership and transactions | Go tests cover shared homes, locking, conflicts, private backups, removal, rollback, and unchanged state on refusal | Maintain coverage when adding new settings or assets. Retest affected native paths against the final source. |
 | Skills, tools, and plugins | Direct discovery, package preservation, projection, selected native lifecycle receipts, and authenticated public GitHub MCP discovery through Codex and Copilot | Complete broader package families and authorized read-call behavior. Keep the required portable `mcp.envRef` refusal outside the tested package mapping. |
@@ -23,8 +23,8 @@ features. The Linux CLI milestone contains 1,355 semantic features.
 | External authority and operations | Trust, credentials, managed policy, account state, and live sessions remain external | Authentication, installation, scheduling, and execution require their own native prerequisites and evidence. Apply must not perform these operations. |
 | Release support and ratification | No new adapter support promotion or ratification | Existing release, compatibility, governance, and pinned native gates remain separate. |
 
-The 234 validator declarations comprise 164 Codex settings, 61 Copilot
-settings, seven Copilot MCP fields, and two Copilot agent-frontmatter fields.
+The 233 validator declarations comprise 164 Codex settings, 61 Copilot
+settings, seven Copilot MCP fields, and one Copilot agent-frontmatter field.
 The next audit should separate settings that already have relevant bounded
 receipts from settings whose effective behavior is still untested. Schema
 acceptance alone must not become an activation claim. The keymap parser defect
@@ -159,3 +159,39 @@ output; both have SHA-256
 `e7bdbd89af11412aa1e70d234a756e95041655dd2456039673a1945bb66799a7`.
 Whitespace checks pass for the root, CLI, and Workbench changes. This is local
 working-source validation; remote CI and native support were not tested.
+
+## Copilot agent-frontmatter `model` field audit (2026-09-16)
+
+The 234-item validator-declared backlog's smallest family, the two Copilot
+agent-frontmatter fields, was reviewed for activation instead of schema
+acceptance alone. A new `model-override` scenario in
+`WORKBENCH/conformance/run_native_copilot_agent.py` set the parent session's
+model and the fixture agent's frontmatter `model` to distinct, unambiguous
+values and captured every request the native Copilot 1.0.84-9 binary sent to a
+local synthetic OpenAI-compatible provider. The parent turn's request used the
+session default; the delegated child turn's request used the agent's own
+`model` field, confirming the native binary honors this documented override
+rather than only accepting it as valid YAML. `CLI/internal/config/native_copilot_agent.go`
+now records the `model` field as `artifact-field-mapping` /
+`bounded-fixture-execution` with evidence at
+`WORKBENCH/evidence/native-draft2-debug/copilot-agent-model-override-project.json`
+and `-user.json` (local, gitignored receipts; not committed). Regenerating
+`.agents/features/coverage.json` drops the validator-declared count from 234
+to 233 and both `--check` reproducibility and `check_compatibility.py` still
+pass with no other change.
+
+`reasoningEffort` remains `validator-declared`/`unverified`. The same
+experiment with `reasoningEffort: high` and a model name recognized as
+reasoning-capable did transmit a `reasoning_effort` request field, so the
+control reaches the wire protocol, but the transmitted value was `medium`
+instead of the declared `high` in this synthetic single-turn fixture. This
+does not establish a native defect: the documented precedence chain (explicit
+per-call value, a `subagents` override in `~/.copilot/settings.json`, the
+agent's own field, then the parent session's value, with a policy-dependent
+fallback when a declared value "can't be honored") gives several legitimate
+reasons an unrecognized synthetic model could fall back to a default effort.
+Closing this field needs a fixture built against a model name the harness
+recognizes as reasoning-capable with a known default, plus coverage of the
+`models` and `modelPolicy` fields the same documentation section defines but
+the current inventory does not yet track. This is left open for a follow-up
+audit slice rather than claimed prematurely.
