@@ -34,6 +34,39 @@ cd CLI
 go run ./cmd/agents plan --vendor codex --root ../SPEC/examples/native-draft --experimental --format json
 ```
 
+## Model selection
+
+Model selection (`model`, and its Codex-only sibling `model_provider` at user
+scope) needs no new portable schema field. Both harnesses already recognize
+`model` in the draft.2 native-registry allow-list at project and user scope
+(`CLI/internal/config/native_registry.go`), so a repository authors it exactly
+like any other native passthrough setting: a `config` artifact under
+`.agents/native/<namespace>/`. `SPEC/examples/native-model-selection` has a
+runnable fixture for each harness:
+
+```sh
+cd CLI
+go run ./cmd/agents apply --vendor codex --root ../SPEC/examples/native-model-selection/codex --experimental
+cat ../SPEC/examples/native-model-selection/codex/.codex/config.toml   # model = "gpt-5.5"
+
+go run ./cmd/agents apply --vendor copilot --root ../SPEC/examples/native-model-selection/copilot --experimental
+cat ../SPEC/examples/native-model-selection/copilot/.github/copilot/settings.json   # {"model": "gpt-5.5"}
+```
+
+Codex writes the requested `model` into `config.toml` at either scope; the
+Codex-only `model_provider` field currently activates at user scope only
+(Codex `0.154.0` ignores a project-scope `model_provider` override, so a
+required project artifact containing it refuses activation with an explicit
+diagnostic rather than silently dropping it). Copilot writes `model` into
+`settings.json` at either scope. Neither write proves the harness honors the
+requested model at runtime; that needs separate native evidence following the
+same process as the `reasoningEffort` and MCP `timeout` audits before this can
+be promoted out of `vendor-extension` in the
+[feature inventory](FEATURE_INVENTORY.md). See
+[decision 0003](decisions/0003-model-selection-native-profile.md) for why this
+supersedes the abstract `models` manifest field proposed in
+[decision 0002](decisions/0002-portable-models-and-agents.md).
+
 Native import can create a canonical tree or merge into an existing draft.2 tree.
 It adds disjoint values and preserves existing portable policy and required native
 status. It refuses conflicting values, including with `--force`. It does not
