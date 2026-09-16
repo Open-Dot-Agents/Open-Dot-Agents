@@ -112,7 +112,7 @@ jobs:
           cache-dependency-path: CLI/go.sum
       - name: Install evidence validator
         if: steps.workbench.outputs.available == 'true'
-        run: python3 -m pip install -r SPEC/conformance/requirements.txt
+        run: python3 -m pip install -r WORKBENCH/conformance/requirements.txt
       - name: Check compatibility including Workbench pins
         if: steps.workbench.outputs.available == 'true'
         run: python3 CLI/scripts/check_compatibility.py

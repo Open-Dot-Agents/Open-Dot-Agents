@@ -5,6 +5,21 @@ release histories live in their respective repositories.
 
 ## Unreleased
 
+- Fix CI regressions surfaced by PR #16: the "Workbench deterministic
+  tests" job installed only `SPEC/conformance/requirements.txt`, leaving
+  `pexpect` (required by several Workbench conformance tests) uninstalled;
+  it now installs `WORKBENCH/conformance/requirements.txt`, which already
+  pulls in the SPEC requirements transitively. Also update four leftover
+  `1.0.83` literals in `WORKBENCH/conformance/synthetic_verifier_fixtures.py`
+  to `1.0.84-9` (missed in the earlier Copilot pin bump), which were
+  tripping `verify_copilot_skill_metadata`/`verify_copilot_parent_skills`/
+  `verify_public_github_mcp` assertions. Also switch `security.yml`'s
+  standalone `govulncheck` job to `go-version-file: CLI/go.mod` instead of
+  a second hardcoded Go version, so `CLI/go.mod` is the single source of
+  truth. Verified locally: all 160 Workbench conformance tests and 104
+  task/test tests pass against an isolated venv that mirrors the CI
+  install step exactly.
+
 - Bump build and CI toolchain pins to the current latest stable releases:
   the reference CLI's `go.mod` directive to Go 1.27.1 (CI's `setup-go`
   steps already track `CLI/go.mod`), the standalone `govulncheck` job's
