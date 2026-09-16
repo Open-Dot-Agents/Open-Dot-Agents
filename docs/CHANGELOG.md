@@ -5,6 +5,15 @@ release histories live in their respective repositories.
 
 ## Unreleased
 
+- Bump build and CI toolchain pins to the current latest stable releases:
+  the reference CLI's `go.mod` directive to Go 1.27.1 (CI's `setup-go`
+  steps already track `CLI/go.mod`), the standalone `govulncheck` job's
+  Go pin to 1.27.1, the verification workflow's Python pin from 3.12 to
+  3.14, the MCP server and adapter-conformance workflows' Node.js pin
+  from 24 to 26, and the spec conformance suite's `jsonschema` pin from
+  4.25.1 to 4.26.0. All Go, spec conformance, and Workbench test suites
+  were re-run locally against the updated toolchains and pass unchanged.
+
 - Update the pinned Copilot native harness from 1.0.83 to 1.0.84-9 in the
   reference CLI's version gate, compatibility summary, and Workbench test
   fixtures. Codex remains pinned at 0.154.0. The frozen 1,679-row feature
