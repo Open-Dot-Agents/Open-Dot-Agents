@@ -13,7 +13,7 @@ features. The Linux CLI milestone contains 1,355 semantic features.
 | --- | --- | --- |
 | Separate stable, draft.1, and experimental draft.2 contracts | Separate schemas and fixtures; combined stable, draft, and Go checks | Keep these checks passing during the remaining work. |
 | Source-linked feature dispositions | Reproducible coverage map; zero `mapping-pending`; frozen source hash retained | Review native behavior independently of these counts. |
-| Native setting validation | 232 `validator-declared` semantic features | These are declarations of validators, not complete native behavior proofs. Audit activation, scope, precedence, reload, and effects by family. |
+| Native setting validation | 231 `validator-declared` semantic features | These are declarations of validators, not complete native behavior proofs. Audit activation, scope, precedence, reload, and effects by family. |
 | Native security settings | 81 `security-evidence-required` features: 71 Codex and 10 Copilot | Establish safe native-only configurations and scope authority. Refuse conflicts with portable requirements. Do not treat missing tests as native limitations. |
 | Scoped ownership and transactions | Go tests cover shared homes, locking, conflicts, private backups, removal, rollback, and unchanged state on refusal | Maintain coverage when adding new settings or assets. Retest affected native paths against the final source. |
 | Skills, tools, and plugins | Direct discovery, package preservation, projection, selected native lifecycle receipts, and authenticated public GitHub MCP discovery through Codex and Copilot | Complete broader package families and authorized read-call behavior. Keep the required portable `mcp.envRef` refusal outside the tested package mapping. |
@@ -23,10 +23,12 @@ features. The Linux CLI milestone contains 1,355 semantic features.
 | External authority and operations | Trust, credentials, managed policy, account state, and live sessions remain external | Authentication, installation, scheduling, and execution require their own native prerequisites and evidence. Apply must not perform these operations. |
 | Release support and ratification | No new adapter support promotion or ratification | Existing release, compatibility, governance, and pinned native gates remain separate. |
 
-The 232 validator declarations comprise 164 Codex settings, 61 Copilot
-settings, and seven Copilot MCP fields. All Copilot agent-frontmatter fields
-have now left this backlog: `model` moved to a bounded fixture-execution
-mapping and `reasoningEffort` moved to a native limitation. The next audit
+The 231 validator declarations comprise 164 Codex settings, 61 Copilot
+settings, and six Copilot MCP fields (`oauthClientId`, `oauthPublicClient`,
+`oauthGrantType`, `oidc`, `disableToolCache`, `deferTools`). All Copilot
+agent-frontmatter fields have now left this backlog: `model` moved to a
+bounded fixture-execution mapping and `reasoningEffort` moved to a native
+limitation. The next audit
 should separate settings that already have relevant bounded receipts from
 settings whose effective behavior is still untested. Schema acceptance alone
 must not become an activation claim. The keymap parser defect shows why this
@@ -232,3 +234,34 @@ confirming activation and one confirming non-activation. The `models`
 (array) and `modelPolicy` fields remain outside the current inventory and
 are a separate, deliberate inventory-completeness gap, not part of this
 closure.
+
+## Copilot MCP `timeout` field audit (2026-09-16)
+
+Moving to the next-smallest validator-declared family, the seven Copilot MCP
+server fields, a `timeout-exceeded`/`timeout-tolerated` pair of scenarios was
+added to `WORKBENCH/conformance/run_native_copilot_mcp.py`. Both scenarios
+pair an identical artificial delay (4 seconds) in a local stdio MCP server's
+`tools/call` response with a different configured `timeout`: 500ms
+(`timeout-exceeded`) or 8000ms (`timeout-tolerated`). The short timeout ends
+the call as a failed tool call with `MCP error -32001: Request timed out`;
+the long timeout tolerates the identical delay and completes normally with
+the tool's result reaching the model. This isolates the `timeout` field's
+effect from the server's own behavior and rules out an unrelated failure
+cause, since the server still receives and would have answered the call.
+
+`CLI/internal/config/native_copilot_mcp.go` now records the `timeout` field
+as `artifact-field-mapping`/`bounded-fixture-execution`, with evidence at
+`WORKBENCH/evidence/native-draft2-debug/copilot-mcp-timeout-exceeded-{scope}.json`
+and `copilot-mcp-timeout-tolerated-{scope}.json` (local, gitignored
+receipts; not committed). Regenerating `.agents/features/coverage.json`
+drops the validator-declared count from 232 to 231 and raises the
+artifact-field-mapping count from 56 to 57; both `--check` reproducibility
+and `check_compatibility.py` still pass with no other change.
+
+Six Copilot MCP fields remain validator-declared: `oauthClientId`,
+`oauthPublicClient`, `oauthGrantType`, and `oidc` (all OAuth-related, needing
+a mock OAuth-capable HTTP MCP server to test) and `disableToolCache` and
+`deferTools` (needing a fixture that changes the server's tool list across
+repeated CLI invocations against the same `COPILOT_HOME`, and one that
+proves a deferred tool is hidden from initial discovery). These are left
+open for follow-up audit slices.

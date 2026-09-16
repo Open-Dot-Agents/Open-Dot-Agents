@@ -45,7 +45,7 @@ three-adapter release gate unchanged.
    path.
 3. Run global defaults, project overrides, fallback, inherited skills,
    conflicts, relocation, removal, and rollback against the pinned binaries.
-4. Review the 232 validator declarations by activation and scope. Review the
+4. Review the 231 validator declarations by activation and scope. Review the
    81 security requirements separately. Retain unsafe-mapping refusals.
 5. Publish tested component commits before the root integration reference.
 
