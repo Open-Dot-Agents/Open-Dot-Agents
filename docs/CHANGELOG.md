@@ -5,6 +5,19 @@ release histories live in their respective repositories.
 
 ## Unreleased
 
+- Add Python linting to CI across all three component repositories
+  (Agents-Spec, Agents-CLI, Agents-Workbench): a minimal `ruff.toml`
+  (`select = ["E9", "F"]` — syntax errors, unused imports/variables,
+  undefined names) plus a pinned `ruff==0.16.8` CI step. Fixed the findings
+  it surfaced: an unused import in Agents-CLI's `native_coverage_test.py`,
+  and 8 unused imports plus 10 unused local variables (mostly copy-pasted,
+  never-referenced hash computations) across several Agents-Workbench
+  `conformance/verify_*.py` scripts and `run_native_copilot_mcp.py`. No
+  behavior change; the deterministic 104-test Workbench suite and CLI Go
+  tests still pass. `golangci-lint` was evaluated for the Go side but its
+  latest release (built with Go 1.26) cannot analyze this module's
+  `go 1.27.1` code yet; deferred until it ships a compatible build.
+
 - Close the Copilot MCP `disableToolCache` native-evidence gap: a new
   Workbench fixture restarts the pinned native process twice under the same
   `COPILOT_HOME` against the same local stdio MCP server and counts
