@@ -5,6 +5,12 @@ release histories live in their respective repositories.
 
 ## Unreleased
 
+- Update the pinned Copilot native harness from 1.0.83 to 1.0.84-9 in the
+  reference CLI's version gate, compatibility summary, and Workbench test
+  fixtures. Codex remains pinned at 0.154.0. The frozen 1,679-row feature
+  inventory and its historical per-feature evidence claims are unchanged;
+  a new native evidence campaign against 1.0.84-9 has not yet been run.
+
 - Add transactional initial instruction links to stable file projections,
   with shared-link sync and protection for existing root instruction files.
 
