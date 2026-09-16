@@ -13,7 +13,7 @@ features. The Linux CLI milestone contains 1,355 semantic features.
 | --- | --- | --- |
 | Separate stable, draft.1, and experimental draft.2 contracts | Separate schemas and fixtures; combined stable, draft, and Go checks | Keep these checks passing during the remaining work. |
 | Source-linked feature dispositions | Reproducible coverage map; zero `mapping-pending`; frozen source hash retained | Review native behavior independently of these counts. |
-| Native setting validation | 233 `validator-declared` semantic features | These are declarations of validators, not complete native behavior proofs. Audit activation, scope, precedence, reload, and effects by family. |
+| Native setting validation | 232 `validator-declared` semantic features | These are declarations of validators, not complete native behavior proofs. Audit activation, scope, precedence, reload, and effects by family. |
 | Native security settings | 81 `security-evidence-required` features: 71 Codex and 10 Copilot | Establish safe native-only configurations and scope authority. Refuse conflicts with portable requirements. Do not treat missing tests as native limitations. |
 | Scoped ownership and transactions | Go tests cover shared homes, locking, conflicts, private backups, removal, rollback, and unchanged state on refusal | Maintain coverage when adding new settings or assets. Retest affected native paths against the final source. |
 | Skills, tools, and plugins | Direct discovery, package preservation, projection, selected native lifecycle receipts, and authenticated public GitHub MCP discovery through Codex and Copilot | Complete broader package families and authorized read-call behavior. Keep the required portable `mcp.envRef` refusal outside the tested package mapping. |
@@ -23,16 +23,19 @@ features. The Linux CLI milestone contains 1,355 semantic features.
 | External authority and operations | Trust, credentials, managed policy, account state, and live sessions remain external | Authentication, installation, scheduling, and execution require their own native prerequisites and evidence. Apply must not perform these operations. |
 | Release support and ratification | No new adapter support promotion or ratification | Existing release, compatibility, governance, and pinned native gates remain separate. |
 
-The 233 validator declarations comprise 164 Codex settings, 61 Copilot
-settings, seven Copilot MCP fields, and one Copilot agent-frontmatter field.
-The next audit should separate settings that already have relevant bounded
-receipts from settings whose effective behavior is still untested. Schema
-acceptance alone must not become an activation claim. The keymap parser defect
-shows why this distinction matters.
+The 232 validator declarations comprise 164 Codex settings, 61 Copilot
+settings, and seven Copilot MCP fields. All Copilot agent-frontmatter fields
+have now left this backlog: `model` moved to a bounded fixture-execution
+mapping and `reasoningEffort` moved to a native limitation. The next audit
+should separate settings that already have relevant bounded receipts from
+settings whose effective behavior is still untested. Schema acceptance alone
+must not become an activation claim. The keymap parser defect shows why this
+distinction matters.
 
-Seven semantic features currently have version-bound native limitation
-dispositions: three Copilot sidekick fields, three Codex settings, and Copilot
-`sandbox.userPolicy.network.allowLocalNetwork`. These have source and native
+Eight semantic features currently have version-bound native limitation
+dispositions: three Copilot sidekick fields, three Codex settings, Copilot
+`sandbox.userPolicy.network.allowLocalNetwork`, and the Copilot
+agent-frontmatter `reasoningEffort` field. These have source and native
 evidence. This classification must not be extended to the 81 security gates
 merely because those mappings need more work.
 
@@ -195,3 +198,37 @@ recognizes as reasoning-capable with a known default, plus coverage of the
 `models` and `modelPolicy` fields the same documentation section defines but
 the current inventory does not yet track. This is left open for a follow-up
 audit slice rather than claimed prematurely.
+
+## Copilot agent-frontmatter `reasoningEffort` field audit (2026-09-16)
+
+Following the prior entry's open item, a `reasoning-effort` scenario was
+added to `WORKBENCH/conformance/run_native_copilot_agent.py` using `gpt-5`
+as the agent's frontmatter `model`, a name Copilot 1.0.84-9 recognizes as
+reasoning-capable in its offline fixture harness (it is the only tested
+name, alongside `gpt-5-codex`, that causes a `reasoning_effort` request
+field to be transmitted at all; `o3`, `o3-mini`, `o4-mini`, and tested
+Claude model names transmit no such field in this harness). With
+`reasoningEffort: high` declared, the delegated child turn's request still
+transmitted `reasoning_effort: "medium"`. Repeating the probe with
+`reasoningEffort` set to `low`, `medium`, `xhigh`, `minimal`, `none`, and
+with the field omitted entirely all produced the identical transmitted
+value of `medium`. This is conclusive rather than inconclusive: the
+declared value has no observed effect on the transmitted request for this
+harness-recognized model, across every declared value and its absence.
+
+`CLI/internal/config/native_copilot_agent.go` now records the
+`reasoningEffort` field as `native-limitation` /
+`bounded-reasoning-effort-ignored`, matching the vocabulary used for other
+confirmed negative findings (for example `bounded-acp-native-ignored` and
+`bounded-local-network-mismatch`), with evidence at
+`WORKBENCH/evidence/native-draft2-debug/copilot-agent-reasoning-effort-project.json`
+and `-user.json` (local, gitignored receipts; not committed). Regenerating
+`.agents/features/coverage.json` drops the validator-declared count from
+233 to 232 and raises the native-limitation count from 7 to 8; both
+`--check` reproducibility and `check_compatibility.py` still pass with no
+other change. This closes the Copilot agent-frontmatter field family: both
+`model` and `reasoningEffort` now have durable native evidence, one
+confirming activation and one confirming non-activation. The `models`
+(array) and `modelPolicy` fields remain outside the current inventory and
+are a separate, deliberate inventory-completeness gap, not part of this
+closure.

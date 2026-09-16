@@ -2678,20 +2678,19 @@
         "limitation": "Fixture verifies this field with native discovery and delegation. Other values need separate checks."
       },
       {
-        "native_status": "unverified",
+        "native_status": "bounded-reasoning-effort-ignored",
         "evidence": [
-          "WORKBENCH/evidence/native-draft2-debug/copilot-agent-final-project.json",
-          "https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-command-reference#custom-agent-frontmatter-fields"
+          "WORKBENCH/evidence/native-draft2-debug/copilot-agent-reasoning-effort-project.json"
         ],
         "feature": "artifact:agent:/reasoningEffort",
         "source": "native_copilot_agent.go",
         "destination": "<scope-root>/.github/agents/<name>.agent.md",
         "scope": "project",
-        "disposition": "validator-declared",
+        "disposition": "native-limitation",
         "activation": "pending native reload",
         "ownership": "file",
         "authority": "registry target",
-        "limitation": "Documented frontmatter field with a typed validator. Effective native behavior needs separate evidence."
+        "limitation": "Fixture proves the declared value is not honored: with a harness-recognized reasoning model (gpt-5) and reasoningEffort: high, the delegated child turn transmits a fixed reasoning_effort of 'medium' regardless of the declared value or its absence. Other harness-recognized models and higher-precedence overrides need separate evidence."
       },
       {
         "native_status": "unverified",
@@ -2755,7 +2754,7 @@
         "activation": "pending native reload",
         "ownership": "file",
         "authority": "registry target",
-        "limitation": "Copilot 1.0.83 fixture verifies discovery, instructions, delegation, and an approved child command. The model field override is separately verified; reasoningEffort and other frontmatter controls still need separate evidence. Agent-local MCP has separate discovery, delegation, and parent-isolation fixtures."
+        "limitation": "Copilot 1.0.83 fixture verifies discovery, instructions, delegation, and an approved child command. The model field override is separately verified; reasoningEffort is separately verified as not honored (native limitation). Other frontmatter controls still need separate evidence. Agent-local MCP has separate discovery, delegation, and parent-isolation fixtures."
       },
       {
         "native_status": "bounded-recursive-instruction-loading",
@@ -4133,20 +4132,19 @@
         "limitation": "Fixture verifies this field with native discovery and delegation. Other values need separate checks."
       },
       {
-        "native_status": "unverified",
+        "native_status": "bounded-reasoning-effort-ignored",
         "evidence": [
-          "WORKBENCH/evidence/native-draft2-debug/copilot-agent-final-user.json",
-          "https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-command-reference#custom-agent-frontmatter-fields"
+          "WORKBENCH/evidence/native-draft2-debug/copilot-agent-reasoning-effort-user.json"
         ],
         "feature": "artifact:agent:/reasoningEffort",
         "source": "native_copilot_agent.go",
         "destination": "<scope-root>/agents/<name>.agent.md",
         "scope": "user",
-        "disposition": "validator-declared",
+        "disposition": "native-limitation",
         "activation": "pending native reload",
         "ownership": "file",
         "authority": "registry target",
-        "limitation": "Documented frontmatter field with a typed validator. Effective native behavior needs separate evidence."
+        "limitation": "Fixture proves the declared value is not honored: with a harness-recognized reasoning model (gpt-5) and reasoningEffort: high, the delegated child turn transmits a fixed reasoning_effort of 'medium' regardless of the declared value or its absence. Other harness-recognized models and higher-precedence overrides need separate evidence."
       },
       {
         "native_status": "unverified",
@@ -4210,7 +4208,7 @@
         "activation": "pending native reload",
         "ownership": "file",
         "authority": "registry target",
-        "limitation": "Copilot 1.0.83 fixture verifies discovery, instructions, delegation, and an approved child command. The model field override is separately verified; reasoningEffort and other frontmatter controls still need separate evidence. Agent-local MCP has separate discovery, delegation, and parent-isolation fixtures."
+        "limitation": "Copilot 1.0.83 fixture verifies discovery, instructions, delegation, and an approved child command. The model field override is separately verified; reasoningEffort is separately verified as not honored (native limitation). Other frontmatter controls still need separate evidence. Agent-local MCP has separate discovery, delegation, and parent-isolation fixtures."
       },
       {
         "native_status": "bounded-recursive-instruction-loading",
@@ -4504,12 +4502,12 @@
     "artifact-mapping": 18,
     "external": 236,
     "mapping-pending": 0,
-    "native-limitation": 7,
+    "native-limitation": 8,
     "native-operation": 723,
     "outside-milestone": 12,
     "portable-mapping": 6,
     "security-evidence-required": 81,
-    "validator-declared": 233,
+    "validator-declared": 232,
     "value-mapping": 7
   },
   "record_counts": {
@@ -4517,13 +4515,13 @@
     "artifact-mapping": 18,
     "external": 236,
     "mapping-pending": 0,
-    "native-limitation": 7,
+    "native-limitation": 8,
     "native-operation": 723,
     "outside-milestone": 12,
     "portable-mapping": 6,
     "security-evidence-required": 81,
     "syntax-reference": 17,
-    "validator-declared": 233,
+    "validator-declared": 232,
     "value-mapping": 7
   },
   "milestone_counts": {
@@ -4531,11 +4529,11 @@
     "artifact-mapping": 18,
     "external": 224,
     "mapping-pending": 0,
-    "native-limitation": 7,
+    "native-limitation": 8,
     "native-operation": 723,
     "portable-mapping": 6,
     "security-evidence-required": 81,
-    "validator-declared": 233,
+    "validator-declared": 232,
     "value-mapping": 7
   },
   "features": [
@@ -30393,7 +30391,7 @@
       "disposition": "artifact-mapping",
       "native_status": "bounded-fixture-execution",
       "limitations": [
-        "Copilot 1.0.83 fixture verifies discovery, instructions, delegation, and an approved child command. The model field override is separately verified; reasoningEffort and other frontmatter controls still need separate evidence. Agent-local MCP has separate discovery, delegation, and parent-isolation fixtures."
+        "Copilot 1.0.83 fixture verifies discovery, instructions, delegation, and an approved child command. The model field override is separately verified; reasoningEffort is separately verified as not honored (native limitation). Other frontmatter controls still need separate evidence. Agent-local MCP has separate discovery, delegation, and parent-isolation fixtures."
       ],
       "evidence": [
         {
@@ -51852,10 +51850,10 @@
       ],
       "adapter": "CLI/internal/config/native_copilot_agent.go",
       "version_constraint": "=1.0.83",
-      "disposition": "validator-declared",
-      "native_status": "unverified",
+      "disposition": "native-limitation",
+      "native_status": "bounded-reasoning-effort-ignored",
       "limitations": [
-        "Documented frontmatter field with a typed validator. Effective native behavior needs separate evidence."
+        "Fixture proves the declared value is not honored: with a harness-recognized reasoning model (gpt-5) and reasoningEffort: high, the delegated child turn transmits a fixed reasoning_effort of 'medium' regardless of the declared value or its absence. Other harness-recognized models and higher-precedence overrides need separate evidence."
       ],
       "evidence": [
         {
@@ -51873,9 +51871,8 @@
         "user"
       ],
       "native_evidence": [
-        "WORKBENCH/evidence/native-draft2-debug/copilot-agent-final-project.json",
-        "WORKBENCH/evidence/native-draft2-debug/copilot-agent-final-user.json",
-        "https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-command-reference#custom-agent-frontmatter-fields"
+        "WORKBENCH/evidence/native-draft2-debug/copilot-agent-reasoning-effort-project.json",
+        "WORKBENCH/evidence/native-draft2-debug/copilot-agent-reasoning-effort-user.json"
       ],
       "record_kind": "feature",
       "counted_feature": true,
