@@ -5,6 +5,15 @@ release histories live in their respective repositories.
 
 ## Unreleased
 
+- Document and add regression coverage for portable model selection: the
+  existing draft.2 native profile already projects a portable `model` field
+  into Codex's `config.toml` and Copilot's `settings.json` at project or
+  user scope; no new schema was needed. Adds
+  `SPEC/examples/native-model-selection` (conformance-checked),
+  `CLI/internal/config/native_model_selection_test.go`, and a new "Model
+  selection" section in `docs/NATIVE_CONFIGURATION.md`. Decision 0002
+  (proposed abstract `models` manifest field) is superseded by decision 0003.
+
 - Fix CI regressions surfaced by PR #16: the "Workbench deterministic
   tests" job installed only `SPEC/conformance/requirements.txt`, leaving
   `pexpect` (required by several Workbench conformance tests) uninstalled;

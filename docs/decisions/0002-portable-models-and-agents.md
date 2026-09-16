@@ -1,9 +1,20 @@
 # 0002: Portable Models and Agents (proposal)
 
-- Status: proposed
-- Public comment opens: 2026-09-16
-- Public comment closes: 2026-09-30 (14 calendar days, per GOVERNANCE.md)
+- Status: superseded by [0003](0003-model-selection-native-profile.md)
+- Public comment opened: 2026-09-16
+- Superseded: 2026-09-16 (comment period cut short; the model-selection
+  subset of this proposal turned out to already be solved by the existing
+  draft.2 native profile, see 0003)
 - Decider: Maurizio Casciano
+
+> **Superseded.** The model-selection design below was withdrawn before the
+> comment period closed: `CLI/internal/config/native_registry.go` already
+> recognizes `model` for both Codex and Copilot, and the existing draft.2
+> native profile already projects it into each harness's real config file
+> today. See [decision 0003](0003-model-selection-native-profile.md). The
+> remaining 130 `models-agents` settings this record did not name explicitly
+> (provider wiring, context window, auto-compaction, review model) are
+> unaffected and remain open for a future proposal.
 
 ## Context
 
