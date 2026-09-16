@@ -258,10 +258,24 @@ drops the validator-declared count from 232 to 231 and raises the
 artifact-field-mapping count from 56 to 57; both `--check` reproducibility
 and `check_compatibility.py` still pass with no other change.
 
-Six Copilot MCP fields remain validator-declared: `oauthClientId`,
+`disableToolCache` moved to `artifact-field-mapping`/`bounded-fixture-execution`
+in a later slice: a fixture restarts the native process twice under the same
+`COPILOT_HOME` and counts `tools/list` calls on the second restart.
+`disableToolCache: false` (default) issues two calls; `true` issues one. This
+dropped `validator-declared` from 231 to 230 and raised `artifact-field-mapping`
+from 57 to 58.
+
+Five Copilot MCP fields remain validator-declared: `oauthClientId`,
 `oauthPublicClient`, `oauthGrantType`, and `oidc` (all OAuth-related, needing
-a mock OAuth-capable HTTP MCP server to test) and `disableToolCache` and
-`deferTools` (needing a fixture that changes the server's tool list across
-repeated CLI invocations against the same `COPILOT_HOME`, and one that
-proves a deferred tool is hidden from initial discovery). These are left
-open for follow-up audit slices.
+a mock OAuth-capable HTTP MCP server to test) and `deferTools`. A fixture
+probe registered `deferTools: 'auto'` versus `'never'` on a server with up to
+217 total tools across the session and compared the model's first request
+tool list; both values produced an identical tool list in every case. Native
+docs describe tool search (deferred tool loading) as "model- and
+feature-dependent," and the only documented `toolSearch` setting can disable
+it but not force it on. This suggests the behavior is gated by a real model
+and/or a server-side feature flag that our offline fake-provider fixture
+cannot activate, so `deferTools` cannot currently be proven or disproven this
+way. It stays `validator-declared` until a live-model fixture (or another
+native signal) becomes available. These are left open for follow-up audit
+slices.
