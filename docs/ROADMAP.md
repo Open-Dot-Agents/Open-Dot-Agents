@@ -69,6 +69,9 @@ The next phases are:
    Test portable policies after apply; native settings alone do not establish
    portable enforcement. Keep pending scenarios explicit.
 3. Propose portable agent roles and model intent with named provider extensions.
+   [Decision 0002](decisions/0002-portable-models-and-agents.md) opens the
+   public comment period (through 2026-09-30) for the model-selection subset
+   of the 131 `models-agents` vendor-extension settings.
 4. Propose planning artifacts, context controls, and session transfer rules.
 5. Assess plugin metadata, LSP scope, automation, and remote protocol extensions.
 6. Submit the security proposal for public comment and record the maintainer
