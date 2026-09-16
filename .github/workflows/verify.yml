@@ -23,7 +23,7 @@ jobs:
           cache-dependency-path: CLI/go.sum
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
-          python-version: '3.12'
+          python-version: '3.14'
       - name: Validate JSON files
         run: |
           python3 -m json.tool CLI/compatibility.json >/dev/null
@@ -50,7 +50,7 @@ jobs:
         run: git submodule update --init --depth=1 SPEC
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
-          python-version: '3.12'
+          python-version: '3.14'
       - name: Install conformance validator
         run: python3 -m pip install -r SPEC/conformance/requirements.txt
       - name: Run conformance suite
@@ -101,7 +101,7 @@ jobs:
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         if: steps.workbench.outputs.available == 'true'
         with:
-          python-version: '3.12'
+          python-version: '3.14'
       - name: Checkout test dependencies
         if: steps.workbench.outputs.available == 'true'
         run: git submodule update --init --depth=1 CLI SPEC
@@ -112,7 +112,7 @@ jobs:
           cache-dependency-path: CLI/go.sum
       - name: Install evidence validator
         if: steps.workbench.outputs.available == 'true'
-        run: python3 -m pip install -r SPEC/conformance/requirements.txt
+        run: python3 -m pip install -r WORKBENCH/conformance/requirements.txt
       - name: Check compatibility including Workbench pins
         if: steps.workbench.outputs.available == 'true'
         run: python3 CLI/scripts/check_compatibility.py
