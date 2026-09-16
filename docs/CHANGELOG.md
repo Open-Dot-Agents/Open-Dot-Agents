@@ -5,6 +5,21 @@ release histories live in their respective repositories.
 
 ## Unreleased
 
+- Close the Copilot MCP `disableToolCache` native-evidence gap: a new
+  Workbench fixture restarts the pinned native process twice under the same
+  `COPILOT_HOME` against the same local stdio MCP server and counts
+  `tools/list` requests on the second restart. `disableToolCache: false`
+  (the default) issues two `tools/list` calls on restart (a cache
+  reconciliation query, then a live query); `disableToolCache: true` issues
+  exactly one direct call. This is reproducible across repeated runs and
+  isolates the field's effect on restart-time tool-list re-querying. Moves
+  the field from `validator-declared`/`unverified` to
+  `artifact-field-mapping`/`bounded-fixture-execution` (project and user
+  scope) in `.agents/features/coverage.json`; `validator-declared` count is
+  now 230 (was 231), `artifact-field-mapping` is now 58 (was 57). Does not
+  establish behavior for a live `listChanged` notification within one
+  session, or for HTTP transports.
+
 - Document and add regression coverage for portable model selection: the
   existing draft.2 native profile already projects a portable `model` field
   into Codex's `config.toml` and Copilot's `settings.json` at project or
